@@ -1,11 +1,11 @@
 <?php
 
-interface GetItemsInterface
+/*interface ItemsGetterInterface
 {
     public function getItems();
 }
 
-interface DefineMachineInterface
+interface VendingMachineInterface
 {
     public function getRow();
 
@@ -18,29 +18,22 @@ interface DefineMachineInterface
 
 }
 
-interface ItemMapInterface
+interface ItemLoaderInterface
 {
-    public function itemMap($rownumber, $columnnumber, $item);
+    public function loadItem($object, $item);
 
 
 }
 
-class GetItems implements GetItemsInterface
+interface ItemGetterInterface
 {
-    private $items;
+    public function getItem($object, $item);
 
-    public function __construct($items)
-    {
-        $this->items = $items;
-    }
 
-    public function getItems()
-    {
-        return $this->items;
-    }
-}
+}*/
 
-class DefineMachine implements DefineMachineInterface
+
+class VendingMachine implements VendingMachineInterface
 {
     private $rownumber;
     private $columnnumber;
@@ -56,37 +49,88 @@ class DefineMachine implements DefineMachineInterface
 
     }
 
-    public function getRow()
+    public
+    function getRow()
     {
         return $this->rownumber;
     }
 
-    public function getColumn()
+    public
+    function getColumn()
     {
         return $this->columnnumber;
     }
 
-    public function getCells()
+    public
+    function getCells()
     {
         return $this->maxcells;
     }
 
-    public function getCellDepth()
+    public
+    function getCellDepth()
     {
         return $this->celldepth;
     }
 }
 
-class ItemMapping implements ItemMapInterface
+class Cell
 {
-    public function itemMap($rownumber, $columnnumber, $item)
+    private $itemname;
+    private $quantity;
+    private $size;
+
+    public function __construct($itemname, $quantity, $size)
+    {
+        $this->itemname = $itemname;
+        $this->quantity = $quantity;
+        $this->size = $size;
+
+    }
+
+    public function getItemName()
+    {
+        return $this->itemname;
+    }
+
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+}
+
+class ItemGetter implements ItemGetterInterface
+{
+    private $item;
+
+    public function __construct($object, $item)
+    {
+        $this->item = $item;
+    }
+
+    public function getItem($object, $item)
+    {
+        // TODO: Implement getItem() method.
+    }
+}
+
+class ItemLoader implements ItemLoaderInterface
+{
+    public function loadItem($object, $item)
     {
 
     }
 }
 
-
-function start()
+class Mapper
 {
+    private $map;
+
+    public function __construct($obj)
+    {
+        $this->map = $obj;
+        var_dump($this->map);
+    }
+
 
 }
