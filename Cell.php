@@ -11,6 +11,7 @@ class Cell
     private $product;
     private $quantity;
     private $size;
+    private $combined = false;
 
     public function __construct($product, $quantity, $size)
     {
@@ -35,6 +36,11 @@ class Cell
         return $this->quantity;
     }
 
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
     public function getSize()
     {
         return $this->size;
@@ -45,10 +51,14 @@ class Cell
         $this->size = $size;
     }
 
-    public function setItemQuantity($quantity)
+    public function getCombined()
     {
-        $this->quantity = $quantity;
+        return $this->combined;
     }
 
+    public function setCombined($combined)
+    {
+        $this->combined = $combined;
+    }
 
 }

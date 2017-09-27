@@ -9,14 +9,14 @@
 class Product
 {
     private $productname;
-    private $quanity;
+    private $quantity;
     private $size;
     private $expiredate;
 
     public function __construct($productname, $quantity, $size, $expiredate)
     {
         $this->productname = $productname;
-        $this->quanity = $quantity;
+        $this->quantity = $quantity;
         $this->size = $size;
         $this->expiredate = $expiredate;
     }
@@ -34,7 +34,7 @@ class Product
 
     public function getQuantity()
     {
-        return $this->quanity;
+        return $this->quantity;
     }
 
     public function getSize()
@@ -59,7 +59,7 @@ class Product
 
     public function setQuantity($quantity)
     {
-        $this->quanity = $quantity;
+        $this->quantity = $quantity;
     }
 
 

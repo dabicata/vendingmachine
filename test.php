@@ -22,8 +22,16 @@ class Mapper
             }
         }
 
+    }
 
+    public function combineCells()
+    {
+
+
+        $this->map[0][2]->setSize(6);
         var_dump($this->map);
+
+
     }
 
 }
@@ -31,12 +39,25 @@ class Mapper
 class Cell
 {
     public $text;
+    private $size = 2;
+    private $combined = false;
 
     public function __construct($msg)
     {
         $this->text = $msg;
 
     }
+
+    public function setCombined($combined)
+    {
+        $this->combined = $combined;
+    }
+
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
 
 }
 
@@ -58,4 +79,4 @@ $a14 = new Cell('hello from a14');
 
 
 $b = new Mapper (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14));
-
+$b->combineCells();

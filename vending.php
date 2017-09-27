@@ -71,4 +71,8 @@ class VendingMachine
 
     }
 
+    public function combineCells($cells)
+    {
+
+    }
 }
