@@ -1,44 +1,13 @@
 <?php
 
-/*interface ItemsGetterInterface
-{
-    public function getItems();
-}
-
-interface VendingMachineInterface
-{
-    public function getRow();
-
-    public function getColumn();
-
-    public function getCells();
-
-    public function getCellDepth();
-
-
-}
-
-interface ItemLoaderInterface
-{
-    public function loadItem($object, $item);
-
-
-}
-
-interface ItemGetterInterface
-{
-    public function getItem($object, $item);
-
-
-}*/
-
-
-class VendingMachine implements VendingMachineInterface
+class VendingMachine
 {
     private $rownumber;
     private $columnnumber;
     private $maxcells;
     private $celldepth;
+    private $map;
+
 
     public function __construct($rownumber, $columnnumber, $celldepth)
     {
@@ -49,88 +18,52 @@ class VendingMachine implements VendingMachineInterface
 
     }
 
-    public
-    function getRow()
+    public function createCell($obj)
+    {
+
+        $this->map = [];
+        $counter = 0;
+        for ($y = 0; $y < $this->rownumber; $y++) {
+            for ($x = 0; $x < $this->columnnumber; $x++) {
+                if (isset($obj[$counter])) {
+                    $this->map[$y][] = $obj[$counter++];
+                } else {
+                    break;
+                }
+
+            }
+        }
+
+
+        var_dump($this->map);
+    }
+
+    public function getRow()
     {
         return $this->rownumber;
     }
 
-    public
-    function getColumn()
+    public function getColumn()
     {
         return $this->columnnumber;
     }
 
-    public
-    function getCells()
-    {
-        return $this->maxcells;
-    }
 
-    public
-    function getCellDepth()
+    public function getCellDepth()
     {
         return $this->celldepth;
     }
-}
 
-class Cell
-{
-    private $itemname;
-    private $quantity;
-    private $size;
 
-    public function __construct($itemname, $quantity, $size)
+    public function getCell($x, $y)
     {
-        $this->itemname = $itemname;
-        $this->quantity = $quantity;
-        $this->size = $size;
+        if (isset($this->map[$x][$y])) {
 
+            return "error cell not mapped";
+        }
+
+
+        return $this->map[$x][$y];
     }
-
-    public function getItemName()
-    {
-        return $this->itemname;
-    }
-
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-}
-
-class ItemGetter implements ItemGetterInterface
-{
-    private $item;
-
-    public function __construct($object, $item)
-    {
-        $this->item = $item;
-    }
-
-    public function getItem($object, $item)
-    {
-        // TODO: Implement getItem() method.
-    }
-}
-
-class ItemLoader implements ItemLoaderInterface
-{
-    public function loadItem($object, $item)
-    {
-
-    }
-}
-
-class Mapper
-{
-    private $map;
-
-    public function __construct($obj)
-    {
-        $this->map = $obj;
-        var_dump($this->map);
-    }
-
 
 }
