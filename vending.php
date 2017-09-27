@@ -66,4 +66,9 @@ class VendingMachine
         return $this->map[$x][$y];
     }
 
+    public function loadProduct($product, $x, $y)
+    {
+
+    }
+
 }
