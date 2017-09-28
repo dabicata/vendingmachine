@@ -6,6 +6,9 @@
  * Time: 12:00 PM
  */
 
+namespace vending;
+
+
 class Cell
 {
     private $product; // contains the product object

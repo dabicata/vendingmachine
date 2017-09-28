@@ -6,6 +6,9 @@
  * Time: 12:02 PM
  */
 
+namespace vending;
+
+
 class Product
 {
     private $productname; // name of product

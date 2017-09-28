@@ -202,6 +202,6 @@ $products9 = new Product('pizza9', '10', '1', 2018);
 $products10 = new Product('pizza10', '10', '1', 2018);
 $products11 = new Product('pizza11', '10', '1', 2018);
 $products12 = new Product('pizza12', '10', '1', 2018);
-$b = new Mapper (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14, $a15));
+$b = new createCell (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14, $a15));
 $b->loadProduct(array($products1, $products2, $products3, $products4, $products5, $products6, $products7, $products8, $products9, $products10, $products11, $products12));
 $b->getProduct(0, 0);

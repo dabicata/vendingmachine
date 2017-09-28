@@ -1,10 +1,11 @@
 <?php
 
+namespace vending;
 class VendingMachine
 {
     private $rownumber; //row numbers
     private $columnnumber; //column numbers
-//    private $maxcells;  //maximum cells
+    private $maxcells;  //maximum cells
     private $cellsize;  //cell size
     private $map;   //mapped cells to machine
 
@@ -19,7 +20,7 @@ class VendingMachine
     {
         $this->columnnumber = $columnnumber;
         $this->rownumber = $rownumber;
-//        $this->maxcells = $rownumber * $columnnumber;
+        $this->maxcells = $rownumber * $columnnumber;
         $this->cellsize = $cellsize;
 
     }
@@ -127,7 +128,7 @@ class VendingMachine
                         $this->map[$y][$x]->getProduct()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
                         echo ($quantity - $this->map[$y][$x]->getProduct()->getQuantity()) . " " . $this->map[$y][$x]->getProduct()->getProductName() . "s " . "not loaded. \n";
                     }
-                    /*                    var_dump($this->map[$y][$x]->getProduct());*/
+                    //var_dump($this->map[$y][$x]->getProduct());
 
                     $counter2++;
                 } else {
@@ -152,7 +153,21 @@ class VendingMachine
         $this->map[$x][$y]->getProduct()->setQuantity($this->map[$x][$y]->getProduct()->getQuantity() - 1);
         /*var_dump($this->map[$x][$y]->getProduct()->getQuantity()-1);
         var_dump($this->map[$x][$y]);*/
-        return $this->map[$x][$y]->getProduct()->getProductName();
+        echo $this->map[$x][$y]->getProduct()->getProductName();
     }
 
+    /**
+     * @return
+     * name of product
+     */
+    public function listItems()
+    {
+        for ($y = 0; $y < $this->rownumber; $y++) {
+            for ($x = 0; $x < $this->columnnumber; $x++) {
+                echo $this->map[$y][$x]->getProduct()->getProductName() . "\n";
+
+            }
+        }
+
+    }
 }
