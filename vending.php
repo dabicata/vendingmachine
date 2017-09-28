@@ -2,13 +2,19 @@
 
 class VendingMachine
 {
-    private $rownumber;
-    private $columnnumber;
-//    private $maxcells;
-    private $cellsize;
-    private $map;
+    private $rownumber; //row numbers
+    private $columnnumber; //column numbers
+//    private $maxcells;  //maximum cells
+    private $cellsize;  //cell size
+    private $map;   //mapped cells to machine
 
 
+    /**
+     * VendingMachine constructor.
+     * @param $rownumber
+     * @param $columnnumber
+     * @param $cellsize
+     */
     public function __construct($rownumber, $columnnumber, $cellsize)
     {
         $this->columnnumber = $columnnumber;
@@ -18,6 +24,10 @@ class VendingMachine
 
     }
 
+    /**
+     * @param $obj
+     * create new cell and map it to machine
+     */
     public function createCell($obj)
     {
 
@@ -27,6 +37,7 @@ class VendingMachine
             for ($x = 0; $x < $this->columnnumber; $x++) {
                 if (isset($obj[$counter])) {
                     $this->map[$y][] = $obj[$counter++];
+//                    $this->map[$y][] = new Cell($this->cellsize);
                 } else {
                     break;
                 }
@@ -35,37 +46,52 @@ class VendingMachine
         }
 
 
-        var_dump($this->map);
+//        var_dump($this->map);
     }
 
+    /**
+     *
+     *
+     * @return mixed
+     * returns row number of machine
+     */
     public function getRow()
     {
         return $this->rownumber;
     }
 
+    /**
+     * @return mixed
+     * return column number of machine
+     */
     public function getColumn()
     {
         return $this->columnnumber;
     }
 
 
+    /**
+     * @return mixed
+     * returns cell size of machine
+     */
     public function getCellsize()
     {
         return $this->cellsize;
     }
 
 
-    public function getCell($x, $y)
-    {
-        if (isset($this->map[$x][$y])) {
-
-            return "error cell not mapped";
-        }
-
-
-        return $this->map[$x][$y];
-    }
-
+    /**
+     * @param
+     * $x rows of the first cell you want to combine
+     * @param
+     * $y column of first the cell you want to combine
+     * @param
+     * $a rows of the second cell you want to combine
+     * @param
+     * $b column of second the cell you want to combine
+     *  merge 2 cells into one from left to right
+     * example cell with cordinates 1,1 merged with 2,2
+     */
     public function combineCells($x, $y, $a, $b)
     {
         if ($x == $a && $b == $y + 1) {
@@ -80,6 +106,10 @@ class VendingMachine
 
     }
 
+    /**
+     * @param $obj2 array of objects of products
+     * loads product objects into cells
+     */
     public function loadProduct($obj2)
     {
 
@@ -88,7 +118,7 @@ class VendingMachine
         for ($y = 0; $y < $this->rownumber; $y++) {
             for ($x = 0; $x < $this->columnnumber; $x++) {
                 if (isset($obj2[$counter2]) && $this->map[$y][$x]->getSize() >= $obj2[$counter2]->getSize()) {
-                    $this->map[$y][$x]->setText($obj2[$counter2]);
+                    $this->map[$y][$x]->setProduct($obj2[$counter2]);
                     /* $hey = (($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
                                          $this->map[$y][$x]->getProduct()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
                                         ($obj2[$counter2]->getQuantity() - (($obj2[$counter2]->getQuantity() / $this->map[$y][$x]->getSize()))) > $obj2[$counter2]->getQuantity())*/
@@ -109,4 +139,20 @@ class VendingMachine
 
 
     }
+
+    /**
+     * @param
+     * $x row of the cell containing the product
+     * @param
+     * $y column of the cell containing the product
+     * @return  product name
+     */
+    public function getProduct($x, $y)
+    {
+        $this->map[$x][$y]->getProduct()->setQuantity($this->map[$x][$y]->getProduct()->getQuantity() - 1);
+        /*var_dump($this->map[$x][$y]->getProduct()->getQuantity()-1);
+        var_dump($this->map[$x][$y]);*/
+        return $this->map[$x][$y]->getProduct()->getProductName();
+    }
+
 }

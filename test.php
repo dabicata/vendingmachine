@@ -16,7 +16,7 @@ class Mapper
         for ($y = 0; $y < $rowsCount; $y++) {
             for ($x = 0; $x < $colsCount; $x++) {
                 if (isset($obj[$counter])) {
-                    $this->map[$y][] = $obj[$counter++];
+                    $this->map[$y][] = new Cell($this->cellsize);
                 } else {
                     break;
                 }
@@ -26,8 +26,44 @@ class Mapper
 //        var_dump($this->map);
     }
 
+    public function loadProduct($obj2)
+    {
+
+        $rowsCount2 = 4;
+        $colsCount2 = 3;
+        $counter2 = 0;
+        for ($y = 0; $y < $rowsCount2; $y++) {
+            for ($x = 0; $x < $colsCount2; $x++) {
+
+                if (isset($obj2[$counter2]) && $this->map[$y][$x]->getSize() >= $obj2[$counter2]->getSize()) {
+                    $this->map[$y][$x]->setText($obj2[$counter2]);
+                    /* $hey = (($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
+                                         $this->map[$y][$x]->getText()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
+                                        ($obj2[$counter2]->getQuantity() - (($obj2[$counter2]->getQuantity() / $this->map[$y][$x]->getSize()))) > $obj2[$counter2]->getQuantity())*/
+                    if (($obj2[$counter2]->getQuantity() * $obj2[$counter2]->getSize()) > $this->map[$y][$x]->getSize()) {
+                        $quantity = $obj2[$counter2]->getQuantity();
+                        $this->map[$y][$x]->getText()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
+                        echo ($quantity - $this->map[$y][$x]->getText()->getQuantity()) . " " . $this->map[$y][$x]->getText()->getProductName() . "s " . "not loaded. \n";
+                    }
+                    var_dump($this->map[$y][$x]->getText());
+
+                    $counter2++;
+                } else {
+                    $counter2++;
+                    echo "Product can't be loaded. \n";
+                }
+            }
+        }
 
 
+    }
+
+    public function getProduct($x, $y)
+    {
+        $this->map[$x][$y]->getText()->setQuantity($this->map[$x][$y]->getText()->getQuantity() - 1);
+        /*var_dump($this->map[$x][$y]->getText()->getQuantity()-1);
+        var_dump($this->map[$x][$y]);*/
+    }
 
 }
 
@@ -42,7 +78,7 @@ class Cell
         return $this->quantity;
     }
 
-    public function ads($quantity)
+    public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
     }
@@ -154,9 +190,9 @@ $a12 = new Cell('hello from a12');
 $a13 = new Cell('hello from a13');
 $a14 = new Cell('hello from a14');
 $a15 = new Cell('hello from a15');
-$products1 = new Product('pizza1', '15', '3', 2018);
-$products2 = new Product('pizza2', '10', '4', 2018);
-$products3 = new Product('pizza3', '10', '13', 2018);
+$products1 = new Product('pizza1', '10', '1', 2018);
+$products2 = new Product('pizza2', '10', '1', 2018);
+$products3 = new Product('pizza3', '10', '1', 2018);
 $products4 = new Product('pizza4', '10', '1', 2018);
 $products5 = new Product('pizza5', '10', '1', 2018);
 $products6 = new Product('pizza6', '10', '1', 2018);
@@ -168,3 +204,4 @@ $products11 = new Product('pizza11', '10', '1', 2018);
 $products12 = new Product('pizza12', '10', '1', 2018);
 $b = new Mapper (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14, $a15));
 $b->loadProduct(array($products1, $products2, $products3, $products4, $products5, $products6, $products7, $products8, $products9, $products10, $products11, $products12));
+$b->getProduct(0, 0);
