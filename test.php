@@ -3,6 +3,8 @@
 class Mapper
 {
     private $map;
+    private $rownumber = 3;
+    private $columnnumber = 3;
 
     public function __construct($obj)
     {
@@ -21,31 +23,44 @@ class Mapper
 
             }
         }
-
+//        var_dump($this->map);
     }
 
-    public function combineCells()
-    {
 
 
-        $this->map[0][2]->setSize(6);
-        var_dump($this->map);
-
-
-    }
 
 }
 
 class Cell
 {
     public $text;
-    private $size = 2;
+    private $size = 10;
     private $combined = false;
+
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    public function ads($quantity)
+    {
+        $this->quantity = $quantity;
+    }
 
     public function __construct($msg)
     {
         $this->text = $msg;
 
+    }
+
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    public function setText($text2)
+    {
+        $this->text = $text2;
     }
 
     public function setCombined($combined)
@@ -56,6 +71,68 @@ class Cell
     public function setSize($size)
     {
         $this->size = $size;
+    }
+
+    public function getSize()
+    {
+        return $this->size;
+    }
+}
+
+class Product
+{
+    private $productname;
+    private $quantity;
+    private $size;
+    private $expiredate;
+
+    public function __construct($productname, $quantity, $size, $expiredate)
+    {
+        $this->productname = $productname;
+        $this->quantity = $quantity;
+        $this->size = $size;
+        $this->expiredate = $expiredate;
+    }
+
+
+    public function getProductName()
+    {
+        return $this->productname;
+    }
+
+    public function setProductName($productname)
+    {
+        $this->productname = $productname;
+    }
+
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    public function getExpireDate()
+    {
+        return $this->expiredate;
+    }
+
+    public function setExpiredate($expiredate)
+    {
+        $this->expiredate = $expiredate;
     }
 
 
@@ -76,7 +153,18 @@ $a11 = new Cell('hello from a11');
 $a12 = new Cell('hello from a12');
 $a13 = new Cell('hello from a13');
 $a14 = new Cell('hello from a14');
-
-
-$b = new Mapper (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14));
-$b->combineCells();
+$a15 = new Cell('hello from a15');
+$products1 = new Product('pizza1', '15', '3', 2018);
+$products2 = new Product('pizza2', '10', '4', 2018);
+$products3 = new Product('pizza3', '10', '13', 2018);
+$products4 = new Product('pizza4', '10', '1', 2018);
+$products5 = new Product('pizza5', '10', '1', 2018);
+$products6 = new Product('pizza6', '10', '1', 2018);
+$products7 = new Product('pizza7', '10', '1', 2018);
+$products8 = new Product('pizza8', '10', '1', 2018);
+$products9 = new Product('pizza9', '10', '1', 2018);
+$products10 = new Product('pizza10', '10', '1', 2018);
+$products11 = new Product('pizza11', '10', '1', 2018);
+$products12 = new Product('pizza12', '10', '1', 2018);
+$b = new Mapper (array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11, $a12, $a13, $a14, $a15));
+$b->loadProduct(array($products1, $products2, $products3, $products4, $products5, $products6, $products7, $products8, $products9, $products10, $products11, $products12));

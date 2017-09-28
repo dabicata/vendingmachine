@@ -9,7 +9,7 @@
 class Cell
 {
     private $product;
-    private $quantity;
+    /*    private $quantity;*/
     private $size;
     private $combined = false;
 
