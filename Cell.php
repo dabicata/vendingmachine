@@ -19,7 +19,8 @@ class Cell
     /**
      * Cell constructor.
      * @param
-     * $size sets size of cells
+     * $size
+     * sets size of cells
      */
     public function __construct($size)
     {
@@ -29,7 +30,8 @@ class Cell
 
     /**
      * @return
-     * mixed product object
+     * mixed
+     *  returns product object
      */
     public function getProduct()
     {
@@ -38,7 +40,8 @@ class Cell
 
     /**
      * @param
-     * $product set product object
+     * $product
+     * sets product object
      */
     public function setProduct($product)
     {
@@ -57,7 +60,7 @@ class Cell
 
     /**
      * @return
-     * size of cell
+     * returns size of cell
      */
     public function getSize()
     {
@@ -66,7 +69,8 @@ class Cell
 
     /**
      * @param
-     * $size sets size of cell
+     * $size
+     * sets size of cell
      */
     public function setSize($size)
     {
@@ -75,7 +79,8 @@ class Cell
 
     /**
      * @return
-     * bool returns true or false depending if the cell is merged with other
+     * bool
+     * returns true or false depending if the cell is merged with other
      */
     public function getCombined()
     {
@@ -84,7 +89,8 @@ class Cell
 
     /**
      * @param
-     * $combined set cell as merged
+     * $combined
+     * set cell as merged
      */
     public function setCombined($combined)
     {

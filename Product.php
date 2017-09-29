@@ -22,6 +22,7 @@ class Product
      * @param $quantity sets quantity of product
      * @param $size sets size of product
      * @param $expiredate set expire date of product
+     * sets productname, quantity, size and expiredate.
      */
     public function __construct($productname, $quantity, $size, $expiredate)
     {
@@ -35,6 +36,7 @@ class Product
     /**
      * @return
      * product name
+     * returns product name.
      */
     public function getProductName()
     {
@@ -43,7 +45,8 @@ class Product
 
     /**
      * @param
-     * $productname sets product name
+     * $productname
+     * sets product name
      */
     public function setProductName($productname)
     {
@@ -61,7 +64,7 @@ class Product
 
     /**
      * @return
-     * returns product size
+     * returns size of product
      */
     public function getSize()
     {
@@ -70,7 +73,8 @@ class Product
 
     /**
      * @param
-     * $size sets size of product
+     * $size
+     * sets size of product
      */
     public function setSize($size)
     {
@@ -88,7 +92,8 @@ class Product
 
     /**
      * @param
-     * $expiredate sets expire date of product
+     * $expiredate
+     * sets expire date of product
      */
     public function setExpiredate($expiredate)
     {

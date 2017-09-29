@@ -41,4 +41,5 @@ $b = new VendingMachine (4, 3, 15);
 $b->createCell(array($a, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $a11));
 $b->loadProduct(array($products1, $products2, $products3, $products4, $products5, $products6, $products7, $products8, $products9, $products10, $products11, $products12));
 //$b->getProduct(2, 2);
+$b->combineCells(1, 1, 1, 3);
 $b->listItems();

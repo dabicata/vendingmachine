@@ -12,9 +12,11 @@ class VendingMachine
 
     /**
      * VendingMachine constructor.
+     *
      * @param $rownumber
      * @param $columnnumber
      * @param $cellsize
+     * sets rows columns and cell size of machine
      */
     public function __construct($rownumber, $columnnumber, $cellsize)
     {
@@ -37,8 +39,8 @@ class VendingMachine
         for ($y = 0; $y < $this->rownumber; $y++) {
             for ($x = 0; $x < $this->columnnumber; $x++) {
                 if (isset($obj[$counter])) {
-                    $this->map[$y][] = $obj[$counter++];
-//                    $this->map[$y][] = new Cell($this->cellsize);
+                    $this->map[$y][$x] = $obj[$counter++];
+//                    $this->map[$y][$x] = new Cell($this->cellsize);
                 } else {
                     break;
                 }
@@ -82,26 +84,26 @@ class VendingMachine
 
 
     /**
-     * @param
-     * $x rows of the first cell you want to combine
-     * @param
-     * $y column of first the cell you want to combine
-     * @param
-     * $a rows of the second cell you want to combine
-     * @param
-     * $b column of second the cell you want to combine
+     * @param $x rows of the first cell you want to combine
+     * @param $y column of first the cell you want to combine
+     * @param $a rows of the second cell you want to combine
+     * @param $b column of second the cell you want to combine
      *  merge 2 cells into one from left to right
      * example cell with cordinates 1,1 merged with 2,2
      */
     public function combineCells($x, $y, $a, $b)
     {
         if ($x == $a && $b == $y + 1) {
-            $this->map[$x][$y]->setSize($this->map[$x][$y]->getSize() * 2);
-            $this->map[$x][$y]->setCombined(true);
-            $this->map[$a][$b]->setCombined(true);
-            $this->map[$a][$b]->setSize(0);
+            if ($this->map[$x][$y] && $this->map[$x][$y]) {
+                $this->map[$x][$y]->setSize($this->map[$x][$y]->getSize() * 2);
+                $this->map[$x][$y]->setCombined(true);
+                $this->map[$a][$b]->setCombined(true);
+                $this->map[$a][$b]->setSize(0);
+            } else {
+                echo "cell doesn't exist \n";
+            }
         } else {
-            echo 'error you can combine only cells on same row from left to right';
+            echo "error you can combine only cells on same row from left to right \n";
         }
 
 
@@ -147,8 +149,9 @@ class VendingMachine
      * @param
      * $y column of the cell containing the product
      * @return  product name
+     * returns product of cell
      */
-    public function getProduct($x, $y)
+    public function buyProduct($x, $y)
     {
         $this->map[$x][$y]->getProduct()->setQuantity($this->map[$x][$y]->getProduct()->getQuantity() - 1);
         /*var_dump($this->map[$x][$y]->getProduct()->getQuantity()-1);
@@ -159,11 +162,13 @@ class VendingMachine
     /**
      * @return
      * name of product
+     * displays all products from machine
      */
     public function listItems()
     {
         for ($y = 0; $y < $this->rownumber; $y++) {
             for ($x = 0; $x < $this->columnnumber; $x++) {
+                if (!$this->map[$y][$x]->getCombined() && $this->map[$y][$x]->getSize() == 0) ;
                 if (!null == $this->map[$y][$x]->getProduct()) {
                     echo $this->map[$y][$x]->getProduct()->getProductName() . "\n";
                     echo $this->map[$y][$x]->getProduct()->getQuantity() . "\n";
