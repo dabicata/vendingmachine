@@ -133,7 +133,7 @@ class VendingMachine
                     $counter2++;
                 } else {
                     $counter2++;
-                    echo "Product can't be loaded. \n";
+                    echo "Product can't be loaded, product is too big. \n";
                 }
             }
         }
@@ -164,8 +164,10 @@ class VendingMachine
     {
         for ($y = 0; $y < $this->rownumber; $y++) {
             for ($x = 0; $x < $this->columnnumber; $x++) {
-                echo $this->map[$y][$x]->getProduct()->getProductName() . "\n";
-
+                if (!null == $this->map[$y][$x]->getProduct()) {
+                    echo $this->map[$y][$x]->getProduct()->getProductName() . "\n";
+                    echo $this->map[$y][$x]->getProduct()->getQuantity() . "\n";
+                }
             }
         }
 
