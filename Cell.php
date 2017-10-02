@@ -17,10 +17,9 @@ class Cell
     private $combined = false; // if true cell is merged with other cell
 
     /**
-     * Cell constructor.
-     * @param
-     * $size
      * sets size of cells
+     * Cell constructor.
+     * @param $size
      */
     public function __construct($size)
     {
@@ -29,9 +28,8 @@ class Cell
     }
 
     /**
-     * @return
-     * mixed
      *  returns product object
+     * @return mixed
      */
     public function getProduct()
     {
@@ -39,11 +37,10 @@ class Cell
     }
 
     /**
-     * @param
-     * $product
      * sets product object
+     * @param $product
      */
-    public function setProduct($product)
+    public function setProduct(Product $product)
     {
         $this->product = $product;
     }
@@ -59,8 +56,8 @@ class Cell
         }*/
 
     /**
-     * @return
      * returns size of cell
+     * @return
      */
     public function getSize()
     {
@@ -68,9 +65,8 @@ class Cell
     }
 
     /**
-     * @param
-     * $size
      * sets size of cell
+     * @param $size
      */
     public function setSize($size)
     {
@@ -78,9 +74,9 @@ class Cell
     }
 
     /**
+     * returns true or false depending if the cell is merged with other
      * @return
      * bool
-     * returns true or false depending if the cell is merged with other
      */
     public function getCombined()
     {
@@ -88,9 +84,8 @@ class Cell
     }
 
     /**
-     * @param
-     * $combined
      * set cell as merged
+     * @param $combined
      */
     public function setCombined($combined)
     {

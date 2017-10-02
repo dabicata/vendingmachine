@@ -11,51 +11,49 @@ namespace vending;
 
 class Product
 {
-    private $productname; // name of product
+    private $productName; // name of product
     private $quantity; // quantity of product
     private $size; // size of product
-    private $expiredate; // expire date of product
+    private $expireDate; // expire date of product
 
     /**
      * Product constructor.
-     * @param $productname sets productname
+     * sets productName, quantity, size and expireDate.
+     * @param $productName sets productName
      * @param $quantity sets quantity of product
      * @param $size sets size of product
-     * @param $expiredate set expire date of product
-     * sets productname, quantity, size and expiredate.
+     * @param $expireDate set expire date of product
      */
-    public function __construct($productname, $quantity, $size, $expiredate)
+    public function __construct($productName, $quantity, $size, $expireDate)
     {
-        $this->productname = $productname;
+        $this->productName = $productName;
         $this->quantity = $quantity;
         $this->size = $size;
-        $this->expiredate = $expiredate;
+        $this->expireDate = $expireDate;
     }
 
 
     /**
-     * @return
-     * product name
      * returns product name.
+     * @return
      */
     public function getProductName()
     {
-        return $this->productname;
+        return $this->productName;
     }
 
     /**
-     * @param
-     * $productname
      * sets product name
+     * @param $productName
      */
-    public function setProductName($productname)
+    public function setProductName($productName)
     {
-        $this->productname = $productname;
+        $this->productName = $productName;
     }
 
     /**
-     * @return
      * returns quantity of product
+     * @return
      */
     public function getQuantity()
     {
@@ -63,8 +61,8 @@ class Product
     }
 
     /**
-     * @return
      * returns size of product
+     * @return
      */
     public function getSize()
     {
@@ -72,9 +70,9 @@ class Product
     }
 
     /**
+     * sets size of product
      * @param
      * $size
-     * sets size of product
      */
     public function setSize($size)
     {
@@ -82,22 +80,21 @@ class Product
     }
 
     /**
-     * @return
      * returns expire date of product
+     * @return
      */
     public function getExpireDate()
     {
-        return $this->expiredate;
+        return $this->expireDate;
     }
 
     /**
-     * @param
-     * $expiredate
      * sets expire date of product
+     * @param $expireDate
      */
-    public function setExpiredate($expiredate)
+    public function setExpiredate($expireDate)
     {
-        $this->expiredate = $expiredate;
+        $this->expireDate = $expireDate;
     }
 
     public function setQuantity($quantity)

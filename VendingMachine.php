@@ -3,102 +3,90 @@
 namespace vending;
 class VendingMachine
 {
-    private $rownumber; //row numbers
-    private $columnnumber; //column numbers
-    private $maxcells;  //maximum cells
-    private $cellsize;  //cell size
-    private $map;   //mapped cells to machine
+    private $rowNumber; //row numbers
+    private $columnNumber; //column numbers
+    private $cellSize;  //cell size
+    private $cellMatrix;   //cellMatrixped cells to machine
 
 
     /**
      * VendingMachine constructor.
-     *
-     * @param $rownumber
-     * @param $columnnumber
-     * @param $cellsize
      * sets rows columns and cell size of machine
+     * @param $rowNumber
+     * @param $columnNumber
+     * @param $cellSize
      */
-    public function __construct($rownumber, $columnnumber, $cellsize)
+    public function __construct($rowNumber, $columnNumber, $cellSize)
     {
-        $this->columnnumber = $columnnumber;
-        $this->rownumber = $rownumber;
-        $this->maxcells = $rownumber * $columnnumber;
-        $this->cellsize = $cellsize;
+        $this->columnNumber = $columnNumber;
+        $this->rowNumber = $rowNumber;
+        $this->cellSize = $cellSize;
 
     }
 
     /**
-     * @param $obj
-     * create new cell and map it to machine
+     * returns row number of machine
+     * @return mixed
      */
-    public function createCell($obj)
+    public function getRow()
+    {
+        return $this->rowNumber;
+    }
+
+    /**
+     * create new cell and cellMatrix it to machine
+     * @param $obj
+     */
+    public function defineMachine()
     {
 
-        $this->map = [];
-        $counter = 0;
-        for ($y = 0; $y < $this->rownumber; $y++) {
-            for ($x = 0; $x < $this->columnnumber; $x++) {
-                if (isset($obj[$counter])) {
-                    $this->map[$y][$x] = $obj[$counter++];
-//                    $this->map[$y][$x] = new Cell($this->cellsize);
-                } else {
-                    break;
-                }
-
+        $this->cellMatrix = [];
+        for ($column = 0; $column < $this->rowNumber; $column++) {
+            for ($row = 0; $row < $this->columnNumber; $row++) {
+//                    $this->cellMatrix[$column][$row] = $obj[$counter++];
+                $this->cellMatrix[$column][$row] = new Cell($this->cellSize);
             }
         }
 
 
-//        var_dump($this->map);
+//        var_dump($this->cellMatrix);
     }
 
     /**
-     *
-     *
-     * @return mixed
-     * returns row number of machine
-     */
-    public function getRow()
-    {
-        return $this->rownumber;
-    }
-
-    /**
-     * @return mixed
      * return column number of machine
+     * @return mixed
      */
     public function getColumn()
     {
-        return $this->columnnumber;
+        return $this->columnNumber;
     }
 
 
     /**
-     * @return mixed
      * returns cell size of machine
+     * @return mixed
      */
     public function getCellsize()
     {
-        return $this->cellsize;
+        return $this->cellSize;
     }
 
 
     /**
-     * @param $x rows of the first cell you want to combine
-     * @param $y column of first the cell you want to combine
+     * merge 2 cells into one from left to right
+     * example cell with cordinates 1,1 merged with 2,2@param $row rows of the first cell you want to combine
+     * @param $column column of first the cell you want to combine
      * @param $a rows of the second cell you want to combine
      * @param $b column of second the cell you want to combine
-     *  merge 2 cells into one from left to right
-     * example cell with cordinates 1,1 merged with 2,2
      */
-    public function combineCells($x, $y, $a, $b)
+    public function combineCells($firstCellRow, $firstCellColumn, $secondCellRow, $secondCellColumn)
     {
-        if ($x == $a && $b == $y + 1) {
-            if ($this->map[$x][$y] && $this->map[$x][$y]) {
-                $this->map[$x][$y]->setSize($this->map[$x][$y]->getSize() * 2);
-                $this->map[$x][$y]->setCombined(true);
-                $this->map[$a][$b]->setCombined(true);
-                $this->map[$a][$b]->setSize(0);
+        if ($firstCellRow == $secondCellRow && $secondCellColumn == $firstCellColumn + 1) {
+            if ($this->cellMatrix[$firstCellRow][$firstCellColumn] && $this->cellMatrix[$secondCellRow][$secondCellColumn]) {
+                $this->cellMatrix[$firstCellRow][$firstCellColumn]->setSize($this->cellMatrix[$firstCellRow][$firstCellColumn]->getSize() * 2);
+                $this->cellMatrix[$firstCellRow][$firstCellColumn]->setCombined(true);
+                $this->cellMatrix[$secondCellRow][$secondCellColumn]->setCombined(true);
+                $this->cellMatrix[$secondCellRow][$secondCellColumn]->setSize(0);
             } else {
                 echo "cell doesn't exist \n";
             }
@@ -110,31 +98,31 @@ class VendingMachine
     }
 
     /**
-     * @param $obj2 array of objects of products
      * loads product objects into cells
+     * @param $productArray array of objects of products
      */
-    public function loadProduct($obj2)
+    public function loadProduct(array $productArray)
     {
 
 
-        $counter2 = 0;
-        for ($y = 0; $y < $this->rownumber; $y++) {
-            for ($x = 0; $x < $this->columnnumber; $x++) {
-                if (isset($obj2[$counter2]) && $this->map[$y][$x]->getSize() >= $obj2[$counter2]->getSize()) {
-                    $this->map[$y][$x]->setProduct($obj2[$counter2]);
-                    /* $hey = (($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
-                                         $this->map[$y][$x]->getProduct()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
-                                        ($obj2[$counter2]->getQuantity() - (($obj2[$counter2]->getQuantity() / $this->map[$y][$x]->getSize()))) > $obj2[$counter2]->getQuantity())*/
-                    if (($obj2[$counter2]->getQuantity() * $obj2[$counter2]->getSize()) > $this->map[$y][$x]->getSize()) {
-                        $quantity = $obj2[$counter2]->getQuantity();
-                        $this->map[$y][$x]->getProduct()->setQuantity((int)($this->map[$y][$x]->getSize() / ($obj2[$counter2]->getSize())));
-                        echo ($quantity - $this->map[$y][$x]->getProduct()->getQuantity()) . " " . $this->map[$y][$x]->getProduct()->getProductName() . "s " . "not loaded. \n";
+        $counter = 0;
+        for ($column = 0; $column < $this->rowNumber; $column++) {
+            for ($row = 0; $row < $this->columnNumber; $row++) {
+                if (isset($productArray[$counter]) && $this->cellMatrix[$column][$row]->getSize() >= $productArray[$counter]->getSize()) {
+                    $this->cellMatrix[$column][$row]->setProduct($productArray[$counter]);
+                    /* $hey = (($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
+                                         $this->cellMatrix[$column][$row]->getProduct()->setQuantity((int)($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
+                                        ($productArray[$counter]->getQuantity() - (($productArray[$counter]->getQuantity() / $this->cellMatrix[$column][$row]->getSize()))) > $productArray[$counter]->getQuantity())*/
+                    if (($productArray[$counter]->getQuantity() * $productArray[$counter]->getSize()) > $this->cellMatrix[$column][$row]->getSize()) {
+                        $quantity = $productArray[$counter]->getQuantity();
+                        $this->cellMatrix[$column][$row]->getProduct()->setQuantity((int)($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
+                        echo ($quantity - $this->cellMatrix[$column][$row]->getProduct()->getQuantity()) . " " . $this->cellMatrix[$column][$row]->getProduct()->getProductName() . "s " . "not loaded. \n";
                     }
-                    //var_dump($this->map[$y][$x]->getProduct());
+                    //var_dump($this->cellMatrix[$column][$row]->getProduct());
 
-                    $counter2++;
+                    $counter++;
                 } else {
-                    $counter2++;
+                    $counter++;
                     echo "Product can't be loaded, product is too big. \n";
                 }
             }
@@ -144,34 +132,36 @@ class VendingMachine
     }
 
     /**
-     * @param
-     * $x row of the cell containing the product
-     * @param
-     * $y column of the cell containing the product
-     * @return  product name
      * returns product of cell
+     * @param $row row of the cell containing the product
+     * @param $column column of the cell containing the product
+     * @return  product name
      */
-    public function buyProduct($x, $y)
+    public function buyProduct($row, $column)
     {
-        $this->map[$x][$y]->getProduct()->setQuantity($this->map[$x][$y]->getProduct()->getQuantity() - 1);
-        /*var_dump($this->map[$x][$y]->getProduct()->getQuantity()-1);
-        var_dump($this->map[$x][$y]);*/
-        echo $this->map[$x][$y]->getProduct()->getProductName();
+        if ($this->cellMatrix[$row][$column]->getProduct()->getQuantity() > 0) {
+            $this->cellMatrix[$row][$column]->getProduct()->setQuantity($this->cellMatrix[$row][$column]->getProduct()->getQuantity() - 1);
+            /*var_dump($this->cellMatrix[$row][$column]->getProduct()->getQuantity()-1);
+            var_dump($this->cellMatrix[$row][$column]);*/
+            echo $this->cellMatrix[$row][$column]->getProduct()->getProductName();
+        } else {
+            echo "product not found";
+        }
     }
 
     /**
+     * displays all products from machine
      * @return
      * name of product
-     * displays all products from machine
      */
     public function listItems()
     {
-        for ($y = 0; $y < $this->rownumber; $y++) {
-            for ($x = 0; $x < $this->columnnumber; $x++) {
-                if (!$this->map[$y][$x]->getCombined() && $this->map[$y][$x]->getSize() == 0) ;
-                if (!null == $this->map[$y][$x]->getProduct()) {
-                    echo $this->map[$y][$x]->getProduct()->getProductName() . "\n";
-                    echo $this->map[$y][$x]->getProduct()->getQuantity() . "\n";
+        for ($column = 0; $column < $this->rowNumber; $column++) {
+            for ($row = 0; $row < $this->columnNumber; $row++) {
+                if (!$this->cellMatrix[$column][$row]->getCombined() && $this->cellMatrix[$column][$row]->getSize() == 0) ;
+                if (!null == $this->cellMatrix[$column][$row]->getProduct()) {
+                    echo $this->cellMatrix[$column][$row]->getProduct()->getProductName() . "\n";
+                    echo $this->cellMatrix[$column][$row]->getProduct()->getQuantity() . "\n";
                 }
             }
         }
