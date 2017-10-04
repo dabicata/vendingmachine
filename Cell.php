@@ -11,8 +11,8 @@ namespace vending;
 
 class Cell
 {
-    private $product; // contains the product object
-    /*    private $quantity;*/
+    private $productz; // contains the product object
+    private $quantity = 0;
     private $size; // size of cell
     private $combined = false; // if true cell is merged with other cell
 
@@ -33,27 +33,28 @@ class Cell
      */
     public function getProduct()
     {
-        return $this->product;
+        return $this->productz;
     }
 
     /**
      * sets product object
      * @param $product
      */
-    public function setProduct(Product $product)
+    public function setProduct($product)
     {
-        $this->product = $product;
+        $this->productz[] = $product;
     }
 
-    /*    public function getQuantity()
-        {
-            return $this->quantity;
-        }
-    
-        public function setQuantity($quantity)
-        {
-            $this->quantity = $quantity;
-        }*/
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
 
     /**
      * returns size of cell
@@ -90,6 +91,11 @@ class Cell
     public function setCombined($combined)
     {
         $this->combined = $combined;
+    }
+
+    public function getProductFromArray()
+    {
+        return $this->productz[0];
     }
 
 }

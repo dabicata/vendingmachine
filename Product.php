@@ -12,7 +12,7 @@ namespace vending;
 class Product
 {
     private $productName; // name of product
-    private $quantity; // quantity of product
+    /*    private $quantity; // quantity of product*/
     private $size; // size of product
     private $expireDate; // expire date of product
 
@@ -24,10 +24,11 @@ class Product
      * @param $size sets size of product
      * @param $expireDate set expire date of product
      */
-    public function __construct($productName, $quantity, $size, $expireDate)
+    public function __construct($productName,/* $quantity,*/
+                                $size, $expireDate)
     {
         $this->productName = $productName;
-        $this->quantity = $quantity;
+        /*        $this->quantity = $quantity;*/
         $this->size = $size;
         $this->expireDate = $expireDate;
     }
@@ -55,10 +56,15 @@ class Product
      * returns quantity of product
      * @return
      */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
+    /*    public function getQuantity()
+        {
+            return $this->quantity;
+        }*/
+
+    /*    public function setQuantity($quantity)
+        {
+            $this->quantity = $quantity;
+        }*/
 
     /**
      * returns size of product
@@ -95,10 +101,5 @@ class Product
     public function setExpiredate($expireDate)
     {
         $this->expireDate = $expireDate;
-    }
-
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
     }
 }

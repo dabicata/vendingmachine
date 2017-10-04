@@ -41,10 +41,10 @@ class VendingMachine
     {
 
         $this->cellMatrix = [];
-        for ($column = 0; $column < $this->rowNumber; $column++) {
-            for ($row = 0; $row < $this->columnNumber; $row++) {
+        for ($row = 0; $row < $this->rowNumber; $row++) {
+            for ($column = 0; $column < $this->columnNumber; $column++) {
 //                    $this->cellMatrix[$column][$row] = $obj[$counter++];
-                $this->cellMatrix[$column][$row] = new Cell($this->cellSize);
+                $this->cellMatrix[$row][$column] = new Cell($this->cellSize);
             }
         }
 
@@ -74,7 +74,7 @@ class VendingMachine
 
     /**
      * merge 2 cells into one from left to right
-     * example cell with cordinates 1,1 merged with 2,2@param $row rows of the first cell you want to combine
+     * example cell with cordinates 1,1 merged with 2,2 @param $row rows of the first cell you want to combine
      * @param $column column of first the cell you want to combine
      * @param $a rows of the second cell you want to combine
      * @param $b column of second the cell you want to combine
@@ -101,35 +101,19 @@ class VendingMachine
      * loads product objects into cells
      * @param $productArray array of objects of products
      */
-    public function loadProduct(array $productArray)
+    public function loadProduct($productArray)
     {
-
-
+        var_dump($productArray);
         $counter = 0;
-        for ($column = 0; $column < $this->rowNumber; $column++) {
-            for ($row = 0; $row < $this->columnNumber; $row++) {
-                if (isset($productArray[$counter]) && $this->cellMatrix[$column][$row]->getSize() >= $productArray[$counter]->getSize()) {
-                    $this->cellMatrix[$column][$row]->setProduct($productArray[$counter]);
-                    /* $hey = (($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
-                                         $this->cellMatrix[$column][$row]->getProduct()->setQuantity((int)($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
-                                        ($productArray[$counter]->getQuantity() - (($productArray[$counter]->getQuantity() / $this->cellMatrix[$column][$row]->getSize()))) > $productArray[$counter]->getQuantity())*/
-                    if (($productArray[$counter]->getQuantity() * $productArray[$counter]->getSize()) > $this->cellMatrix[$column][$row]->getSize()) {
-                        $quantity = $productArray[$counter]->getQuantity();
-                        $this->cellMatrix[$column][$row]->getProduct()->setQuantity((int)($this->cellMatrix[$column][$row]->getSize() / ($productArray[$counter]->getSize())));
-                        echo ($quantity - $this->cellMatrix[$column][$row]->getProduct()->getQuantity()) . " " . $this->cellMatrix[$column][$row]->getProduct()->getProductName() . "s " . "not loaded. \n";
-                    }
-                    //var_dump($this->cellMatrix[$column][$row]->getProduct());
-
-                    $counter++;
-                } else {
-                    $counter++;
-                    echo "Product can't be loaded, product is too big. \n";
-                }
+        foreach ($this->cellMatrix as $matrix) {
+            foreach ($matrix as $cell) {
+                var_dump($cell->getProduct());
             }
+
         }
 
-
     }
+
 
     /**
      * returns product of cell
@@ -137,7 +121,8 @@ class VendingMachine
      * @param $column column of the cell containing the product
      * @return  product name
      */
-    public function buyProduct($row, $column)
+    public
+    function buyProduct($row, $column)
     {
         if ($this->cellMatrix[$row][$column]->getProduct()->getQuantity() > 0) {
             $this->cellMatrix[$row][$column]->getProduct()->setQuantity($this->cellMatrix[$row][$column]->getProduct()->getQuantity() - 1);
@@ -154,17 +139,24 @@ class VendingMachine
      * @return
      * name of product
      */
-    public function listItems()
+    public
+    function listItems()
     {
-        for ($column = 0; $column < $this->rowNumber; $column++) {
-            for ($row = 0; $row < $this->columnNumber; $row++) {
-                if (!$this->cellMatrix[$column][$row]->getCombined() && $this->cellMatrix[$column][$row]->getSize() == 0) ;
-                if (!null == $this->cellMatrix[$column][$row]->getProduct()) {
-                    echo $this->cellMatrix[$column][$row]->getProduct()->getProductName() . "\n";
-                    echo $this->cellMatrix[$column][$row]->getProduct()->getQuantity() . "\n";
+        for ($row = 0; $row < $this->rowNumber; $row++) {
+            for ($column = 0; $column < $this->columnNumber; $column++) {
+                if (!$this->cellMatrix[$row][$column]->getCombined() && $this->cellMatrix[$row][$column]->getSize() == 0) ;
+                if (!null == $this->cellMatrix[$row][$column]->getProduct()) {
+                    echo $this->cellMatrix[$row][$column]->getProduct()->getProductName() . "\n";
+                    echo $this->cellMatrix[$row][$column]->getProduct()->getQuantity() . "\n";
                 }
             }
         }
 
+    }
+
+    public
+    function setFood($row, $column, $product)
+    {
+        $this->cellMatrix[$row][$column]->setProduct($product);
     }
 }
