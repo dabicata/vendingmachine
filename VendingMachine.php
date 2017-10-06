@@ -111,7 +111,7 @@ class VendingMachine
                         if ($product->getSize() <= $cell->getSize()) {
                             if (is_null($cell->getProduct())) {
                                 $cell->setProduct($product);
-                                $cell->setQuantity($cell->getQuantity() + 1);
+                                $cell->setQuantity(1);
                                 break 2;
                             } else {
                                 if ($cell->getProductFromArray()->getProductName() == $product->getProductName()) {
@@ -166,8 +166,7 @@ class VendingMachine
      * @return
      * name of product and quantity
      */
-    public
-    function listItems()
+    public function listItems()
     {
 
         foreach ($this->cellMatrix as $matrix) {
@@ -189,7 +188,7 @@ class VendingMachine
                     foreach ($cell->getProduct() as $products) {
                         if ($products->getExpireDate() >= date("d.m.y")) {
                             $cell->setQuantity($cell->getQuantity() - 1);
-                            var_dump($cell);
+
                         }
 
                     }
@@ -197,6 +196,7 @@ class VendingMachine
             }
         }
     }
+
 }
 
 
