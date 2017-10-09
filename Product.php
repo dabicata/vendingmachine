@@ -9,10 +9,9 @@
 namespace vending;
 
 
-class Product
+abstract class Product
 {
     private $productName; // name of product
-    /*    private $quantity; // quantity of product*/
     private $size; // size of product
     private $expireDate; // expire date of product
 
@@ -20,18 +19,20 @@ class Product
      * Product constructor.
      * sets productName, quantity, size and expireDate.
      * @param $productName sets productName
-     * @param $quantity sets quantity of product
      * @param $size sets size of product
      * @param $expireDate set expire date of product
      */
-    public function __construct($productName,/* $quantity,*/
-                                $size, $expireDate)
+    public function __construct($productName, $size, $expireDate)
     {
         $this->productName = $productName;
-        /*        $this->quantity = $quantity;*/
         $this->size = $size;
         $this->expireDate = $expireDate;
     }
+
+    abstract public function setPrice($price);
+
+    abstract public function getPrice();
+
 
 
     /**
@@ -52,19 +53,6 @@ class Product
         $this->productName = $productName;
     }
 
-    /**
-     * returns quantity of product
-     * @return
-     */
-    /*    public function getQuantity()
-        {
-            return $this->quantity;
-        }*/
-
-    /*    public function setQuantity($quantity)
-        {
-            $this->quantity = $quantity;
-        }*/
 
     /**
      * returns size of product
@@ -98,9 +86,10 @@ class Product
      * sets expire date of product
      * @param $expireDate
      */
-    public function setExpiredate($expireDate)
+    public function setExpireDate($expireDate)
     {
         $this->expireDate = $expireDate;
     }
+
 
 }
