@@ -115,7 +115,7 @@ class VendingMachine
      * loads product objects into cells
      * @param $productArray array of objects of products
      */
-    public function loadProduct2(iterable $productArray)
+    public function loadProducts(iterable $productArray)
     {
         foreach ($productArray as $product) {
             foreach ($this->cellMatrix as $matrix) {
