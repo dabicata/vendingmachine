@@ -1,18 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 9/27/17
- * Time: 12:00 PM
- */
 
 namespace vending;
 
-
+/**
+ * Class Cell
+ * contains objects of product class
+ * @package vending
+ */
 class Cell
 {
     private $products; // contains the product object
-//    private $quantity = 0;
     private $size; // size of cell
 
     /**
@@ -30,7 +27,7 @@ class Cell
      *  returns product object
      * @return mixed
      */
-    public function getProduct()
+    public function getProducts()
     {
         return $this->products;
     }
@@ -44,14 +41,13 @@ class Cell
         $this->products[] = $product;
     }
 
+    /**
+     * returns quantity of products in the cell
+     * @return int
+     */
     public function getQuantity()
     {
         return count($this->products);
-    }
-
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
     }
 
 
@@ -74,7 +70,10 @@ class Cell
     }
 
 
-
+    /**
+     * returs first product from the products array
+     * @return mixed
+     */
     public function getProductFromArray()
     {
         return $this->products[0];
@@ -82,10 +81,21 @@ class Cell
     }
 
     /**
+     * pops product from array
      * @return mixed
      */
     public function popProduct()
     {
         array_pop($this->products);
+    }
+
+    /**
+     * remove product from products array and reformat it
+     * @param $x
+     */
+    public function removeProduct($x)
+    {
+        unset($this->products[$x]);
+        $this->products = array_values($this->products);
     }
 }

@@ -1,14 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 9/27/17
- * Time: 12:02 PM
- */
 
 namespace vending;
 
-
+/**
+ * Class Product
+ * contains productname, size, and expiredate of the product
+ * @package vending
+ */
 abstract class Product
 {
     private $productName; // name of product
@@ -17,6 +15,7 @@ abstract class Product
 
     /**
      * Product constructor.
+     *
      * sets productName, quantity, size and expireDate.
      * @param $productName sets productName
      * @param $size sets size of product
@@ -29,10 +28,17 @@ abstract class Product
         $this->expireDate = $expireDate;
     }
 
+    /**
+     * sets price of  product
+     * @param $price
+     * @return mixed
+     */
     abstract public function setPrice($price);
 
+    /** returns price of product
+     * @return mixed
+     */
     abstract public function getPrice();
-
 
 
     /**
@@ -73,9 +79,10 @@ abstract class Product
         $this->size = $size;
     }
 
+
     /**
-     * returns expire date of product
-     * @return
+     * returs expire date of product
+     * @return set
      */
     public function getExpireDate()
     {

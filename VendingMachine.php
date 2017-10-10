@@ -1,6 +1,12 @@
 <?php
 
 namespace vending;
+
+/**
+ * Class VendingMachine
+ * create cell objects and map them to the machine allows you to buy products and check their expiredate
+ * @package vending
+ */
 class VendingMachine
 {
     private $rowNumber; //row numbers
@@ -35,7 +41,6 @@ class VendingMachine
 
     /**
      * create new cell and cellMatrix it to machine
-     * @param $obj
      */
     public function defineMachine()
     {
@@ -63,17 +68,19 @@ class VendingMachine
 
 
     /**
-     * returns cell size of machine
-     * @return mixed
-     */
-    /**
-     * @param mixed $cellSize
+     * sets cell size
+     * @param $cellSize
      */
     public function setCellSize($cellSize)
     {
         $this->cellSize = $cellSize;
     }
 
+
+    /**
+     * returns cell size
+     * @return mixed
+     */
     public function getCellSize()
     {
         return $this->cellSize;
@@ -82,10 +89,11 @@ class VendingMachine
 
     /**
      * merge 2 cells into one from left to right
-     * example cell with cordinates 1,1 merged with 2,2 @param $row rows of the first cell you want to combine
-     * @param $column column of first the cell you want to combine
-     * @param $a rows of the second cell you want to combine
-     * @param $b column of second the cell you want to combine
+     * example cell with cordinates 1,1 merged with 2,2
+     * @param $firstCellRow row of the first cell you want to combine
+     * @param $firstCellColumn column of first the cell you want to combine
+     * @param $secondCellRow row of the second cell you want to combine
+     * @param $secondCellColumn column of second the cell you want to combine
      */
     public function combineCells($firstCellRow, $firstCellColumn, $secondCellRow, $secondCellColumn)
     {
@@ -107,19 +115,18 @@ class VendingMachine
      * loads product objects into cells
      * @param $productArray array of objects of products
      */
-
     public function loadProduct2(iterable $productArray)
     {
         foreach ($productArray as $product) {
             foreach ($this->cellMatrix as $matrix) {
                 foreach ($matrix as $cell) {
                     if ($product->getSize() <= $cell->getSize()) {
-                        if (is_null($cell->getProduct())) {
+                        if (is_null($cell->getProducts())) {
                             $cell->setProduct($product);
                             break 2;
                         } else {
                             if (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())) {
-                                if (((($cell->getSize() - ($product->getSize())) * (count($cell->getProduct()))) / $product->getSize() >= 1)) {
+                                if (((($cell->getSize() - ($product->getSize())) * ($cell->getQuantity())) / $product->getSize() >= 1)) {
                                     $cell->setProduct($product);
                                     break 2;
                                 } else {
@@ -137,15 +144,14 @@ class VendingMachine
     }
 
     /**
-     * returns product of cell
-     * @param $row row of the cell containing the product
-     * @param $column column of the cell containing the product
-     * @return  product name
+     * returns product and change
+     * @param $row
+     * @param $column
+     * @param $price
      */
-    public
-    function buyProduct($row, $column, $price)
+    public function buyProduct($row, $column, $price)
     {
-        if (count($this->cellMatrix[$row][$column]->getProduct()) > 0) {
+        if (count($this->cellMatrix[$row][$column]->getProducts()) > 0) {
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
                 $this->cellMatrix[$row][$column]->popProduct();
                 echo $this->cellMatrix[$row][$column]->getProductFromArray()->getProductName() . " product bought \n";
@@ -160,11 +166,9 @@ class VendingMachine
 
     /**
      * displays all products from machine
-     * @return
-     * name of product and quantity
+     * @return name of product and quantity
      */
-    public
-    function listItems()
+    public function listItems()
     {
 
         foreach ($this->cellMatrix as $matrix) {
@@ -173,30 +177,33 @@ class VendingMachine
                 if (null !== $cell->getProductFromArray()) {
 
                     echo $cell->getProductFromArray()->getProductName() . "\n";
-                    echo (count($cell->getProduct())) . "\n";
+                    echo ($cell->getQuantity()) . "\n";
                 }
             }
         }
     }
 
-    public
-    function removeExpireDate()
+    /**
+     *checks if there are expired products and remove them
+     */
+    public function removeExpiredProducts()
     {
         foreach ($this->cellMatrix as $matrix) {
+            $counter = 0;
             foreach ($matrix as $cell) {
-                if ($cell->getProduct() == !null) {
-                    foreach ($cell->getProduct() as $products) {
-                        if ($products->getExpireDate() >= date("d.m.y")) {
-                            $cell->setQuantity($cell->getQuantity() - 1);
-
+                if ($cell->getProducts() == !null) {
+                    foreach ($cell->getProducts() as $products) {
+                        if (strtotime($products->getExpireDate()) < strtotime(date("d.m.y"))) {
+                            $cell->removeProduct($counter);
+                        } else {
+                            $counter++;
                         }
-
+                        var_dump($cell);
                     }
                 }
             }
         }
     }
-
 }
 
 
