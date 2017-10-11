@@ -62,7 +62,7 @@ abstract class Product
 
     /**
      * returns size of product
-     * @return
+     * @return sets
      */
     public function getSize()
     {
