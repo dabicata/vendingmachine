@@ -4,7 +4,7 @@ namespace vending;
 
 /**
  * Class Product
- * contains productname, size, and expiredate of the product
+ * contains productName, size, and expireDate of the product
  * @package vending
  */
 abstract class Product
@@ -43,7 +43,7 @@ abstract class Product
 
     /**
      * returns product name.
-     * @return
+     * @return product name
      */
     public function getProductName()
     {
@@ -81,7 +81,7 @@ abstract class Product
 
 
     /**
-     * returs expire date of product
+     * returns expire date of product
      * @return set
      */
     public function getExpireDate()

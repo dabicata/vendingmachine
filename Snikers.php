@@ -29,7 +29,7 @@ class Snikers extends Product
     }
 
     /**
-     * returs price of product
+     * returns price of product
      * @return sets
      */
     public function getPrice()

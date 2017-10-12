@@ -18,6 +18,7 @@ class VendingMachine
     /**
      * VendingMachine constructor.
      * sets rows columns and cell size of machine
+     *
      * @param $rowNumber - rows of machine
      * @param $columnNumber - columns of machine
      * @param $cellSize - default cell size of machine
@@ -44,17 +45,12 @@ class VendingMachine
      */
     public function defineMachine()
     {
-
         $this->cellMatrix = [];
         for ($row = 0; $row < $this->rowNumber; $row++) {
             for ($column = 0; $column < $this->columnNumber; $column++) {
-//                    $this->cellMatrix[$column][$row] = $obj[$counter++];
                 $this->cellMatrix[$row][$column] = new Cell($this->cellSize);
             }
         }
-
-
-//        var_dump($this->cellMatrix);
     }
 
     /**
@@ -118,9 +114,11 @@ class VendingMachine
      */
     public function loadProducts(iterable $productArray)
     {
+        $this->removeExpiredProducts();
         foreach ($productArray as $product) {
             foreach ($this->cellMatrix as $matrix) {
                 foreach ($matrix as $cell) {
+
                     if ($product->getSize() <= $cell->getSize()) {
                         if (is_null($cell->getProducts())) {
                             $cell->setProduct($product);
@@ -131,8 +129,8 @@ class VendingMachine
                                     $cell->setProduct($product);
                                     break 2;
                                 } else {
-                                    $returnProducts[] = $product;
-                                    echo $product->getProductName() . " can't be loaded \n";
+                                    return $returnProducts[] = $product;
+                                    /*                                    echo $product->getProductName() . " can't be loaded \n";*/
                                     break 2; /*break 2 makes it puts different items in each cell; no break puts same items in many cells*/
                                 }
                             }
@@ -145,15 +143,7 @@ class VendingMachine
     }
 
     /**
-     * returns product and change.
-     *
-     * @param $row - row of item
-     * @param $column - column(cell) of item
-     * @param $price - money put in machine
-     */
-
-    /**
-     *
+     * TODO
      *
      * @param $row
      * @param $column
@@ -179,16 +169,12 @@ class VendingMachine
     }
 
     /**
-     * displays all products from machine
-     * @return - name of product and quantity
+     * Displays all products from machine.
      */
-    public
-    function listItems()
+    public function listItems()
     {
-
         foreach ($this->cellMatrix as $matrix) {
             foreach ($matrix as $cell) {
-
                 if (null !== $cell->getProductFromArray()) {
                     echo $cell->getProductFromArray()->getProductName() . "\n";
                     echo ($cell->getQuantity()) . "\n";
@@ -200,8 +186,7 @@ class VendingMachine
     /**
      *checks if there are expired products and remove them
      */
-    public
-    function removeExpiredProducts()
+    public function removeExpiredProducts()
     {
         foreach ($this->cellMatrix as $matrix) {
             $counter = 0;
@@ -218,6 +203,7 @@ class VendingMachine
             }
         }
     }
+
 }
 
 

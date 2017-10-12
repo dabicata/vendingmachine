@@ -77,7 +77,6 @@ class Cell
     public function getProductFromArray()
     {
         return $this->products[0];
-
     }
 
     /**
