@@ -4,9 +4,9 @@ namespace vending;
 
 /**
  * Class Chips
- * extends product class
- * sets properties of extend product class
- * and adds price as property
+ * Extends product class.
+ * Sets properties of extend product class
+ * and adds price as property.
  * @package vending
  */
 class Chips extends Product
@@ -16,7 +16,7 @@ class Chips extends Product
     /**
      * Cola constructor.
      * sets productname,size and expire date of product in abstract class
-     * and sets price
+     * and sets price.
      * @param sets $price
      * @param sets $expireDate
      */
@@ -29,7 +29,7 @@ class Chips extends Product
     }
 
     /**
-     * returs price of product
+     * Returs price of product.
      * @return sets
      */
     public function getPrice()
@@ -39,7 +39,7 @@ class Chips extends Product
 
 
     /**
-     * sets price of product
+     * Sets price of product.
      * @param $price
      * @return mixed
      */

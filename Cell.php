@@ -13,7 +13,7 @@ class Cell
     private $size; // size of cell
 
     /**
-     * sets size of cells
+     * Sets size of cells.
      * Cell constructor.
      * @param $size
      */
@@ -24,7 +24,7 @@ class Cell
     }
 
     /**
-     *  returns product object
+     * Returns product object.
      * @return mixed
      */
     public function getProducts()
@@ -33,7 +33,7 @@ class Cell
     }
 
     /**
-     * sets product object
+     * Sets product object.
      * @param $product
      */
     public function setProduct($product)
@@ -42,7 +42,7 @@ class Cell
     }
 
     /**
-     * returns quantity of products in the cell
+     * Returns quantity of products in the cell.
      * @return int
      */
     public function getQuantity()
@@ -52,7 +52,7 @@ class Cell
 
 
     /**
-     * returns size of cell
+     * Seturns size of cell.
      * @return
      */
     public function getSize()
@@ -61,7 +61,7 @@ class Cell
     }
 
     /**
-     * sets size of cell
+     * Sets size of cell.
      * @param $size
      */
     public function setSize($size)
@@ -71,7 +71,7 @@ class Cell
 
 
     /**
-     * returs first product from the products array
+     * Returs first product from the products array.
      * @return mixed
      */
     public function getProductFromArray()
@@ -80,7 +80,7 @@ class Cell
     }
 
     /**
-     * pops product from array
+     * Pops product from array.
      * @return mixed
      */
     public function popProduct()
@@ -89,7 +89,7 @@ class Cell
     }
 
     /**
-     * remove product from products array and reformat it
+     * Remove product from products array and reformat it.
      * @param $x
      */
     public function removeProduct($x)

@@ -4,7 +4,7 @@ namespace vending;
 
 /**
  * Class VendingMachine
- * create cell objects and map them to the machine allows you to buy products and check their expiredate
+ * Create cell objects and map them to the machine, allows you to buy products and check their expiredate.
  * @package vending
  */
 class VendingMachine
@@ -17,8 +17,7 @@ class VendingMachine
 
     /**
      * VendingMachine constructor.
-     * sets rows columns and cell size of machine
-     *
+     * Sets rows columns and cell size of machine.
      * @param $rowNumber - rows of machine
      * @param $columnNumber - columns of machine
      * @param $cellSize - default cell size of machine
@@ -28,11 +27,11 @@ class VendingMachine
         $this->columnNumber = $columnNumber;
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
-
+        $this->defineMachine();
     }
 
     /**
-     * returns row number of machine
+     * Returns row number of machine.
      * @return mixed
      */
     public function getRow()
@@ -41,7 +40,7 @@ class VendingMachine
     }
 
     /**
-     * create new cell and cellMatrix it to machine
+     * Create new cell and cellMatrix it to machine.
      */
     public function defineMachine()
     {
@@ -54,7 +53,7 @@ class VendingMachine
     }
 
     /**
-     * return column number of machine
+     * Return column number of machine.
      * @return mixed
      */
     public function getColumn()
@@ -64,7 +63,7 @@ class VendingMachine
 
 
     /**
-     * sets cell size
+     * Sets cell size.
      * @param $cellSize
      */
     public function setCellSize($cellSize)
@@ -74,7 +73,7 @@ class VendingMachine
 
 
     /**
-     * returns cell size
+     * Returns cell size.
      * @return mixed
      */
     public function getCellSize()
@@ -83,8 +82,8 @@ class VendingMachine
     }
 
     /**
-     * merge 2 cells into one from left to right
-     * example cell with cordinates 1,1 merged with 2,2
+     * Merge 2 cells into one from left to right.
+     * Example: cell with cordinates 1,1 merged with 2,2
      * @param $firstCellRow - row of the first cell you want to combine
      * @param $firstCellColumn - column of first the cell you want to combine
      * @param $secondCellRow - row of the second cell you want to combine
@@ -109,29 +108,28 @@ class VendingMachine
     }
 
     /**
-     * loads product objects into cells
+     * Loads product objects into cells.
      * @param array|iterable $productArray array of objects of products
+     * @return array
      */
     public function loadProducts(iterable $productArray)
     {
-        $this->removeExpiredProducts();
-        foreach ($productArray as $product) {
+        var_dump($productArray);
+        foreach ($productArray as $key => $product) {
             foreach ($this->cellMatrix as $matrix) {
                 foreach ($matrix as $cell) {
-
+                    $this->removeExpiredProducts();
                     if ($product->getSize() <= $cell->getSize()) {
                         if (is_null($cell->getProducts())) {
                             $cell->setProduct($product);
+                            unset($productArray[$key]);
                             break 2;
                         } else {
                             if (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())) {
-                                if (((($cell->getSize() - ($product->getSize())) * ($cell->getQuantity())) / $product->getSize() >= 1)) {
+                                if (($cell->getSize() / $product->getSize()) > $cell->getQuantity()) {
                                     $cell->setProduct($product);
+                                    unset($productArray[$key]);
                                     break 2;
-                                } else {
-                                    return $returnProducts[] = $product;
-                                    /*                                    echo $product->getProductName() . " can't be loaded \n";*/
-                                    break 2; /*break 2 makes it puts different items in each cell; no break puts same items in many cells*/
                                 }
                             }
                         }
@@ -140,11 +138,16 @@ class VendingMachine
                 }
             }
         }
+        var_dump($productArray);
+
+        if ($productArray == !null) {
+            return $productArray;
+        }
     }
 
+
     /**
-     * TODO
-     *
+     *Lets you buy a product.
      * @param $row
      * @param $column
      * @param $price
@@ -176,15 +179,15 @@ class VendingMachine
         foreach ($this->cellMatrix as $matrix) {
             foreach ($matrix as $cell) {
                 if (null !== $cell->getProductFromArray()) {
-                    echo $cell->getProductFromArray()->getProductName() . "\n";
-                    echo ($cell->getQuantity()) . "\n";
+                    echo $cell->getProductFromArray()->getProductName() . ' ' . ($cell->getQuantity()) . "\n";
+//                    echo ($cell->getQuantity()) . "\n";
                 }
             }
         }
     }
 
     /**
-     *checks if there are expired products and remove them
+     *Checks if there are expired products and remove them.
      */
     public function removeExpiredProducts()
     {
@@ -193,7 +196,8 @@ class VendingMachine
             foreach ($matrix as $cell) {
                 if ($cell->getProducts() == !null) {
                     foreach ($cell->getProducts() as $products) {
-                        if (($products->getExpireDate()) < new \DateTime(date("d.m.y"))) {
+
+                        if (($products->getExpireDate()) < new \DateTime()) {
                             $cell->removeProduct($counter);
                         } else {
                             $counter++;

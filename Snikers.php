@@ -4,9 +4,9 @@ namespace vending;
 
 /**
  * Class Snikers
- * extends product class
- * sets properties of extend product class
- * and adds price as property
+ * Extends product class.
+ * Sets properties of extend product class
+ * and adds price as property.
  * @package vending
  */
 class Snikers extends Product
@@ -15,8 +15,8 @@ class Snikers extends Product
 
     /**
      * Cola constructor.
-     * sets productname,size and expire date of product in abstract class
-     * and sets price
+     * Sets productname,size and expire date of product in abstract class
+     * and sets price.
      * @param sets $price
      * @param sets $expireDate
      */
@@ -29,7 +29,7 @@ class Snikers extends Product
     }
 
     /**
-     * returns price of product
+     * Returns price of product.
      * @return sets
      */
     public function getPrice()
@@ -39,7 +39,7 @@ class Snikers extends Product
 
 
     /**
-     * sets price of product
+     * Sets price of product.
      * @param $price
      * @return mixed
      */

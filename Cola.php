@@ -4,9 +4,9 @@ namespace vending;
 
 /**
  * Class Cola
- * extends product class
- * sets properties of extend product class
- * and adds price as property
+ * Extends product class.
+ * Sets properties of extend product class
+ * and adds price as property.
  * @package vending
  */
 class Cola extends Product
@@ -15,8 +15,8 @@ class Cola extends Product
 
     /**
      * Cola constructor.
-     * sets productname,size and expire date of product in abstract class
-     * and sets price
+     * Sets productname,size and expire date of product in abstract class
+     * and sets price.
      * @param sets $price
      * @param sets $expireDate
      */
@@ -29,7 +29,7 @@ class Cola extends Product
     }
 
     /**
-     * returs price of product
+     * Returs price of product.
      * @return sets
      */
     public function getPrice()
@@ -39,7 +39,7 @@ class Cola extends Product
 
 
     /**
-     * sets price of product
+     * Sets price of product.
      * @param $price
      * @return mixed
      */

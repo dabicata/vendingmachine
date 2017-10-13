@@ -4,7 +4,7 @@ namespace vending;
 
 /**
  * Class Product
- * contains productName, size, and expireDate of the product
+ * Contains productName, size, and expireDate of the product.
  * @package vending
  */
 abstract class Product
@@ -16,7 +16,7 @@ abstract class Product
     /**
      * Product constructor.
      *
-     * sets productName, quantity, size and expireDate.
+     * Sets productName, quantity, size and expireDate.
      * @param $productName sets productName
      * @param $size sets size of product
      * @param $expireDate set expire date of product
@@ -29,20 +29,20 @@ abstract class Product
     }
 
     /**
-     * sets price of  product
+     * Sets price of  product.
      * @param $price
      * @return mixed
      */
     abstract public function setPrice($price);
 
-    /** returns price of product
+    /** Returns price of product.
      * @return mixed
      */
     abstract public function getPrice();
 
 
     /**
-     * returns product name.
+     * Returns product name.
      * @return product name
      */
     public function getProductName()
@@ -51,7 +51,7 @@ abstract class Product
     }
 
     /**
-     * sets product name
+     * Sets product name.
      * @param $productName
      */
     public function setProductName($productName)
@@ -61,7 +61,7 @@ abstract class Product
 
 
     /**
-     * returns size of product
+     * Returns size of product.
      * @return sets
      */
     public function getSize()
@@ -70,7 +70,7 @@ abstract class Product
     }
 
     /**
-     * sets size of product
+     * Sets size of product.
      * @param
      * $size
      */
@@ -81,7 +81,7 @@ abstract class Product
 
 
     /**
-     * returns expire date of product
+     * Returns expire date of product.
      * @return set
      */
     public function getExpireDate()
@@ -90,7 +90,7 @@ abstract class Product
     }
 
     /**
-     * sets expire date of product
+     * Sets expire date of product.
      * @param $expireDate
      */
     public function setExpireDate($expireDate)
