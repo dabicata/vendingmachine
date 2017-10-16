@@ -45,7 +45,7 @@ class Snikers extends Product
      */
     public function setPrice($price)
     {
-        return $this->price = $price;
+        $this->price = $price;
     }
 
 }
