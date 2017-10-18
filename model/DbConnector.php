@@ -6,7 +6,7 @@
  * Time: 3:22 PM
  */
 
-namespace vending\model;
+namespace vending;
 
 /**
  * This Class connects you to database and perform Queries.
@@ -15,10 +15,10 @@ namespace vending\model;
  */
 class DbConnector
 {
+    private $dataBase;
     const  DSN = "mysql:dbname=vending_machine;host=127.0.0.1";
     const USER = "work";
     const PASSWORD = "workpass";
-    private $dataBase;
 
     /**
      * DbConnector constructor.
@@ -55,8 +55,6 @@ class DbConnector
             $query->bindParam($counter, $param);
             $counter++;
         }
-        var_dump($query);
-        var_dump($parameters);
         $query->execute();
     }
 
@@ -75,8 +73,6 @@ class DbConnector
             $counter++;
         }
         $query->execute();
-        var_dump($query->fetchAll(\PDO::FETCH_OBJ));
-        var_dump(new \DateTime());
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 }

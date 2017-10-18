@@ -15,7 +15,7 @@ class CellDAO implements CRUDInterface
     public function selectAll()
     {
         $sql = 'SELECT * FROM `cells`';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->selectQuery($sql);
         $db->closeConnection();
     }
@@ -23,7 +23,7 @@ class CellDAO implements CRUDInterface
     public function select($cellid)
     {
         $sql = 'SELECT * FROM `cells` WHERE cell_id = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $cellid);
         $db->closeConnection();
     }
@@ -32,7 +32,7 @@ class CellDAO implements CRUDInterface
     {
         $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `combined_cell`, `cell_date_created`)
  VALUES (?, ?, ?, ?, now())';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
     }
@@ -40,7 +40,7 @@ class CellDAO implements CRUDInterface
     public function update($updateParam)
     {
         $sql = 'UPDATE `cells` SET `vending_machine_id` = ?, `cell_row` = ?, `cell_column` = ?, `combined_cell` = ?, `cell_date_updated` = now() WHERE `cells`.`cell_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
     }
@@ -48,11 +48,12 @@ class CellDAO implements CRUDInterface
     public function delete($cellid)
     {
         $sql = 'DELETE FROM `cells` WHERE `cells`.`cell_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $cellid);
         $db->closeConnection();
     }
 }
 
-$cell = new CellDAO();
-$cell->insert(array(255, 255, 255, 0));
+//$insertparam=array(1,255,255,0);
+//$cell = new CellDAO();
+//$cell->insert($insertparam);

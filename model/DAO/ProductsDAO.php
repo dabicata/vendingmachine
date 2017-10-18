@@ -7,14 +7,15 @@
  */
 
 namespace vending\model;
-
+include 'CRUDInterface.php';
+include '../DbConnector.php';
 
 class ProductsDAO implements CRUDInterface
 {
     public function selectAll()
     {
         $sql = 'SELECT * FROM `products`';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->selectQuery($sql);
         $db->closeConnection();
     }
@@ -22,7 +23,7 @@ class ProductsDAO implements CRUDInterface
     public function select($productId)
     {
         $sql = 'SELECT * FROM `products` WHERE product_id = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->selectQuery($sql, $productId);
         $db->closeConnection();
     }
@@ -32,7 +33,7 @@ class ProductsDAO implements CRUDInterface
         $sql = 'INSERT INTO `products` (`product_type_id`, `product_price`, `product_expire_date`, 
                     `product_size`, `cell_id`, `product__date_created`)
                     VALUES (?, ?, ?, ?, ?, now() )';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
     }
@@ -41,7 +42,7 @@ class ProductsDAO implements CRUDInterface
     {
         $sql = 'UPDATE `products` SET `product_type_id` = ?, `product_price` = ?, `product_expire_date` = ?, `product_size` = ?, 
                   `cell_id` = ?, `product_date_updated` = now() WHERE `products`.`product_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
     }
@@ -49,7 +50,7 @@ class ProductsDAO implements CRUDInterface
     public function delete($productId)
     {
         $sql = 'DELETE FROM `products` WHERE `products`.`product_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $productId);
         $db->closeConnection();
     }

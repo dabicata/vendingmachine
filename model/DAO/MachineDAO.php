@@ -8,13 +8,17 @@
 
 namespace vending\model;
 
+use vending\DbConnector;
+
+include 'CRUDInterface.php';
+include '../DbConnector.php';
 
 class MachineDAO implements CRUDInterface
 {
     public function selectAll()
     {
         $sql = 'SELECT * FROM `vending_machines`';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->selectQuery($sql);
         $db->closeConnection();
     }
@@ -22,7 +26,7 @@ class MachineDAO implements CRUDInterface
     public function select($machineId)
     {
         $sql = 'SELECT * FROM `vending_machines` WHERE vending_machine_id = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->selectQuery($sql, $machineId);
         $db->closeConnection();
     }
@@ -31,7 +35,7 @@ class MachineDAO implements CRUDInterface
     {
         $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_date_created`) VALUES
  (?, ?, ?, now())';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
     }
@@ -40,7 +44,7 @@ class MachineDAO implements CRUDInterface
     {
         $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, `machine_size` = ?, `vending_machine_date_updated` = now()
 WHERE `vending_machines`.`vending_machine_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
     }
@@ -48,8 +52,12 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
     public function delete($machineId)
     {
         $sql = 'DELETE FROM `vending_machines` WHERE `vending_machines`.`vending_machine_id` = ?';
-        $db = new namespace\DbConnector();
+        $db = new DbConnector();
         $db->executeQuery($sql, $machineId);
         $db->closeConnection();
     }
 }
+
+$parameters3 = [18, 18, 18];
+$dbz = new MachineDAO();
+$dbz->insert($parameters3);
