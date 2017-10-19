@@ -13,8 +13,16 @@ use vending\DbConnector;
 include 'CRUDInterface.php';
 include '../DbConnector.php';
 
+/**
+ *  * This class lets you do CRUD operations to vending_machine table.
+ * Class MachineDAO
+ * @package vending\model
+ */
 class MachineDAO implements CRUDInterface
 {
+    /**
+     *Select All machines.
+     */
     public function selectAll()
     {
         $sql = 'SELECT * FROM `vending_machines`';
@@ -23,6 +31,10 @@ class MachineDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Select machine by ID.
+     * @param $machineId
+     */
     public function select($machineId)
     {
         $sql = 'SELECT * FROM `vending_machines` WHERE vending_machine_id = ?';
@@ -31,6 +43,10 @@ class MachineDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Insert into machines: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_created.
+     * @param $insertParam
+     */
     public function insert($insertParam)
     {
         $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_date_created`) VALUES
@@ -40,15 +56,23 @@ class MachineDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Update machine selected by ID: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_updated.
+     * @param $updateParam
+     */
     public function update($updateParam)
     {
-        $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, `machine_size` = ?, `vending_machine_date_updated` = now()
+        $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, `machine_size` = ?, `vending_machine_date_updated` = now() 
 WHERE `vending_machines`.`vending_machine_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
     }
 
+    /**
+     * Delete machine by ID.
+     * @param $machineId
+     */
     public function delete($machineId)
     {
         $sql = 'DELETE FROM `vending_machines` WHERE `vending_machines`.`vending_machine_id` = ?';
@@ -58,6 +82,8 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
     }
 }
 
-$parameters3 = [18, 18, 18];
+$paraminsert = [118, 118, 181];
 $dbz = new MachineDAO();
-$dbz->insert($parameters3);
+//$dbz->insert($paraminsert);
+$paramupdate = [12, 17, 114, 1];
+$dbz->update($paramupdate);

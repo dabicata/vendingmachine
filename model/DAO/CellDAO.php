@@ -7,11 +7,22 @@
  */
 
 namespace vending\model;
+
+use vending\DbConnector;
+
 include 'CRUDInterface.php';
 include '../DbConnector.php';
 
+/**
+ * This class lets you do CRUD operations to cells table.
+ * Class CellDAO
+ * @package vending\model
+ */
 class CellDAO implements CRUDInterface
 {
+    /**
+     *Select All cells
+     */
     public function selectAll()
     {
         $sql = 'SELECT * FROM `cells`';
@@ -20,6 +31,10 @@ class CellDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Select cell by ID.
+     * @param $cellid
+     */
     public function select($cellid)
     {
         $sql = 'SELECT * FROM `cells` WHERE cell_id = ?';
@@ -28,6 +43,10 @@ class CellDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Insert into cells: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_created.
+     * @param $insertParam
+     */
     public function insert($insertParam)
     {
         $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `combined_cell`, `cell_date_created`)
@@ -37,6 +56,10 @@ class CellDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Update cells selected by ID: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_updated.
+     * @param $updateParam
+     */
     public function update($updateParam)
     {
         $sql = 'UPDATE `cells` SET `vending_machine_id` = ?, `cell_row` = ?, `cell_column` = ?, `combined_cell` = ?, `cell_date_updated` = now() WHERE `cells`.`cell_id` = ?';
@@ -45,6 +68,10 @@ class CellDAO implements CRUDInterface
         $db->closeConnection();
     }
 
+    /**
+     * Delete cell by ID.
+     * @param $cellid
+     */
     public function delete($cellid)
     {
         $sql = 'DELETE FROM `cells` WHERE `cells`.`cell_id` = ?';
@@ -54,6 +81,9 @@ class CellDAO implements CRUDInterface
     }
 }
 
-//$insertparam=array(1,255,255,0);
-//$cell = new CellDAO();
-//$cell->insert($insertparam);
+$dbz = new CellDAO();
+$paramupdate = [2, 112, 133, 0, 5];
+$paraminsert = [2, 177, 173, 0];
+$dbz->update($paramupdate);
+$dbz->insert($paraminsert);
+
