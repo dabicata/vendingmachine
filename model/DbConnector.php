@@ -6,7 +6,7 @@
  * Time: 3:22 PM
  */
 
-namespace vending;
+namespace vending\model;
 
 /**
  * This Class connects you to database and perform Queries.
@@ -28,6 +28,7 @@ class DbConnector
     {
         try {
             $this->dataBase = new \PDO(SELF::DSN, SELF::USER, SELF::PASSWORD);
+            $this->dataBase->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
@@ -46,6 +47,7 @@ class DbConnector
      * Takes sql and parameters for sql and performs  insert, update, delete query.
      * @param $sql holds the sql.
      * @param iterable|holds $parameters holds parameters for sql
+     * @return string
      */
     public function executeQuery($sql, iterable $parameters)
     {
@@ -55,9 +57,13 @@ class DbConnector
             $query->bindValue($counter, $param);
             $counter++;
         }
-        $query->execute();
+        try {
+            $query->execute();
 
-
+        } catch (\PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
+        return $this->dataBase->lastInsertId();
     }
 
     /**
@@ -74,7 +80,11 @@ class DbConnector
             $query->bindValue($counter, $param);
             $counter++;
         }
-        $query->execute();
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
         return $query->fetchAll(\PDO::FETCH_OBJ);
 
     }
@@ -87,8 +97,11 @@ class DbConnector
             $query->bindValue($counter, $param);
             $counter++;
         }
-        $query->execute();
-        var_dump($query->fetch(\PDO::FETCH_OBJ));
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
         return $query->fetch(\PDO::FETCH_OBJ);
     }
 }

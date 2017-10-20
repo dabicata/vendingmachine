@@ -8,8 +8,6 @@
 
 namespace vending\model;
 
-use vending\DbConnector;
-
 include 'CRUDInterface.php';
 include '../DbConnector.php';
 
@@ -62,6 +60,7 @@ class MachineDAO implements CRUDInterface
     /**
      * Update machine selected by ID: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_updated.
      * @param $updateParam
+     * @return mixed|void
      */
     public function update(iterable $updateParam)
     {
@@ -75,6 +74,7 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
     /**
      * Delete machine by ID.
      * @param $machineId
+     * @return mixed|void
      */
     public function delete($machineId)
     {
@@ -89,4 +89,4 @@ $select = [1, 2];
 
 $paraminsert = [123, 35, 124];
 $dbz = new MachineDAO();
-$dbz->select($select);
+$dbz->insert($paraminsert);

@@ -2,6 +2,10 @@
 
 namespace vending;
 
+use vending\model\MachineDAO;
+
+include '../model/DAO/MachineDAO.php';
+
 /**
  * Class VendingMachine
  * Create cell objects and map them to the machine, allows you to buy products and check their expiredate.
@@ -13,6 +17,7 @@ class VendingMachine
     private $columnNumber; //column numbers
     private $cellSize;  //cell size
     private $cellMatrix;   //cellMatrixped cells to machine
+    private $machineId;
 
 
     /**
@@ -24,10 +29,12 @@ class VendingMachine
      */
     public function __construct($rowNumber, $columnNumber, $cellSize)
     {
+        $database = new MachineDAO();
+        echo $database->insert(array($rowNumber, $columnNumber, $cellSize));
         $this->columnNumber = $columnNumber;
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
-        $this->defineMachine();
+        //  $this->defineMachine();
     }
 
     /**
@@ -209,5 +216,5 @@ class VendingMachine
 
 }
 
-
+$machineee = new VendingMachine(17, 17, 19);
 
