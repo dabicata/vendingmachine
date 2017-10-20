@@ -39,7 +39,7 @@ class ProductsDAO implements CRUDInterface
     {
         $sql = 'SELECT * FROM `products` WHERE product_id = ?';
         $db = new DbConnector();
-        $db->selectQuery($sql, $productId);
+        $db->selectByIdQuery($sql, $productId);
         $db->closeConnection();
     }
 
@@ -48,7 +48,7 @@ class ProductsDAO implements CRUDInterface
      * product_size, cell_id, product__date_created.
      * @param $insertParam
      */
-    public function insert($insertParam)
+    public function insert(iterable $insertParam)
     {
         $sql = 'INSERT INTO `products` (`product_type_id`, `product_price`, `product_expire_date`, 
                     `product_size`, `cell_id`, `product__date_created`)
@@ -63,7 +63,7 @@ class ProductsDAO implements CRUDInterface
     cell_id, product_date_updated.
      * @param $updateParam
      */
-    public function update($updateParam)
+    public function update(iterable $updateParam)
     {
         $sql = 'UPDATE `products` SET `product_type_id` = ?, `product_price` = ?, `product_expire_date` = ?, `product_size` = ?, 
                   `cell_id` = ?, `product_date_updated` = now() WHERE `products`.`product_id` = ?';

@@ -50,17 +50,11 @@ class DbConnector
     public function executeQuery($sql, iterable $parameters)
     {
         $query = $this->dataBase->prepare($sql);
-        $counter = 1;;
-        foreach ($parameters as $key => $param) {
-            $query->bindParam($counter, $parameters[$key]);
-//            var_dump($parameters[$key]);
-//            var_dump($param);
+        $counter = 1;
+        foreach ($parameters as $param) {
+            $query->bindValue($counter, $param);
             $counter++;
         }
-//        $query->bindParam(1, $parameters[0]);
-//        $query->bindParam(2, $parameters[1]);
-//        $query->bindParam(3, $parameters[2]);
-//        $query->bindParam(4, $parameters[3]);
         $query->execute();
 
 
@@ -77,11 +71,25 @@ class DbConnector
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
         foreach ($parameters as $param) {
-            $query->bindParam($counter, $param);
+            $query->bindValue($counter, $param);
             $counter++;
         }
         $query->execute();
         return $query->fetchAll(\PDO::FETCH_OBJ);
+
+    }
+
+    public function selectByIdQuery($sql, $parameters)
+    {
+        $query = $this->dataBase->prepare($sql);
+        $counter = 1;
+        foreach ($parameters as $param) {
+            $query->bindValue($counter, $param);
+            $counter++;
+        }
+        $query->execute();
+        var_dump($query->fetch(\PDO::FETCH_OBJ));
+        return $query->fetch(\PDO::FETCH_OBJ);
     }
 }
 

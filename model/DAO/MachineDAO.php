@@ -34,20 +34,23 @@ class MachineDAO implements CRUDInterface
     /**
      * Select machine by ID.
      * @param $machineId
+     * @return array
      */
     public function select($machineId)
     {
         $sql = 'SELECT * FROM `vending_machines` WHERE vending_machine_id = ?';
         $db = new DbConnector();
-        $db->selectQuery($sql, $machineId);
+        $data = $db->selectByIdQuery($sql, $machineId);
         $db->closeConnection();
+        return $data;
+
     }
 
     /**
      * Insert into machines: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_created.
      * @param $insertParam
      */
-    public function insert($insertParam)
+    public function insert(iterable $insertParam)
     {
         $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_date_created`) VALUES
  (?, ?, ?, now())';
@@ -60,7 +63,7 @@ class MachineDAO implements CRUDInterface
      * Update machine selected by ID: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_updated.
      * @param $updateParam
      */
-    public function update($updateParam)
+    public function update(iterable $updateParam)
     {
         $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, `machine_size` = ?, `vending_machine_date_updated` = now() 
 WHERE `vending_machines`.`vending_machine_id` = ?';
@@ -82,8 +85,8 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
     }
 }
 
-$paraminsert = [118, 118, 181];
+$select = [1, 2];
+
+$paraminsert = [123, 35, 124];
 $dbz = new MachineDAO();
-//$dbz->insert($paraminsert);
-$paramupdate = [12, 17, 114, 1];
-$dbz->update($paramupdate);
+$dbz->select($select);

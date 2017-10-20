@@ -39,7 +39,7 @@ class CellDAO implements CRUDInterface
     {
         $sql = 'SELECT * FROM `cells` WHERE cell_id = ?';
         $db = new DbConnector();
-        $db->executeQuery($sql, $cellid);
+        $db->selectByIdQuery($sql, $cellid);
         $db->closeConnection();
     }
 
@@ -47,10 +47,10 @@ class CellDAO implements CRUDInterface
      * Insert into cells: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_created.
      * @param $insertParam
      */
-    public function insert($insertParam)
+    public function insert(iterable $insertParam)
     {
-        $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `combined_cell`, `cell_date_created`)
- VALUES (?, ?, ?, ?, now())';
+        $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `cell_date_created`)
+ VALUES (?, ?, 0, now())';
         $db = new DbConnector();
         $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
@@ -60,9 +60,9 @@ class CellDAO implements CRUDInterface
      * Update cells selected by ID: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_updated.
      * @param $updateParam
      */
-    public function update($updateParam)
+    public function update(iterable $updateParam)
     {
-        $sql = 'UPDATE `cells` SET `vending_machine_id` = ?, `cell_row` = ?, `cell_column` = ?, `combined_cell` = ?, `cell_date_updated` = now() WHERE `cells`.`cell_id` = ?';
+        $sql = 'UPDATE `cells` SET `vending_machine_id` = ?, `cell_row` = ?, `cell_column` = ?, `cell_date_updated` = now() WHERE `cells`.`cell_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
@@ -82,7 +82,7 @@ class CellDAO implements CRUDInterface
 }
 
 $dbz = new CellDAO();
-$paramupdate = [2, 112, 133, 0, 5];
+$paramupdate = [2, 112, 133, 0, 4];
 $paraminsert = [2, 177, 173, 0];
 $dbz->update($paramupdate);
 $dbz->insert($paraminsert);

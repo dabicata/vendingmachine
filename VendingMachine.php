@@ -114,7 +114,6 @@ class VendingMachine
      */
     public function loadProducts(iterable $productArray)
     {
-        var_dump($productArray);
         foreach ($productArray as $key => $product) {
             foreach ($this->cellMatrix as $matrix) {
                 foreach ($matrix as $cell) {
@@ -138,7 +137,7 @@ class VendingMachine
                 }
             }
         }
-        var_dump($productArray);
+
 
         if ($productArray == !null) {
             return $productArray;
