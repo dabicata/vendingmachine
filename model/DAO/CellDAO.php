@@ -8,10 +8,11 @@
 
 namespace vending\model;
 
-use vending\DbConnector;
+use vending\model\DbConnector;
 
-include 'CRUDInterface.php';
-include '../DbConnector.php';
+include_once 'CRUDInterface.php';
+include_once '/srv/http/vendingmachine/model/DbConnector.php';
+
 
 /**
  * This class lets you do CRUD operations to cells table.
@@ -46,19 +47,22 @@ class CellDAO implements CRUDInterface
     /**
      * Insert into cells: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_created.
      * @param $insertParam
+     * @return string
      */
     public function insert(iterable $insertParam)
     {
         $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `cell_date_created`)
- VALUES (?, ?, 0, now())';
+ VALUES (?, ?, ?, now())';
         $db = new DbConnector();
-        $db->executeQuery($sql, $insertParam);
+        $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
+        return $data;
     }
 
     /**
      * Update cells selected by ID: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_updated.
      * @param $updateParam
+     * @return mixed|void
      */
     public function update(iterable $updateParam)
     {
@@ -71,6 +75,7 @@ class CellDAO implements CRUDInterface
     /**
      * Delete cell by ID.
      * @param $cellid
+     * @return mixed|void
      */
     public function delete($cellid)
     {
@@ -81,9 +86,4 @@ class CellDAO implements CRUDInterface
     }
 }
 
-$dbz = new CellDAO();
-$paramupdate = [2, 112, 133, 0, 4];
-$paraminsert = [2, 177, 173, 0];
-$dbz->update($paramupdate);
-$dbz->insert($paraminsert);
 

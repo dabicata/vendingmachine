@@ -12,6 +12,7 @@ namespace vending;
 class Chips extends Product
 {
     private $price;
+    private $typeId = 2;
 
     /**
      * Cola constructor.
@@ -46,6 +47,14 @@ class Chips extends Product
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeId(): int
+    {
+        return $this->typeId;
     }
 
 }

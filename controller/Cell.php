@@ -9,17 +9,19 @@ namespace vending;
  */
 class Cell
 {
-    private $products; // contains the product object
-    private $size; // size of cell
+    private $products; // contains the product object.
+    private $size; // size of cell.
+    private $cellId; // Id of the cell.
 
     /**
      * Sets size of cells.
      * Cell constructor.
      * @param $size
      */
-    public function __construct($size)
+    public function __construct($size, $cellId)
     {
         $this->size = $size;
+        $this->cellId = $cellId;
 
     }
 
@@ -96,5 +98,13 @@ class Cell
     {
         unset($this->products[$x]);
         $this->products = array_values($this->products);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCellId()
+    {
+        return $this->cellId;
     }
 }

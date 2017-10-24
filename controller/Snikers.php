@@ -12,6 +12,7 @@ namespace vending;
 class Snikers extends Product
 {
     private $price;
+    private $typeId = 3;
 
     /**
      * Cola constructor.
@@ -46,6 +47,14 @@ class Snikers extends Product
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeId(): int
+    {
+        return $this->typeId;
     }
 
 }

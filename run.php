@@ -2,27 +2,23 @@
 
 namespace vending;
 
-include 'VendingMachine.php';
-include 'Cell.php';
-include 'Product.php';
-include 'Cola.php';
-include 'Snikers.php';
-include 'Chips.php';
-
-
-$machines = 5;
-$machineRow = 1;
-$machineColumn = 2;
+include '/srv/http/vendingmachine/controller/VendingMachine.php';
+include '/srv/http/vendingmachine/controller/Chips.php';
+include '/srv/http/vendingmachine/controller/Cola.php';
+include '/srv/http/vendingmachine/controller/Snikers.php';
+$machines = 1;
+$machineRow = 3;
+$machineColumn = 3;
 $cellSize = 10;
-$productsNumber = 66;
+$productsNumber = 500;
 $date = new \DateTime();
 $productArray = [];
 
-$expireDate = ['1' => $date->setDate(2017, 10, 15), '2' => $date->setDate(2017, 10, 21), '3' => $date->setDate(2017, 10, 25)];
-
+$expireDate = ['1' => $date->setDate(2017, 5, 23), '2' => $date->setDate(2017, 12, 21), '3' => $date->setDate(2017, 12, 29)];
 
 for ($x = 0; $x < $productsNumber; $x++) {
     $rand = rand(1, 3);
+
     switch ($rand) {
         case 1:
             $productArray[] = new Cola(3, $expireDate[$rand]);
@@ -45,12 +41,12 @@ foreach ($machineClass as $machine) {
         $productArray = $machine->loadProducts($productArray);
         $machine->listItems();
         echo "\n ";
-        die();
+
 
     }
 }
 
-
+//$machineClass[0]->removeExpiredProduct();
 
 
 

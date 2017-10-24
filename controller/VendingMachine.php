@@ -2,9 +2,17 @@
 
 namespace vending;
 
+use vending\model\CellDAO;
 use vending\model\MachineDAO;
+use vending\model\ProductsDAO;
 
-include '../model/DAO/MachineDAO.php';
+
+include_once '/srv/http/vendingmachine/model/DAO/MachineDAO.php';
+include_once '/srv/http/vendingmachine/model/DAO/CellDAO.php';
+include_once '/srv/http/vendingmachine/model/DAO/ProductsDAO.php';
+include_once 'Cell.php';
+include '/srv/http/vendingmachine/controller/Product.php';
+
 
 /**
  * Class VendingMachine
@@ -30,11 +38,66 @@ class VendingMachine
     public function __construct($rowNumber, $columnNumber, $cellSize)
     {
         $database = new MachineDAO();
-        echo $database->insert(array($rowNumber, $columnNumber, $cellSize));
+        $this->machineId = $database->insert(array($rowNumber, $columnNumber, $cellSize));
+//        var_dump($this->machineId);
         $this->columnNumber = $columnNumber;
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
-        //  $this->defineMachine();
+        $this->defineMachine();
+    }
+
+    /**
+     * Create new cell and cellMatrix it to machine.
+     */
+    public function defineMachine()
+    {
+        $cellDAO = new CellDAO();
+        $this->cellMatrix = [];
+        for ($row = 1; $row <= $this->rowNumber; $row++) {
+            for ($column = 1; $column <= $this->columnNumber; $column++) {
+                $cellId = $cellDAO->insert(array($this->machineId, $row, $column));
+                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
+            }
+        }
+    }
+
+    /**
+     * Loads product objects into cells.
+     * @param array|iterable $productArray array of objects of products
+     * @return array
+     */
+    public function loadProducts(iterable $productArray)
+    {
+        $productDAO = new ProductsDAO();
+        foreach ($productArray as $key => $product) {
+            foreach ($this->cellMatrix as $matrix) {
+                foreach ($matrix as $cell) {
+                    if ($product->getSize() <= $cell->getSize()) {
+                        if (is_null($cell->getProducts())) {
+                            $cell->setProduct($product);
+                            $productId = $productDAO->insert(array($product->getTypeId(), $product->getPrice(), $product->getExpireDate()->format('Y/m/d h:m:s'), $product->getSize(), $cell->getCellId()));
+                            unset($productArray[$key]);
+                            break 2;
+                        } else {
+                            if (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())) {
+                                if (($cell->getSize() / $product->getSize()) > $cell->getQuantity()) {
+                                    $cell->setProduct($product);
+                                    $productId = $productDAO->insert(array($product->getTypeId(), $product->getPrice(), $product->getExpireDate()->format('Y/m/d h:m:s'), $product->getSize(), $cell->getCellId()));
+                                    unset($productArray[$key]);
+                                    break 2;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        if ($productArray == !null) {
+            return $productArray;
+        }
     }
 
     /**
@@ -46,18 +109,6 @@ class VendingMachine
         return $this->rowNumber;
     }
 
-    /**
-     * Create new cell and cellMatrix it to machine.
-     */
-    public function defineMachine()
-    {
-        $this->cellMatrix = [];
-        for ($row = 0; $row < $this->rowNumber; $row++) {
-            for ($column = 0; $column < $this->columnNumber; $column++) {
-                $this->cellMatrix[$row][$column] = new Cell($this->cellSize);
-            }
-        }
-    }
 
     /**
      * Return column number of machine.
@@ -78,7 +129,6 @@ class VendingMachine
         $this->cellSize = $cellSize;
     }
 
-
     /**
      * Returns cell size.
      * @return mixed
@@ -90,7 +140,7 @@ class VendingMachine
 
     /**
      * Merge 2 cells into one from left to right.
-     * Example: cell with cordinates 1,1 merged with 2,2
+     * Example: cell with coordinates 1,1 merged with 2,2
      * @param $firstCellRow - row of the first cell you want to combine
      * @param $firstCellColumn - column of first the cell you want to combine
      * @param $secondCellRow - row of the second cell you want to combine
@@ -114,43 +164,6 @@ class VendingMachine
         }
     }
 
-    /**
-     * Loads product objects into cells.
-     * @param array|iterable $productArray array of objects of products
-     * @return array
-     */
-    public function loadProducts(iterable $productArray)
-    {
-        foreach ($productArray as $key => $product) {
-            foreach ($this->cellMatrix as $matrix) {
-                foreach ($matrix as $cell) {
-                    $this->removeExpiredProducts();
-                    if ($product->getSize() <= $cell->getSize()) {
-                        if (is_null($cell->getProducts())) {
-                            $cell->setProduct($product);
-                            unset($productArray[$key]);
-                            break 2;
-                        } else {
-                            if (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())) {
-                                if (($cell->getSize() / $product->getSize()) > $cell->getQuantity()) {
-                                    $cell->setProduct($product);
-                                    unset($productArray[$key]);
-                                    break 2;
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-
-
-        if ($productArray == !null) {
-            return $productArray;
-        }
-    }
-
 
     /**
      *Lets you buy a product.
@@ -164,6 +177,7 @@ class VendingMachine
     {
         if ((count($this->cellMatrix[$row][$column]->getProducts()) > 0)) {
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
+                $this->cellMatrix[$row][$column]->removeProduct();
                 echo $this->cellMatrix[$row][$column]->getProductFromArray()->getProductName() . " product bought \n";
                 echo 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
                 return 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
@@ -197,14 +211,15 @@ class VendingMachine
      */
     public function removeExpiredProducts()
     {
+        $productDAO = new ProductsDAO();
         foreach ($this->cellMatrix as $matrix) {
             $counter = 0;
             foreach ($matrix as $cell) {
                 if ($cell->getProducts() == !null) {
                     foreach ($cell->getProducts() as $products) {
-
-                        if (($products->getExpireDate()) < new \DateTime()) {
+                        if ((strtotime($products->getExpireDate())) < strtotime(new \DateTime())) {
                             $cell->removeProduct($counter);
+                            $productDAO->deleteExpired($products->getExpireDate());
                         } else {
                             $counter++;
                         }
@@ -216,5 +231,4 @@ class VendingMachine
 
 }
 
-$machineee = new VendingMachine(17, 17, 19);
 

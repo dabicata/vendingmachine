@@ -8,8 +8,8 @@
 
 namespace vending\model;
 
-include 'CRUDInterface.php';
-include '../DbConnector.php';
+include_once 'CRUDInterface.php';
+include_once '/srv/http/vendingmachine/model/DbConnector.php';
 
 /**
  *  * This class lets you do CRUD operations to vending_machine table.
@@ -47,14 +47,16 @@ class MachineDAO implements CRUDInterface
     /**
      * Insert into machines: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_created.
      * @param $insertParam
+     * @return string
      */
     public function insert(iterable $insertParam)
     {
         $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_date_created`) VALUES
  (?, ?, ?, now())';
         $db = new DbConnector();
-        $db->executeQuery($sql, $insertParam);
+        $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
+        return $data;
     }
 
     /**
@@ -84,9 +86,3 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
         $db->closeConnection();
     }
 }
-
-$select = [1, 2];
-
-$paraminsert = [123, 35, 124];
-$dbz = new MachineDAO();
-$dbz->insert($paraminsert);
