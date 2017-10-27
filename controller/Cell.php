@@ -107,4 +107,12 @@ class Cell
     {
         return $this->cellId;
     }
+
+    /**
+     * @param mixed $cellId
+     */
+    public function setCellId($cellId)
+    {
+        $this->cellId = $cellId;
+    }
 }

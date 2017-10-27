@@ -6,7 +6,7 @@ include '/srv/http/vendingmachine/controller/VendingMachine.php';
 include '/srv/http/vendingmachine/controller/Chips.php';
 include '/srv/http/vendingmachine/controller/Cola.php';
 include '/srv/http/vendingmachine/controller/Snikers.php';
-$machines = 1;
+$machines = 4;
 $machineRow = 3;
 $machineColumn = 3;
 $cellSize = 10;
@@ -46,7 +46,7 @@ foreach ($machineClass as $machine) {
     }
 }
 
-//$machineClass[0]->removeExpiredProduct();
+//$machineClass[0]->loadMachine(289);
 
 
 

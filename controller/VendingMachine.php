@@ -35,15 +35,68 @@ class VendingMachine
      * @param $columnNumber - columns of machine
      * @param $cellSize - default cell size of machine
      */
-    public function __construct($rowNumber, $columnNumber, $cellSize)
+    public function __construct($rowNumber, $columnNumber, $cellSize, $machineId = null)
     {
-        $database = new MachineDAO();
-        $this->machineId = $database->insert(array($rowNumber, $columnNumber, $cellSize));
+        if ($machineId === null) {
+            $database = new MachineDAO();
+            $this->machineId = $database->insert(array($rowNumber, $columnNumber, $cellSize));
 //        var_dump($this->machineId);
-        $this->columnNumber = $columnNumber;
-        $this->rowNumber = $rowNumber;
-        $this->cellSize = $cellSize;
-        $this->defineMachine();
+            $this->columnNumber = $columnNumber;
+            $this->rowNumber = $rowNumber;
+            $this->cellSize = $cellSize;
+            $this->defineMachine();
+        } else {
+            $this->loadMachine($machineId);
+        }
+    }
+
+    public function loadMachine($machineId)
+    {
+        $machineData = new MachineDAO();
+        $machineDB = $machineData->select(array($machineId));
+        $this->machineId = $machineDB->vending_machine_id;
+        $this->rowNumber = $machineDB->vending_machine_rows;
+        $this->columnNumber = $machineDB->vending_machine_columns;
+        $this->cellSize = $machineDB->machine_size;
+        $cellDAO = new CellDAO();
+        $cellDB = $cellDAO->selectCellByMachineId(array($machineId));
+//        var_dump($cellDB);
+
+        $this->cellMatrix = [];
+        $counter = 0;
+        for ($row = 1; $row <= $this->rowNumber; $row++) {
+            for ($column = 1; $column <= $this->columnNumber; $column++) {
+                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellDB[$counter]->cell_id);
+                $counter++;
+                echo $machineId;
+                $productData = new ProductsDAO();
+                $productDB = $productData->selectProductByCellId(array($this->cellMatrix[$row][$column]->getCellId()));
+                /*                var_dump($productDB);*/
+                foreach ($productDB as $product) {
+                    switch ($product->product_type_id) {
+                        case 1:
+                            $productOBJ = new Cola($product->product_price, $product->product_expire_date);
+                            $productOBJ->setProductId($product->product_id);
+                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                            break;
+                        case 2:
+                            $productOBJ = new Chips($product->product_price, $product->product_expire_date);
+                            $productOBJ->setProductId($product->product_id);
+                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                            break;
+                        case 3:
+                            $productOBJ = new Snikers($product->product_price, $product->product_expire_date);
+                            $productOBJ->setProductId($product->product_id);
+                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                            break;
+                    }
+
+                }
+                var_dump($this->cellMatrix[$row][$column]);
+            }
+        }
+
+
     }
 
     /**
@@ -76,6 +129,7 @@ class VendingMachine
                         if (is_null($cell->getProducts())) {
                             $cell->setProduct($product);
                             $productId = $productDAO->insert(array($product->getTypeId(), $product->getPrice(), $product->getExpireDate()->format('Y/m/d h:m:s'), $product->getSize(), $cell->getCellId()));
+                            $product->setProductId($productId);
                             unset($productArray[$key]);
                             break 2;
                         } else {
@@ -83,6 +137,7 @@ class VendingMachine
                                 if (($cell->getSize() / $product->getSize()) > $cell->getQuantity()) {
                                     $cell->setProduct($product);
                                     $productId = $productDAO->insert(array($product->getTypeId(), $product->getPrice(), $product->getExpireDate()->format('Y/m/d h:m:s'), $product->getSize(), $cell->getCellId()));
+                                    $product->setProductId($productId);
                                     unset($productArray[$key]);
                                     break 2;
                                 }
@@ -175,9 +230,11 @@ class VendingMachine
      */
     public function buyProduct($row, $column, $price)
     {
+        $productDAO = new ProductsDAO();
         if ((count($this->cellMatrix[$row][$column]->getProducts()) > 0)) {
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
                 $this->cellMatrix[$row][$column]->removeProduct();
+                $productDAO->delete($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getProductId()));
                 echo $this->cellMatrix[$row][$column]->getProductFromArray()->getProductName() . " product bought \n";
                 echo 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
                 return 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
@@ -212,6 +269,7 @@ class VendingMachine
     public function removeExpiredProducts()
     {
         $productDAO = new ProductsDAO();
+        $productDAO->deleteExpired();
         foreach ($this->cellMatrix as $matrix) {
             $counter = 0;
             foreach ($matrix as $cell) {
@@ -219,7 +277,7 @@ class VendingMachine
                     foreach ($cell->getProducts() as $products) {
                         if ((strtotime($products->getExpireDate())) < strtotime(new \DateTime())) {
                             $cell->removeProduct($counter);
-                            $productDAO->deleteExpired($products->getExpireDate());
+
                         } else {
                             $counter++;
                         }

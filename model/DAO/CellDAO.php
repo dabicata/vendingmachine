@@ -28,21 +28,40 @@ class CellDAO implements CRUDInterface
     {
         $sql = 'SELECT * FROM `cells`';
         $db = new DbConnector();
-        $db->selectQuery($sql);
+        $data = $db->selectQuery($sql);
         $db->closeConnection();
+        return $data;
+
     }
 
     /**
      * Select cell by ID.
      * @param $cellid
+     * @return mixed
      */
     public function select($cellid)
     {
         $sql = 'SELECT * FROM `cells` WHERE cell_id = ?';
         $db = new DbConnector();
-        $db->selectByIdQuery($sql, $cellid);
+        $data = $db->selectByIdQuery($sql, $cellid);
         $db->closeConnection();
+        return $data;
     }
+
+    /**
+     * Select cell by  MachineID.
+     * @param $machineId
+     * @return mixed
+     */
+    public function selectCellByMachineId($machineId)
+    {
+        $sql = 'SELECT * FROM `cells` WHERE vending_machine_id = ?';
+        $db = new DbConnector();
+        $data = $db->selectQuery($sql, $machineId);
+        $db->closeConnection();
+        return $data;
+    }
+
 
     /**
      * Insert into cells: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_created.
@@ -70,6 +89,7 @@ class CellDAO implements CRUDInterface
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
+
     }
 
     /**

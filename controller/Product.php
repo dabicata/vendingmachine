@@ -12,6 +12,7 @@ abstract class Product
     private $productName; // name of product
     private $size; // size of product
     private $expireDate; // expire date of product
+    private $productId;
 
     /**
      * Product constructor.
@@ -21,8 +22,9 @@ abstract class Product
      * @param $size sets size of product
      * @param $expireDate set expire date of product
      */
-    public function __construct($productName, $size, $expireDate)
+    public function __construct($productName, $size, $expireDate, $productId = null)
     {
+        $this->productId = $productId;
         $this->productName = $productName;
         $this->size = $size;
         $this->expireDate = $expireDate;
@@ -96,6 +98,22 @@ abstract class Product
     public function setExpireDate($expireDate)
     {
         $this->expireDate = $expireDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @param mixed $productId
+     */
+    public function setProductId($productId)
+    {
+        $this->productId = $productId;
     }
 
 

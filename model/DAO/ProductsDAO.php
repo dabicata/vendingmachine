@@ -11,6 +11,7 @@ namespace vending\model;
 
 include_once 'CRUDInterface.php';
 include_once '/srv/http/vendingmachine/model/DbConnector.php';
+
 /**
  * This class lets you do CRUD operations to product table.
  * Class ProductsDAO
@@ -25,20 +26,38 @@ class ProductsDAO implements CRUDInterface
     {
         $sql = 'SELECT * FROM `products`';
         $db = new DbConnector();
-        $db->selectQuery($sql);
+        $data = $db->selectQuery($sql);
         $db->closeConnection();
-    }
+        return $data;
 
+    }
     /**
      * Select Product by ID.
      * @param $productId
+     * @return mixed
      */
     public function select($productId)
     {
         $sql = 'SELECT * FROM `products` WHERE product_id = ?';
         $db = new DbConnector;
-        $db->selectByIdQuery($sql, $productId);
+        $data = $db->selectByIdQuery($sql, $productId);
         $db->closeConnection();
+        return $data;
+
+    }
+
+    /**
+     * @param $cellId
+     * @return mixed
+     */
+    public function selectProductByCellId($cellId)
+    {
+        $sql = 'SELECT * FROM `products` WHERE cell_id = ? ORDER BY product_expire_date DESC';
+        $db = new DbConnector;
+        $data = $db->selectQuery($sql, $cellId);
+        $db->closeConnection();
+        return $data;
+
     }
 
     /**
@@ -71,6 +90,7 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
+
     }
 
     /**Delete product by ID.
@@ -79,7 +99,7 @@ class ProductsDAO implements CRUDInterface
      */
     public function delete($productId)
     {
-        $sql = 'DELETE FROM `products` WHERE `products`.`product_id` = ?';
+        $sql = 'DELETE FROM `products` WHERE `products`.`product_id` = ? LIMIT 1';
         $db = new DbConnector();
         $db->executeQuery($sql, $productId);
         $db->closeConnection();
@@ -91,7 +111,7 @@ class ProductsDAO implements CRUDInterface
      */
     public function deleteExpired($expiredProduct)
     {
-        $sql = 'DELETE FROM `products` WHERE `products`.`product_expire_date` = ?';
+        $sql = 'DELETE FROM `products` WHERE `products`.`product_expire_date` > now()';
         $db = new DbConnector();
         $db->executeQuery($sql, $expiredProduct);
         $db->closeConnection();
