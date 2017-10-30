@@ -31,7 +31,7 @@ class Snikers extends Product
 
     /**
      * Returns price of product.
-     * @return sets
+     * @return mixed|sets $price
      */
     public function getPrice()
     {

@@ -6,9 +6,9 @@ include '/srv/http/vendingmachine/controller/VendingMachine.php';
 include '/srv/http/vendingmachine/controller/Chips.php';
 include '/srv/http/vendingmachine/controller/Cola.php';
 include '/srv/http/vendingmachine/controller/Snikers.php';
-$machines = 4;
-$machineRow = 3;
-$machineColumn = 3;
+$machines = 1;
+$machineRow = 2;
+$machineColumn = 2;
 $cellSize = 10;
 $productsNumber = 500;
 $date = new \DateTime();
@@ -33,7 +33,8 @@ for ($x = 0; $x < $productsNumber; $x++) {
 
 }
 for ($i = 0; $i < $machines; $i++) {
-    $machineClass[] = new VendingMachine($machineRow, $machineColumn, $cellSize);
+    $machineClass[] = new VendingMachine;
+    $machineClass[$i]->createMachine($machineRow, $machineColumn, $cellSize);
 }
 
 foreach ($machineClass as $machine) {
@@ -46,7 +47,10 @@ foreach ($machineClass as $machine) {
     }
 }
 
-//$machineClass[0]->loadMachine(289);
+
+$machineClass2 = new VendingMachine();
+$machineClass2->loadMachine(253);
+$machineClass2->deleteMachine();
 
 
 

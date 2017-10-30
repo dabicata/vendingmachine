@@ -29,15 +29,14 @@ class VendingMachine
 
 
     /**
-     * VendingMachine constructor.
      * Sets rows columns and cell size of machine.
      * @param $rowNumber - rows of machine
      * @param $columnNumber - columns of machine
      * @param $cellSize - default cell size of machine
+     * @param null $machineId
      */
-    public function __construct($rowNumber, $columnNumber, $cellSize, $machineId = null)
+    public function createMachine($rowNumber, $columnNumber, $cellSize)
     {
-        if ($machineId === null) {
             $database = new MachineDAO();
             $this->machineId = $database->insert(array($rowNumber, $columnNumber, $cellSize));
 //        var_dump($this->machineId);
@@ -45,57 +44,60 @@ class VendingMachine
             $this->rowNumber = $rowNumber;
             $this->cellSize = $cellSize;
             $this->defineMachine();
-        } else {
-            $this->loadMachine($machineId);
-        }
+
     }
 
+    /**
+     * Loads machine data from the Mysql Database.
+     * @param $machineId
+     */
     public function loadMachine($machineId)
     {
         $machineData = new MachineDAO();
         $machineDB = $machineData->select(array($machineId));
-        $this->machineId = $machineDB->vending_machine_id;
-        $this->rowNumber = $machineDB->vending_machine_rows;
-        $this->columnNumber = $machineDB->vending_machine_columns;
-        $this->cellSize = $machineDB->machine_size;
+        if (!empty($machineDB)) {
+            $this->machineId = $machineDB->vending_machine_id;
+            $this->rowNumber = $machineDB->vending_machine_rows;
+            $this->columnNumber = $machineDB->vending_machine_columns;
+            $this->cellSize = $machineDB->machine_size;
+        }
         $cellDAO = new CellDAO();
         $cellDB = $cellDAO->selectCellByMachineId(array($machineId));
-//        var_dump($cellDB);
+        if (!empty($cellDB)) {
+            $this->cellMatrix = [];
+            $counter = 0;
+            for ($row = 1; $row <= $this->rowNumber; $row++) {
+                for ($column = 1; $column <= $this->columnNumber; $column++) {
+                    $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellDB[$counter]->cell_id);
+                    $counter++;
+                    echo $machineId;
+                    $productData = new ProductsDAO();
+                    $productDB = $productData->selectProductByCellId(array($this->cellMatrix[$row][$column]->getCellId()));
+                    /*                var_dump($productDB);*/
+                    foreach ($productDB as $product) {
+                        switch ($product->product_type_id) {
+                            case 1:
+                                $productOBJ = new Cola($product->product_price, $product->product_expire_date);
+                                $productOBJ->setProductId($product->product_id);
+                                $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                                break;
+                            case 2:
+                                $productOBJ = new Chips($product->product_price, $product->product_expire_date);
+                                $productOBJ->setProductId($product->product_id);
+                                $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                                break;
+                            case 3:
+                                $productOBJ = new Snikers($product->product_price, $product->product_expire_date);
+                                $productOBJ->setProductId($product->product_id);
+                                $this->cellMatrix[$row][$column]->setProduct($productOBJ);
+                                break;
+                        }
 
-        $this->cellMatrix = [];
-        $counter = 0;
-        for ($row = 1; $row <= $this->rowNumber; $row++) {
-            for ($column = 1; $column <= $this->columnNumber; $column++) {
-                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellDB[$counter]->cell_id);
-                $counter++;
-                echo $machineId;
-                $productData = new ProductsDAO();
-                $productDB = $productData->selectProductByCellId(array($this->cellMatrix[$row][$column]->getCellId()));
-                /*                var_dump($productDB);*/
-                foreach ($productDB as $product) {
-                    switch ($product->product_type_id) {
-                        case 1:
-                            $productOBJ = new Cola($product->product_price, $product->product_expire_date);
-                            $productOBJ->setProductId($product->product_id);
-                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
-                            break;
-                        case 2:
-                            $productOBJ = new Chips($product->product_price, $product->product_expire_date);
-                            $productOBJ->setProductId($product->product_id);
-                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
-                            break;
-                        case 3:
-                            $productOBJ = new Snikers($product->product_price, $product->product_expire_date);
-                            $productOBJ->setProductId($product->product_id);
-                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
-                            break;
                     }
-
+//                var_dump($this->cellMatrix[$row][$column]);
                 }
-                var_dump($this->cellMatrix[$row][$column]);
             }
         }
-
 
     }
 
@@ -152,6 +154,33 @@ class VendingMachine
 
         if ($productArray == !null) {
             return $productArray;
+        }
+    }
+
+
+    /**
+     *Delete Machine and everything in it.
+     */
+    public function deleteMachine()
+    {
+        $productDAO = new ProductsDAO();
+        $cellDAO = new CellDAO();
+        $machineDAO = new MachineDAO();
+
+        if ($this->cellMatrix !== null) {
+            foreach ($this->cellMatrix as $cells) {
+                foreach ($cells as $cell) {
+                    if ($cell->getProducts() !== null) {
+                        foreach ($cell->getProducts() as $product) {
+                            $productDAO->delete(array($product->getProductId()));
+                        }
+                    }
+                    $cellDAO->delete(array($cell->getCellId()));
+                }
+            }
+        }
+        if ($this->machineId !== null) {
+            $machineDAO->delete(array($this->machineId));
         }
     }
 

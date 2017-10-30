@@ -29,7 +29,6 @@ class ProductsDAO implements CRUDInterface
         $data = $db->selectQuery($sql);
         $db->closeConnection();
         return $data;
-
     }
     /**
      * Select Product by ID.

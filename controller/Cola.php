@@ -17,7 +17,7 @@ class Cola extends Product
 
     /**
      * Cola constructor.
-     * Sets productname,size and expire date of product in abstract class
+     * Sets productName,size and expire date of product in abstract class
      * and sets price.
      * @param sets $price
      * @param sets $expireDate
