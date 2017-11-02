@@ -53,7 +53,7 @@ class VendingMachine
     public function loadMachine($machineId)
     {
         $machineData = new MachineDAO();
-        $machineDB = $machineData->select(array($machineId));
+        $machineDB = $machineData->select([$machineId]);
         if (($machineDB) != null) {
             $this->machineId = $machineDB['vendingMachineId'];
             $this->rowNumber = $machineDB['vendingMachineRows'];
@@ -61,7 +61,7 @@ class VendingMachine
             $this->cellSize = $machineDB['machineSize'];
             $cellDAO = new CellDAO();
             $productData = new ProductsDAO();
-            $cellDB = $cellDAO->selectCellByMachineId(array($machineId));
+            $cellDB = $cellDAO->selectCellByMachineId([$machineId]);
             if (($cellDB) != null) {
                 $this->cellMatrix = [];
                 $counter = 0;
@@ -69,7 +69,7 @@ class VendingMachine
                     for ($column = 0; $column < $this->columnNumber; $column++) {
                         $this->cellMatrix[$cellDB[$counter]['cellRow']][$cellDB[$counter]['cellColumn']] = new Cell($this->cellSize, $cellDB[$counter]['cellId']);
                         $counter++;
-                        $productDB = $productData->selectProductByCellId(array($this->cellMatrix[$row][$column]->getCellId()));
+                        $productDB = $productData->selectProductByCellId([$this->cellMatrix[$row][$column]->getCellId()]);
                         foreach ($productDB as $product) {
                             switch ($product['productTypeId']) {
                                 case Cola::TYPEID:
@@ -100,7 +100,7 @@ class VendingMachine
         $this->cellMatrix = [];
         for ($row = 0; $row < $this->rowNumber; $row++) {
             for ($column = 0; $column < $this->columnNumber; $column++) {
-                $cellId = $cellDAO->insert(array($this->machineId, $row, $column));
+                $cellId = $cellDAO->insert([$this->machineId, $row, $column]);
                 $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
             }
         }
@@ -125,13 +125,13 @@ class VendingMachine
                                     && (($cell->getSize() / $product->getSize()) > $cell->getQuantity())))
                         ) {
                             $cell->setProduct($product);
-                            $productId = $productDAO->insert(array(
+                            $productId = $productDAO->insert([
                                 $product->getTypeId(),
                                 $product->getPrice(),
                                 $product->getExpireDate()->format('Y/m/d h:m:s'),
                                 $product->getSize(),
                                 $cell->getCellId()
-                            ));
+                            ]);
                             $product->setProductId($productId);
                             unset($productArray[$key]);
                             break 2;
@@ -161,9 +161,9 @@ class VendingMachine
             }
             $productDAO->deleteByCellId($cellIdArray);
         }
-        $cellDAO->deleteByMachineId(array($this->machineId));
+        $cellDAO->deleteByMachineId([$this->machineId]);
         if ($this->machineId !== null) {
-            $machineDAO->delete(array($this->machineId));
+            $machineDAO->delete([$this->machineId]);
         }
     }
 
@@ -248,7 +248,7 @@ class VendingMachine
         if ((count($this->cellMatrix[$row][$column]->getProducts()) > 0)) {
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
                 $this->cellMatrix[$row][$column]->removeProduct(0);
-                $productDAO->delete(array($this->cellMatrix[$row][$column]->getProductFromArray()->getProductId()));
+                $productDAO->delete([$this->cellMatrix[$row][$column]->getProductFromArray()->getProductId()]);
                 echo $this->cellMatrix[$row][$column]->getProductFromArray()->getProductName() . " product bought \n";
                 echo 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) . "\n";
                 return ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
@@ -267,10 +267,12 @@ class VendingMachine
      */
     public function listItems()
     {
-        foreach ($this->cellMatrix as $matrix) {
-            foreach ($matrix as $cell) {
-                if (null !== $cell->getProductFromArray()) {
-                    echo $cell->getProductFromArray()->getProductName() . ' ' . ($cell->getQuantity()) . "\n";
+        if ($this->cellMatrix !== null) {
+            foreach ($this->cellMatrix as $matrix) {
+                foreach ($matrix as $cell) {
+                    if (null !== $cell->getProductFromArray()) {
+                        echo $cell->getProductFromArray()->getProductName() . ' ' . ($cell->getQuantity()) . "\n";
+                    }
                 }
             }
         }
