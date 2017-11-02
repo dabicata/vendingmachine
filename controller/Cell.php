@@ -5,6 +5,7 @@ namespace vending;
 /**
  * Class Cell
  * contains objects of product class
+ *
  * @package vending
  */
 class Cell
@@ -16,6 +17,7 @@ class Cell
     /**
      * Sets size of cells.
      * Cell constructor.
+     *
      * @param $size
      */
     public function __construct($size, $cellId)
@@ -27,6 +29,7 @@ class Cell
 
     /**
      * Returns product object.
+     *
      * @return mixed
      */
     public function getProducts()
@@ -36,6 +39,7 @@ class Cell
 
     /**
      * Sets product object.
+     *
      * @param $product
      */
     public function setProduct($product)
@@ -45,6 +49,7 @@ class Cell
 
     /**
      * Returns quantity of products in the cell.
+     *
      * @return int
      */
     public function getQuantity()
@@ -54,7 +59,8 @@ class Cell
 
 
     /**
-     * Seturns size of cell.
+     * Returns size of cell.
+     *
      * @return
      */
     public function getSize()
@@ -64,6 +70,7 @@ class Cell
 
     /**
      * Sets size of cell.
+     *
      * @param $size
      */
     public function setSize($size)
@@ -74,6 +81,7 @@ class Cell
 
     /**
      * Returs first product from the products array.
+     *
      * @return mixed
      */
     public function getProductFromArray()
@@ -83,6 +91,7 @@ class Cell
 
     /**
      * Pops product from array.
+     *
      * @return mixed
      */
     public function popProduct()
@@ -92,6 +101,7 @@ class Cell
 
     /**
      * Remove product from products array and reformat it.
+     *
      * @param $x
      */
     public function removeProduct($x)
@@ -101,6 +111,8 @@ class Cell
     }
 
     /**
+     * Returns CellId.
+     *
      * @return mixed
      */
     public function getCellId()
@@ -109,6 +121,8 @@ class Cell
     }
 
     /**
+     * Sets CellId.
+     *
      * @param mixed $cellId
      */
     public function setCellId($cellId)

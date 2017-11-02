@@ -9,12 +9,12 @@
 namespace vending\model;
 
 
-include_once 'CRUDInterface.php';
-include_once '/srv/http/vendingmachine/model/DbConnector.php';
+include_once __DIR__ . '/CRUDInterface.php';
+include_once __DIR__ . '/../DbConnector.php';
 
 /**
  * This class lets you do CRUD operations to product table.
- * Class ProductsDAO
+ *
  * @package vending\model
  */
 class ProductsDAO implements CRUDInterface
@@ -30,8 +30,10 @@ class ProductsDAO implements CRUDInterface
         $db->closeConnection();
         return $data;
     }
+
     /**
      * Select Product by ID.
+     *
      * @param $productId
      * @return mixed
      */
@@ -46,6 +48,8 @@ class ProductsDAO implements CRUDInterface
     }
 
     /**
+     * Select Product by CellId.
+     *
      * @param $cellId
      * @return mixed
      */
@@ -62,6 +66,7 @@ class ProductsDAO implements CRUDInterface
     /**
      * Insert into Products: product_type_id, product_price, product_expire_date,
      * product_size, cell_id, product__date_created.
+     *
      * @param $insertParam
      * @return string
      */
@@ -79,6 +84,7 @@ class ProductsDAO implements CRUDInterface
     /**
      * Update Product selected by ID : product_type_id, product_price, product_expire_date, product_size,
      * cell_id, product_date_updated.
+     *
      * @param $updateParam
      * @return mixed|void
      */
@@ -93,6 +99,7 @@ class ProductsDAO implements CRUDInterface
     }
 
     /**Delete product by ID.
+     *
      * @param $productId
      * @return mixed|void
      */
@@ -106,6 +113,7 @@ class ProductsDAO implements CRUDInterface
 
     /**
      * Delete product by expire date.
+     *
      * @param $expiredProduct
      */
     public function deleteExpired($expiredProduct)
@@ -113,6 +121,20 @@ class ProductsDAO implements CRUDInterface
         $sql = 'DELETE FROM `products` WHERE `products`.`product_expire_date` > now()';
         $db = new DbConnector();
         $db->executeQuery($sql, $expiredProduct);
+        $db->closeConnection();
+    }
+
+    public function deleteByCellId($cellId)
+    {
+        if (is_array($cellId)) {
+            $inQuery = implode(',', array_fill(0, count($cellId), '?'));
+            $sql = 'DELETE FROM `products` WHERE `products`.`cell_id` IN (' . $inQuery . ')';
+        } else {
+            $sql = 'DELETE FROM `products` WHERE `products`.`cell_id` = ?';
+        }
+        $db = new DbConnector();
+
+        $db->executeQuery($sql, $cellId);
         $db->closeConnection();
     }
 }

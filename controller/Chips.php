@@ -7,30 +7,33 @@ namespace vending;
  * Extends product class.
  * Sets properties of extend product class
  * and adds price as property.
+ *
  * @package vending
  */
 class Chips extends Product
 {
     private $price;
-    private $typeId = 2;
-
+    CONST TYPEID = 2;
+    CONST SIZE = 2;
     /**
      * Cola constructor.
-     * sets productname,size and expire date of product in abstract class
+     * sets productName,size and expire date of product in abstract class
      * and sets price.
+     *
      * @param sets $price
      * @param sets $expireDate
      */
     public function __construct($price, $expireDate)
     {
         $productName = (new \ReflectionClass($this))->getShortName();
-        $size = 2;
+
         $this->price = $price;
-        parent::__construct($productName, $size, $expireDate);
+        parent::__construct($productName, SELF::SIZE, $expireDate);
     }
 
     /**
      * Returs price of product.
+     *
      * @return sets
      */
     public function getPrice()
@@ -41,6 +44,7 @@ class Chips extends Product
 
     /**
      * Sets price of product.
+     *
      * @param $price
      * @return mixed
      */
@@ -50,11 +54,13 @@ class Chips extends Product
     }
 
     /**
+     * Returns typeId of product.
+     *
      * @return int
      */
     public function getTypeId(): int
     {
-        return $this->typeId;
+        return SELF::TYPEID;
     }
 
 }

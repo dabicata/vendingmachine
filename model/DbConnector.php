@@ -10,7 +10,7 @@ namespace vending\model;
 
 /**
  * This Class connects you to database and perform Queries.
- * Class DbConnector
+ *
  * @package vending
  */
 class DbConnector
@@ -45,6 +45,7 @@ class DbConnector
 
     /**
      * Takes sql and parameters for sql and performs  insert, update, delete query.
+     *
      * @param $sql holds the sql.
      * @param iterable|holds $parameters holds parameters for sql
      * @return string
@@ -58,7 +59,9 @@ class DbConnector
             $counter++;
         }
         try {
+
             $query->execute();
+
 
         } catch (\PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
@@ -68,6 +71,7 @@ class DbConnector
 
     /**
      * Takes sql and parameters for sql and performs select query.
+     *
      * @param $sql holds the sql.
      * @param iterable|holds $parameters holds parameters for sql
      * @return array of the query
@@ -85,10 +89,31 @@ class DbConnector
         } catch (\PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
-        return $query->fetchAll(\PDO::FETCH_OBJ);
+        $camelCaseQuery = [];
+        $result = $query->fetchAll();
 
+        if ($result) {
+            foreach ($result as $item) {
+                $camelKeys = [];
+                foreach ($item as $key => $value) {
+                    $camelKey = lcfirst(implode('', array_map('ucfirst', explode('_', $key))));
+                    $camelKeys[] = $camelKey;
+                }
+                $value2 = array_combine($camelKeys, $item);
+                $camelCaseQuery[] = $value2;
+            }
+            return $camelCaseQuery;
+        }
     }
 
+
+    /**
+     * Takes sql and parameters for sql and performs select query by id.
+     *
+     * @param $sql
+     * @param $parameters
+     * @return mixed
+     */
     public function selectByIdQuery($sql, $parameters)
     {
         $query = $this->dataBase->prepare($sql);
@@ -102,7 +127,16 @@ class DbConnector
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
-        return $query->fetch(\PDO::FETCH_OBJ);
+        $camelCaseQuery = [];
+        $result = $query->fetch();
+        if ($result) {
+            foreach ($result as $key => $value) {
+                $camelKey = lcfirst(implode('', array_map('ucfirst', explode('_', $key))));
+                $camelKeys[] = $camelKey;
+            }
+            $camelCaseQuery = array_combine($camelKeys, $result);
+        }
+        return $camelCaseQuery;
     }
 }
 

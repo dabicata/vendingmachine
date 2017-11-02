@@ -10,13 +10,12 @@ namespace vending\model;
 
 use vending\model\DbConnector;
 
-include_once 'CRUDInterface.php';
-include_once '/srv/http/vendingmachine/model/DbConnector.php';
+include_once __DIR__ . '/CRUDInterface.php';
+include_once __DIR__ . '/../DbConnector.php';
 
 
 /**
  * This class lets you do CRUD operations to cells table.
- * Class CellDAO
  * @package vending\model
  */
 class CellDAO implements CRUDInterface
@@ -36,20 +35,23 @@ class CellDAO implements CRUDInterface
 
     /**
      * Select cell by ID.
-     * @param $cellid
+     *
+     * @param $cellId
      * @return mixed
+     * @internal param $cellid
      */
-    public function select($cellid)
+    public function select($cellId)
     {
         $sql = 'SELECT * FROM `cells` WHERE cell_id = ?';
         $db = new DbConnector();
-        $data = $db->selectByIdQuery($sql, $cellid);
+        $data = $db->selectByIdQuery($sql, $cellId);
         $db->closeConnection();
         return $data;
     }
 
     /**
      * Select cell by  MachineID.
+     *
      * @param $machineId
      * @return mixed
      */
@@ -65,6 +67,7 @@ class CellDAO implements CRUDInterface
 
     /**
      * Insert into cells: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_created.
+     *
      * @param $insertParam
      * @return string
      */
@@ -80,6 +83,7 @@ class CellDAO implements CRUDInterface
 
     /**
      * Update cells selected by ID: vending_machine_id, cell_row, cell_column, combined_cell, cell_date_updated.
+     *
      * @param $updateParam
      * @return mixed|void
      */
@@ -94,14 +98,30 @@ class CellDAO implements CRUDInterface
 
     /**
      * Delete cell by ID.
-     * @param $cellid
+     *
+     * @param $cellId
      * @return mixed|void
+     * @internal param $cellid
      */
-    public function delete($cellid)
+    public function delete($cellId)
     {
         $sql = 'DELETE FROM `cells` WHERE `cells`.`cell_id` = ?';
         $db = new DbConnector();
-        $db->executeQuery($sql, $cellid);
+        $db->executeQuery($sql, $cellId);
+        $db->closeConnection();
+    }
+
+    /**
+     * Delete cell by machine id.
+     *
+     *
+     * @param $machineId
+     */
+    public function deleteByMachineId($machineId)
+    {
+        $sql = 'DELETE FROM `cells` WHERE `cells`.`vending_machine_id` = ?';
+        $db = new DbConnector();
+        $db->executeQuery($sql, $machineId);
         $db->closeConnection();
     }
 }

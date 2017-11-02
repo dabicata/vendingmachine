@@ -8,12 +8,12 @@
 
 namespace vending\model;
 
-include_once 'CRUDInterface.php';
-include_once '/srv/http/vendingmachine/model/DbConnector.php';
+include_once __DIR__ . '/CRUDInterface.php';
+include_once __DIR__ . '/../DbConnector.php';
 
 /**
  *  * This class lets you do CRUD operations to vending_machine table.
- * Class MachineDAO
+ *
  * @package vending\model
  */
 class MachineDAO implements CRUDInterface
@@ -31,6 +31,7 @@ class MachineDAO implements CRUDInterface
 
     /**
      * Select machine by ID.
+     *
      * @param $machineId
      * @return array
      */
@@ -46,6 +47,7 @@ class MachineDAO implements CRUDInterface
 
     /**
      * Insert into machines: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_created.
+     *
      * @param $insertParam
      * @return string
      */
@@ -61,6 +63,7 @@ class MachineDAO implements CRUDInterface
 
     /**
      * Update machine selected by ID: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_updated.
+     *
      * @param $updateParam
      * @return mixed|void
      */
@@ -75,6 +78,7 @@ WHERE `vending_machines`.`vending_machine_id` = ?';
 
     /**
      * Delete machine by ID.
+     *
      * @param $machineId
      * @return mixed|void
      */

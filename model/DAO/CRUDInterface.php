@@ -18,18 +18,21 @@ interface CRUDInterface
 
     /**
      * Select by ID.
+     *
      * @param $productId
      */
     public function select($productId);
 
     /**
      * Insert into database.
+     *
      * @param $insertParam
      */
     public function insert(iterable $insertParam);
 
     /**
      * Update the database.
+     *
      * @param iterable $updateParam
      * @return mixed
      */
@@ -37,6 +40,7 @@ interface CRUDInterface
 
     /**
      * Delete from database.
+     *
      * @param $productId
      * @return mixed
      */

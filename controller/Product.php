@@ -16,8 +16,8 @@ abstract class Product
 
     /**
      * Product constructor.
-     *
      * Sets productName, quantity, size and expireDate.
+     *
      * @param $productName sets productName
      * @param $size sets size of product
      * @param $expireDate set expire date of product
@@ -32,6 +32,7 @@ abstract class Product
 
     /**
      * Sets price of  product.
+     *
      * @param $price
      * @return mixed
      */
@@ -45,6 +46,7 @@ abstract class Product
 
     /**
      * Returns product name.
+     *
      * @return product name
      */
     public function getProductName()
@@ -54,6 +56,7 @@ abstract class Product
 
     /**
      * Sets product name.
+     *
      * @param $productName
      */
     public function setProductName($productName)
@@ -64,6 +67,7 @@ abstract class Product
 
     /**
      * Returns size of product.
+     *
      * @return sets
      */
     public function getSize()
@@ -73,8 +77,8 @@ abstract class Product
 
     /**
      * Sets size of product.
-     * @param
-     * $size
+     *
+     * @param $size
      */
     public function setSize($size)
     {
@@ -84,6 +88,7 @@ abstract class Product
 
     /**
      * Returns expire date of product.
+     *
      * @return set
      */
     public function getExpireDate()
@@ -93,6 +98,7 @@ abstract class Product
 
     /**
      * Sets expire date of product.
+     *
      * @param $expireDate
      */
     public function setExpireDate($expireDate)
@@ -101,6 +107,8 @@ abstract class Product
     }
 
     /**
+     * Return productId.
+     *
      * @return mixed
      */
     public function getProductId()
@@ -109,6 +117,8 @@ abstract class Product
     }
 
     /**
+     * Sets productId.
+     *
      * @param mixed $productId
      */
     public function setProductId($productId)

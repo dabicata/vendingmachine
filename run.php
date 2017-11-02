@@ -2,15 +2,15 @@
 
 namespace vending;
 
-include '/srv/http/vendingmachine/controller/VendingMachine.php';
-include '/srv/http/vendingmachine/controller/Chips.php';
-include '/srv/http/vendingmachine/controller/Cola.php';
-include '/srv/http/vendingmachine/controller/Snikers.php';
+include __DIR__ . '/controller/VendingMachine.php';
+include __DIR__ . '/controller/Chips.php';
+include __DIR__ . '/controller/Cola.php';
+include __DIR__ . '/controller/Snikers.php';
 $machines = 1;
 $machineRow = 2;
 $machineColumn = 2;
 $cellSize = 10;
-$productsNumber = 500;
+$productsNumber = 50;
 $date = new \DateTime();
 $productArray = [];
 
@@ -42,15 +42,14 @@ foreach ($machineClass as $machine) {
         $productArray = $machine->loadProducts($productArray);
         $machine->listItems();
         echo "\n ";
-
-
     }
 }
+//$machine = new VendingMachine();
+//$machine->loadMachine(695);
+//$machine->listItems();
+//$machine->deleteMachine();
 
 
-$machineClass2 = new VendingMachine();
-$machineClass2->loadMachine(253);
-$machineClass2->deleteMachine();
 
 
 

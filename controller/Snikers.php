@@ -7,30 +7,34 @@ namespace vending;
  * Extends product class.
  * Sets properties of extend product class
  * and adds price as property.
+ *
  * @package vending
  */
 class Snikers extends Product
 {
     private $price;
-    private $typeId = 3;
+    CONST TYPEID = 3;
+    CONST SIZE = 1;
 
     /**
      * Cola constructor.
-     * Sets productname,size and expire date of product in abstract class
+     * Sets productName,size and expire date of product in abstract class
      * and sets price.
+     *
      * @param sets $price
      * @param sets $expireDate
      */
     public function __construct($price, $expireDate)
     {
         $productName = (new \ReflectionClass($this))->getShortName();
-        $size = 1;
+
         $this->price = $price;
-        parent::__construct($productName, $size, $expireDate);
+        parent::__construct($productName, SELF::SIZE, $expireDate);
     }
 
     /**
      * Returns price of product.
+     *
      * @return mixed|sets $price
      */
     public function getPrice()
@@ -41,6 +45,7 @@ class Snikers extends Product
 
     /**
      * Sets price of product.
+     *
      * @param $price
      * @return mixed
      */
@@ -50,11 +55,13 @@ class Snikers extends Product
     }
 
     /**
+     * Returns typeId of product.
+     *
      * @return int
      */
     public function getTypeId(): int
     {
-        return $this->typeId;
+        return SELF::TYPEID;
     }
 
 }
