@@ -3,7 +3,7 @@
 namespace vending;
 
 /**
- * Class Snikers
+ * Class Snikers.
  * Extends product class.
  * Sets properties of extend product class
  * and adds price as property.
@@ -12,14 +12,14 @@ namespace vending;
  */
 class Snikers extends Product
 {
-    private $price;
     CONST TYPEID = 3;
     CONST SIZE = 1;
 
+    private $price;
+
     /**
      * Cola constructor.
-     * Sets productName,size and expire date of product in abstract class
-     * and sets price.
+     * Sets productName,size and expire date of product in abstract class and sets price.
      *
      * @param sets $price
      * @param sets $expireDate
@@ -35,13 +35,12 @@ class Snikers extends Product
     /**
      * Returns price of product.
      *
-     * @return mixed|sets $price
+     * @return sets
      */
     public function getPrice()
     {
         return $this->price;
     }
-
 
     /**
      * Sets price of product.

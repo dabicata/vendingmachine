@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 10/16/17
- * Time: 3:22 PM
- */
 
 namespace vending\model;
 
@@ -15,10 +9,11 @@ namespace vending\model;
  */
 class DbConnector
 {
-    private $dataBase;
-    const  DSN = "mysql:dbname=vending_machine;host=127.0.0.1";
+    const DSN = "mysql:dbname=vending_machine;host=127.0.0.1";
     const USER = "work";
     const PASSWORD = "workpass";
+
+    private $dataBase;
 
     /**
      * DbConnector constructor.
@@ -33,7 +28,6 @@ class DbConnector
             echo 'Connection failed: ' . $e->getMessage();
         }
     }
-
 
     /**
      * Close the database connection.
@@ -55,17 +49,14 @@ class DbConnector
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
         foreach ($parameters as $param) {
-            $query->bindValue($counter, $param);
-            $counter++;
+            $query->bindValue($counter++, $param);
         }
         try {
-
             $query->execute();
-
-
         } catch (\PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
+
         return $this->dataBase->lastInsertId();
     }
 
@@ -81,17 +72,16 @@ class DbConnector
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
         foreach ($parameters as $param) {
-            $query->bindValue($counter, $param);
-            $counter++;
+            $query->bindValue($counter++, $param);
         }
         try {
             $query->execute();
         } catch (\PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
+
         $camelCaseQuery = [];
         $result = $query->fetchAll();
-
         if ($result) {
             foreach ($result as $item) {
                 $camelKeys = [];
@@ -102,10 +92,10 @@ class DbConnector
                 $value2 = array_combine($camelKeys, $item);
                 $camelCaseQuery[] = $value2;
             }
+
             return $camelCaseQuery;
         }
     }
-
 
     /**
      * Takes sql and parameters for sql and performs select query by id.
@@ -127,6 +117,7 @@ class DbConnector
         } catch (\PDOException $e) {
             echo $e->getMessage();
         }
+
         $camelCaseQuery = [];
         $result = $query->fetch();
         if ($result) {
@@ -136,6 +127,7 @@ class DbConnector
             }
             $camelCaseQuery = array_combine($camelKeys, $result);
         }
+
         return $camelCaseQuery;
     }
 }

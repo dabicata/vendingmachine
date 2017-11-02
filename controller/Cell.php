@@ -19,6 +19,7 @@ class Cell
      * Cell constructor.
      *
      * @param $size
+     * @param $cellId
      */
     public function __construct($size, $cellId)
     {
@@ -80,7 +81,7 @@ class Cell
 
 
     /**
-     * Returs first product from the products array.
+     * Returns first product from the products array.
      *
      * @return mixed
      */

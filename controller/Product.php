@@ -3,16 +3,17 @@
 namespace vending;
 
 /**
- * Class Product
+ * Class Product.
  * Contains productName, size, and expireDate of the product.
+ *
  * @package vending
  */
 abstract class Product
 {
-    private $productName; // name of product
-    private $size; // size of product
-    private $expireDate; // expire date of product
-    private $productId;
+    private $productName; // Name of product.
+    private $size; // Size of product.
+    private $expireDate; // Expire date of product.
+    private $productId; // Id of product.
 
     /**
      * Product constructor.
@@ -21,6 +22,7 @@ abstract class Product
      * @param $productName sets productName
      * @param $size sets size of product
      * @param $expireDate set expire date of product
+     * @param null $productId
      */
     public function __construct($productName, $size, $expireDate, $productId = null)
     {
@@ -39,6 +41,7 @@ abstract class Product
     abstract public function setPrice($price);
 
     /** Returns price of product.
+     *
      * @return mixed
      */
     abstract public function getPrice();
@@ -85,7 +88,6 @@ abstract class Product
         $this->size = $size;
     }
 
-
     /**
      * Returns expire date of product.
      *
@@ -125,6 +127,4 @@ abstract class Product
     {
         $this->productId = $productId;
     }
-
-
 }

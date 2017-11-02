@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 10/18/17
- * Time: 3:08 PM
- */
 
 namespace vending\model;
 
-
+/**
+ * CRUD operations.
+ *
+ * Interface CRUDInterface
+ * @package vending\model
+ */
 interface CRUDInterface
 {
     /**

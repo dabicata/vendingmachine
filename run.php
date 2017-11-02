@@ -6,6 +6,7 @@ include __DIR__ . '/controller/VendingMachine.php';
 include __DIR__ . '/controller/Chips.php';
 include __DIR__ . '/controller/Cola.php';
 include __DIR__ . '/controller/Snikers.php';
+
 $machines = 1;
 $machineRow = 2;
 $machineColumn = 2;
@@ -32,22 +33,22 @@ for ($x = 0; $x < $productsNumber; $x++) {
     }
 
 }
-for ($i = 0; $i < $machines; $i++) {
-    $machineClass[] = new VendingMachine;
-    $machineClass[$i]->createMachine($machineRow, $machineColumn, $cellSize);
-}
-
-foreach ($machineClass as $machine) {
-    if ($productArray == !null) {
-        $productArray = $machine->loadProducts($productArray);
-        $machine->listItems();
-        echo "\n ";
-    }
-}
-//$machine = new VendingMachine();
-//$machine->loadMachine(695);
-//$machine->listItems();
-//$machine->deleteMachine();
+//for ($i = 0; $i < $machines; $i++) {
+//    $machineClass[] = new VendingMachine;
+//    $machineClass[$i]->createMachine($machineRow, $machineColumn, $cellSize);
+//}
+//
+//foreach ($machineClass as $machine) {
+//    if ($productArray == !null) {
+//        $productArray = $machine->loadProducts($productArray);
+//        $machine->listItems();
+//        echo "\n ";
+//    }
+//}
+$machine = new VendingMachine();
+$machine->loadMachine(695);
+$machine->listItems();
+$machine->deleteMachine();
 
 
 

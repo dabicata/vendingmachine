@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 10/18/17
- * Time: 4:46 PM
- */
 
 namespace vending\model;
 
@@ -41,8 +35,8 @@ class MachineDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->selectByIdQuery($sql, $machineId);
         $db->closeConnection();
-        return $data;
 
+        return $data;
     }
 
     /**
@@ -58,6 +52,7 @@ class MachineDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
+
         return $data;
     }
 

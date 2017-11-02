@@ -3,7 +3,7 @@
 namespace vending;
 
 /**
- * Class Chips
+ * Class Chips.
  * Extends product class.
  * Sets properties of extend product class
  * and adds price as property.
@@ -12,13 +12,14 @@ namespace vending;
  */
 class Chips extends Product
 {
-    private $price;
     CONST TYPEID = 2;
     CONST SIZE = 2;
+
+    private $price;
+
     /**
      * Cola constructor.
-     * sets productName,size and expire date of product in abstract class
-     * and sets price.
+     * Sets productName,size and expire date of product in abstract class and sets price.
      *
      * @param sets $price
      * @param sets $expireDate
@@ -32,7 +33,7 @@ class Chips extends Product
     }
 
     /**
-     * Returs price of product.
+     * Returns price of product.
      *
      * @return sets
      */

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 10/18/17
- * Time: 4:24 PM
- */
 
 namespace vending\model;
 
@@ -16,6 +10,7 @@ include_once __DIR__ . '/../DbConnector.php';
 
 /**
  * This class lets you do CRUD operations to cells table.
+ *
  * @package vending\model
  */
 class CellDAO implements CRUDInterface
@@ -29,6 +24,7 @@ class CellDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->selectQuery($sql);
         $db->closeConnection();
+
         return $data;
 
     }
@@ -46,6 +42,7 @@ class CellDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->selectByIdQuery($sql, $cellId);
         $db->closeConnection();
+
         return $data;
     }
 
@@ -61,6 +58,7 @@ class CellDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->selectQuery($sql, $machineId);
         $db->closeConnection();
+
         return $data;
     }
 
@@ -73,11 +71,11 @@ class CellDAO implements CRUDInterface
      */
     public function insert(iterable $insertParam)
     {
-        $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `cell_date_created`)
- VALUES (?, ?, ?, now())';
+        $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `cell_date_created`) VALUES (?, ?, ?, now())';
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
+
         return $data;
     }
 
@@ -101,7 +99,6 @@ class CellDAO implements CRUDInterface
      *
      * @param $cellId
      * @return mixed|void
-     * @internal param $cellid
      */
     public function delete($cellId)
     {
@@ -113,7 +110,6 @@ class CellDAO implements CRUDInterface
 
     /**
      * Delete cell by machine id.
-     *
      *
      * @param $machineId
      */

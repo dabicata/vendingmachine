@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toorhax
- * Date: 10/18/17
- * Time: 10:33 AM
- */
 
 namespace vending\model;
-
 
 include_once __DIR__ . '/CRUDInterface.php';
 include_once __DIR__ . '/../DbConnector.php';
@@ -28,6 +21,7 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->selectQuery($sql);
         $db->closeConnection();
+
         return $data;
     }
 
@@ -43,8 +37,8 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector;
         $data = $db->selectByIdQuery($sql, $productId);
         $db->closeConnection();
-        return $data;
 
+        return $data;
     }
 
     /**
@@ -59,13 +53,14 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector;
         $data = $db->selectQuery($sql, $cellId);
         $db->closeConnection();
+
         return $data;
 
     }
 
     /**
-     * Insert into Products: product_type_id, product_price, product_expire_date,
-     * product_size, cell_id, product__date_created.
+     * Insert into Products:
+     * product_type_id, product_price, product_expire_date, product_size, cell_id, product__date_created.
      *
      * @param $insertParam
      * @return string
@@ -78,6 +73,7 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
+
         return $data;
     }
 
@@ -95,7 +91,6 @@ class ProductsDAO implements CRUDInterface
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
-
     }
 
     /**Delete product by ID.
@@ -114,16 +109,21 @@ class ProductsDAO implements CRUDInterface
     /**
      * Delete product by expire date.
      *
-     * @param $expiredProduct
+     * @param $expiredProducts
      */
-    public function deleteExpired($expiredProduct)
+    public function deleteExpired($expiredProducts)
     {
         $sql = 'DELETE FROM `products` WHERE `products`.`product_expire_date` > now()';
         $db = new DbConnector();
-        $db->executeQuery($sql, $expiredProduct);
+        $db->executeQuery($sql, $expiredProducts);
         $db->closeConnection();
     }
 
+    /**
+     * Delete product by cellId.
+     *
+     * @param $cellId
+     */
     public function deleteByCellId($cellId)
     {
         if (is_array($cellId)) {

@@ -6,27 +6,26 @@ use vending\model\CellDAO;
 use vending\model\MachineDAO;
 use vending\model\ProductsDAO;
 
-
 include_once __DIR__ . '/../model/DAO/MachineDAO.php';
 include_once __DIR__ . '/../model/DAO/CellDAO.php';
 include_once __DIR__ . '/../model/DAO/ProductsDAO.php';
 include_once __DIR__ . '/Cell.php';
-include __DIR__ . '/Product.php';
+include_once __DIR__ . '/Product.php';
 
 
 /**
- * Class VendingMachine
+ * Class VendingMachine.
  * Create cell objects and map them to the machine, allows you to buy products and check their expiredate.
  *
  * @package vending
  */
 class VendingMachine
 {
-    private $rowNumber; //row numbers
-    private $columnNumber; //column numbers
-    private $cellSize;  //cell size
-    private $cellMatrix;   //cellMatrixped cells to machine
-    private $machineId;
+    private $rowNumber; //Row numbers.
+    private $columnNumber; //Column numbers.
+    private $cellSize; //Cell size.
+    private $cellMatrix; //Cell Matrix cells to machine.
+    private $machineId; //Id of machine.
 
 
     /**
@@ -44,7 +43,6 @@ class VendingMachine
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
         $this->defineMachine();
-
     }
 
     /**
@@ -57,8 +55,6 @@ class VendingMachine
         $machineData = new MachineDAO();
         $machineDB = $machineData->select(array($machineId));
         if (($machineDB) != null) {
-
-
             $this->machineId = $machineDB['vendingMachineId'];
             $this->rowNumber = $machineDB['vendingMachineRows'];
             $this->columnNumber = $machineDB['vendingMachineColumns'];
@@ -71,22 +67,19 @@ class VendingMachine
                 $counter = 0;
                 for ($row = 0; $row < $this->rowNumber; $row++) {
                     for ($column = 0; $column < $this->columnNumber; $column++) {
-
                         $this->cellMatrix[$cellDB[$counter]['cellRow']][$cellDB[$counter]['cellColumn']] = new Cell($this->cellSize, $cellDB[$counter]['cellId']);
                         $counter++;
                         $productDB = $productData->selectProductByCellId(array($this->cellMatrix[$row][$column]->getCellId()));
                         foreach ($productDB as $product) {
-
                             switch ($product['productTypeId']) {
-                                case 1:
+                                case Cola::TYPEID:
                                     $productOBJ = new Cola($product['productPrice'], $product['productExpireDate']);
                                     break;
-                                case 2:
+                                case Chips::TYPEID:
                                     $productOBJ = new Chips($product['productPrice'], $product['productExpireDate']);
                                     break;
-                                case 3:
+                                case Snikers::TYPEID:
                                     $productOBJ = new Snikers($product['productPrice'], $product['productExpireDate']);
-
                                     break;
                             }
                             $productOBJ->setProductId($product['productId']);
@@ -128,33 +121,34 @@ class VendingMachine
                     if ($product->getSize() <= $cell->getSize()) {
                         if ((is_null($cell->getProducts())) ||
                             ($cell->getProductFromArray() != null &&
-                                (($cell->getProductFromArray()->getProductName()) == ($product->getProductName()) && (($cell->getSize() / $product->getSize()) > $cell->getQuantity())))) {
+                                (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())
+                                    && (($cell->getSize() / $product->getSize()) > $cell->getQuantity())))
+                        ) {
                             $cell->setProduct($product);
-                            $productId = $productDAO->insert(array($product->getTypeId(), $product->getPrice(), $product->getExpireDate()->format('Y/m/d h:m:s'), $product->getSize(), $cell->getCellId()));
+                            $productId = $productDAO->insert(array(
+                                $product->getTypeId(),
+                                $product->getPrice(),
+                                $product->getExpireDate()->format('Y/m/d h:m:s'),
+                                $product->getSize(),
+                                $cell->getCellId()
+                            ));
                             $product->setProductId($productId);
                             unset($productArray[$key]);
                             break 2;
                         }
-
                     }
-
                 }
             }
-
         }
-
         if ($productArray == !null) {
             return $productArray;
         }
-
     }
-
 
     /**
      *Delete Machine and everything in it.
      */
-    public
-    function deleteMachine()
+    public function deleteMachine()
     {
         $productDAO = new ProductsDAO();
         $cellDAO = new CellDAO();
@@ -178,20 +172,17 @@ class VendingMachine
      *
      * @return mixed
      */
-    public
-    function getRow()
+    public function getRow()
     {
         return $this->rowNumber;
     }
-
 
     /**
      * Return column number of machine.
      *
      * @return mixed
      */
-    public
-    function getColumn()
+    public function getColumn()
     {
         return $this->columnNumber;
     }
@@ -202,8 +193,7 @@ class VendingMachine
      *
      * @param $cellSize
      */
-    public
-    function setCellSize($cellSize)
+    public function setCellSize($cellSize)
     {
         $this->cellSize = $cellSize;
     }
@@ -213,8 +203,7 @@ class VendingMachine
      *
      * @return mixed
      */
-    public
-    function getCellSize()
+    public function getCellSize()
     {
         return $this->cellSize;
     }
@@ -229,8 +218,7 @@ class VendingMachine
      * @param $secondCellColumn - column of second the cell you want to combine
      * @throws \Exception
      */
-    public
-    function combineCells($firstCellRow, $firstCellColumn, $secondCellRow, $secondCellColumn)
+    public function combineCells($firstCellRow, $firstCellColumn, $secondCellRow, $secondCellColumn)
     {
         if (($firstCellRow == $secondCellRow) && ($secondCellColumn == $firstCellColumn + 1)) {
             if (($this->cellMatrix[$firstCellRow][$firstCellColumn]) && ($this->cellMatrix[$secondCellRow][$secondCellColumn])) {
@@ -254,10 +242,8 @@ class VendingMachine
      * @return string
      * @throws \Exception
      */
-    public
-    function buyProduct($row, $column, $price)
+    public function buyProduct($row, $column, $price)
     {
-        var_dump($this->cellMatrix[1][1]);
         $productDAO = new ProductsDAO();
         if ((count($this->cellMatrix[$row][$column]->getProducts()) > 0)) {
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
@@ -279,14 +265,12 @@ class VendingMachine
     /**
      * Displays all products from machine.
      */
-    public
-    function listItems()
+    public function listItems()
     {
         foreach ($this->cellMatrix as $matrix) {
             foreach ($matrix as $cell) {
                 if (null !== $cell->getProductFromArray()) {
                     echo $cell->getProductFromArray()->getProductName() . ' ' . ($cell->getQuantity()) . "\n";
-//                    echo ($cell->getQuantity()) . "\n";
                 }
             }
         }
@@ -295,8 +279,7 @@ class VendingMachine
     /**
      *Checks if there are expired products and remove them.
      */
-    public
-    function removeExpiredProducts()
+    public function removeExpiredProducts()
     {
         $productDAO = new ProductsDAO();
         $productDAO->deleteExpired();
