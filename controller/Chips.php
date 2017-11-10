@@ -2,6 +2,8 @@
 
 namespace vending;
 
+include_once __DIR__ . '/Product.php';
+
 /**
  * Class Chips.
  * Extends product class.

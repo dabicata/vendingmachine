@@ -64,16 +64,13 @@ class DbConnector
      * Takes sql and parameters for sql and performs select query.
      *
      * @param $sql holds the sql.
-     * @param iterable|holds $parameters holds parameters for sql
      * @return array of the query
      */
-    public function selectQuery($sql, iterable $parameters)
+    public function selectQuery($sql)
     {
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
-        foreach ($parameters as $param) {
-            $query->bindValue($counter++, $param);
-        }
+
         try {
             $query->execute();
         } catch (\PDOException $e) {

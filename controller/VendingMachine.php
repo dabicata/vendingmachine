@@ -12,7 +12,6 @@ include_once __DIR__ . '/../model/DAO/ProductsDAO.php';
 include_once __DIR__ . '/Cell.php';
 include_once __DIR__ . '/Product.php';
 
-
 /**
  * Class VendingMachine.
  * Create cell objects and map them to the machine, allows you to buy products and check their expiredate.
