@@ -69,20 +69,22 @@ class VendingMachine
                         $this->cellMatrix[$cellDB[$counter]['cellRow']][$cellDB[$counter]['cellColumn']] = new Cell($this->cellSize, $cellDB[$counter]['cellId']);
                         $counter++;
                         $productDB = $productData->selectProductByCellId([$this->cellMatrix[$row][$column]->getCellId()]);
-                        foreach ($productDB as $product) {
-                            switch ($product['productTypeId']) {
-                                case Cola::TYPEID:
-                                    $productOBJ = new Cola($product['productPrice'], $product['productExpireDate']);
-                                    break;
-                                case Chips::TYPEID:
-                                    $productOBJ = new Chips($product['productPrice'], $product['productExpireDate']);
-                                    break;
-                                case Snikers::TYPEID:
-                                    $productOBJ = new Snikers($product['productPrice'], $product['productExpireDate']);
-                                    break;
+                        if ($productDB != null) {
+                            foreach ($productDB as $product) {
+                                switch ($product['productTypeId']) {
+                                    case Cola::TYPEID:
+                                        $productOBJ = new Cola($product['productPrice'], $product['productExpireDate']);
+                                        break;
+                                    case Chips::TYPEID:
+                                        $productOBJ = new Chips($product['productPrice'], $product['productExpireDate']);
+                                        break;
+                                    case Snikers::TYPEID:
+                                        $productOBJ = new Snikers($product['productPrice'], $product['productExpireDate']);
+                                        break;
+                                }
+                                $productOBJ->setProductId($product['productId']);
+                                $this->cellMatrix[$row][$column]->setProduct($productOBJ);
                             }
-                            $productOBJ->setProductId($product['productId']);
-                            $this->cellMatrix[$row][$column]->setProduct($productOBJ);
                         }
                     }
                 }
@@ -113,6 +115,7 @@ class VendingMachine
      */
     public function loadProducts(iterable $productArray)
     {
+
         $productDAO = new ProductsDAO();
         foreach ($productArray as $key => $product) {
             foreach ($this->cellMatrix as $matrix) {

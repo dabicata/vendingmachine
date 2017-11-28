@@ -19,7 +19,7 @@ class ProductTypeDAO implements CRUDInterface
     {
         $sql = 'SELECT * FROM `product_types`';
         $db = new DbConnector();
-        $data = $db->selectQuery($sql);
+        $data = $db->selectAllQuery($sql);
         $db->closeConnection();
 
         return $data;
@@ -84,6 +84,4 @@ class ProductTypeDAO implements CRUDInterface
         $db->executeQuery($sql, $product_type_id);
         $db->closeConnection();
     }
-
-
 }

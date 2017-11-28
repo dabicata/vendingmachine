@@ -64,13 +64,16 @@ class DbConnector
      * Takes sql and parameters for sql and performs select query.
      *
      * @param $sql holds the sql.
+     * @param iterable $parameters
      * @return array of the query
      */
-    public function selectQuery($sql)
+    public function selectQuery($sql, iterable $parameters)
     {
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
-
+        foreach ($parameters as $param) {
+            $query->bindValue($counter++, $param);
+        }
         try {
             $query->execute();
         } catch (\PDOException $e) {
@@ -103,6 +106,7 @@ class DbConnector
      */
     public function selectByIdQuery($sql, $parameters)
     {
+
         $query = $this->dataBase->prepare($sql);
         $counter = 1;
         foreach ($parameters as $param) {
@@ -127,5 +131,37 @@ class DbConnector
 
         return $camelCaseQuery;
     }
+
+
+    /** Select everything from Database.
+     * @param $sql
+     * @return array
+     */
+    public function selectAllQuery($sql)
+    {
+        $query = $this->dataBase->prepare($sql);
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
+
+        $camelCaseQuery = [];
+        $result = $query->fetchAll();
+        if ($result) {
+            foreach ($result as $item) {
+                $camelKeys = [];
+                foreach ($item as $key => $value) {
+                    $camelKey = lcfirst(implode('', array_map('ucfirst', explode('_', $key))));
+                    $camelKeys[] = $camelKey;
+                }
+                $value2 = array_combine($camelKeys, $item);
+                $camelCaseQuery[] = $value2;
+            }
+
+            return $camelCaseQuery;
+        }
+    }
+
 }
 

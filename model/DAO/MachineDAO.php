@@ -12,15 +12,19 @@ include_once __DIR__ . '/../DbConnector.php';
  */
 class MachineDAO implements CRUDInterface
 {
+
     /**
      *Select All machines.
-     */
+     **/
     public function selectAll()
     {
         $sql = 'SELECT * FROM `vending_machines`';
         $db = new DbConnector();
-        $db->selectQuery($sql);
+        $data = $db->selectAllQuery($sql);
         $db->closeConnection();
+
+
+        return $data;
     }
 
     /**
