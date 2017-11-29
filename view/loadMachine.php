@@ -5,7 +5,7 @@ $counterProductType = 0;
 $counterExpireDate = 0;
 $counterPrice = 0;
 ?>
-<form action="/vendingmachine/public/index.php?action=loadMachine" method="post">
+<form action="index.php?action=loadMachine" method="post">
     <input type="hidden" name="action" value="createProduct">
     <?php foreach ($result[1] as $types): ?>
         <select name="<?php echo "productName" . $counterProductName++; ?>">

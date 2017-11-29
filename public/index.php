@@ -6,7 +6,7 @@ include_once __DIR__ . '/../controller/Machine.php';
 include_once __DIR__ . '/../controller/CreateProduct.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
 
-include '../View/header.php';
+include '../view/header.php';
 if (!isset($_GET["action"])) {
     $_GET["action"] = 'default';
 }
@@ -27,25 +27,25 @@ switch ($_GET["action"]) {
     case "loadMachineView":
         $object = new Machine();
         $result = $object->loadMachine();
-        include '../View/LoadMachine.php';
+        include '../view/loadMachine.php';
         break;
     case "createMachineView":
-        include '../View/CreateMachine.php';
+        include '../view/createMachine.php';
         break;
     case "editMachineView":
         $object = new Machine();
-        $machineDB = $object->editMachineView();
-        include '../View/EditMachine.php';
+        $machineData = $object->editMachineView();
+        include '../view/editMachine.php';
         break;
     case "displayMachineView":
         $object = new Machine();
-        $machineDB = $object->displayMachine();
-        include '../View/Machine.php';
+        $machineData = $object->displayMachine();
+        include '../view/machine.php';
         break;
     case "default":
-        include '../View/index.php';
+        include '../view/index.php';
         break;
     default:
-        include '../View/index.php';
+        include '../view/index.php';
 }
-include '../View/footer.php';
+include '../view/footer.php';

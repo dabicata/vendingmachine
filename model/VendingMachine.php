@@ -52,12 +52,12 @@ class VendingMachine
     public function loadMachine($machineId)
     {
         $machineData = new MachineDAO();
-        $machineDB = $machineData->select([$machineId]);
-        if (($machineDB) != null) {
-            $this->machineId = $machineDB['vendingMachineId'];
-            $this->rowNumber = $machineDB['vendingMachineRows'];
-            $this->columnNumber = $machineDB['vendingMachineColumns'];
-            $this->cellSize = $machineDB['machineSize'];
+        $machineData = $machineData->select([$machineId]);
+        if (($machineData) != null) {
+            $this->machineId = $machineData['vendingMachineId'];
+            $this->rowNumber = $machineData['vendingMachineRows'];
+            $this->columnNumber = $machineData['vendingMachineColumns'];
+            $this->cellSize = $machineData['machineSize'];
             $cellDAO = new CellDAO();
             $productData = new ProductsDAO();
             $cellDB = $cellDAO->selectCellByMachineId([$machineId]);
@@ -251,11 +251,8 @@ class VendingMachine
             if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
                 $this->cellMatrix[$row][$column]->removeProduct(0);
                 $productDAO->delete([$this->cellMatrix[$row][$column]->getProductFromArray()->getProductId()]);
-                echo $this->cellMatrix[$row][$column]->getProductFromArray()->getProductName() . " product bought \n";
-                echo 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) . "\n";
                 return ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
             } else {
-                echo 'change ' . ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) . "\n";
                 return ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
 
             }

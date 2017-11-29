@@ -1,4 +1,4 @@
-<form action="/vendingmachine/public/index.php?action=createMachine" method="post">
+<form action="index.php?action=createMachine" method="post">
     <input type="hidden" name="action" value="createMachine">
     Machine Rows:<br>
     <input type="number" step="1" min="0" name="machineRows">

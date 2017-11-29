@@ -48,26 +48,26 @@ class Machine
     {
 
         $machine = new MachineDAO();
-        $machineDB = $machine->select([$_GET['machineId']]);
+        $machineData = $machine->select([$_GET['machineId']]);
 
-        return $machineDB;
+        return $machineData;
     }
 
     public function displayMachine()
     {
         $machine = new MachineDAO();
-        $machineDB = $machine->selectAll();
+        $machineData = $machine->selectAll();
 
-        return $machineDB;
+        return $machineData;
     }
 
     public function loadMachine()
     {
         $machine = new MachineDAO();
-        $machineDB = $machine->selectAll();
+        $machineData = $machine->selectAll();
         $productTypes = new ProductTypeDAO();
         $productTypesArray = $productTypes->selectAll();
-        $result = [$machineDB, $productTypesArray];
+        $result = [$machineData, $productTypesArray];
 
         return $result;
     }
