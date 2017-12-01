@@ -1,12 +1,12 @@
 <?php
 
-namespace vending;
+namespace vending\controller;
 
 include_once __DIR__ . '/../model/Chips.php';
 include_once __DIR__ . '/../model/Cola.php';
 include_once __DIR__ . '/../model/Snikers.php';
 
-class CreateProduct
+class Product
 {
 
     public function createProducts()
