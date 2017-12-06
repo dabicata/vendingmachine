@@ -22,9 +22,9 @@ class DbConnector
     public function __construct()
     {
         try {
-            $this->dataBase = new \PDO(SELF::DSN, SELF::USER, SELF::PASSWORD);
+            $this->dataBase = new \PDO(self::DSN, self::USER, self::PASSWORD);
             $this->dataBase->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
     }
@@ -40,8 +40,8 @@ class DbConnector
     /**
      * Takes sql and parameters for sql and performs  insert, update, delete query.
      *
-     * @param $sql holds the sql.
-     * @param iterable|holds $parameters holds parameters for sql
+     * @param $sql | holds the sql.
+     * @param iterable| $parameters holds parameters for sql
      * @return string
      */
     public function executeQuery($sql, iterable $parameters)
@@ -63,7 +63,7 @@ class DbConnector
     /**
      * Takes sql and parameters for sql and performs select query.
      *
-     * @param $sql holds the sql.
+     * @param $sql | holds the sql.
      * @param iterable $parameters
      * @return array of the query
      */
@@ -93,8 +93,8 @@ class DbConnector
                 $camelCaseQuery[] = $value2;
             }
 
-            return $camelCaseQuery;
         }
+        return $camelCaseQuery;
     }
 
     /**
@@ -119,6 +119,7 @@ class DbConnector
             echo $e->getMessage();
         }
 
+        $camelKeys = [];
         $camelCaseQuery = [];
         $result = $query->fetch();
         if ($result) {
@@ -159,8 +160,8 @@ class DbConnector
                 $camelCaseQuery[] = $value2;
             }
 
-            return $camelCaseQuery;
         }
+        return $camelCaseQuery;
     }
 
 }

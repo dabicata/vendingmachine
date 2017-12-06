@@ -1,10 +1,11 @@
 <?php
 
-namespace vending;
+namespace vending\model;
 
-use vending\model\CellDAO;
-use vending\model\MachineDAO;
-use vending\model\ProductsDAO;
+
+use vending\model\DAO\CellDAO;
+use vending\model\DAO\MachineDAO;
+use vending\model\DAO\ProductsDAO;
 
 include_once __DIR__ . '/../model/DAO/MachineDAO.php';
 include_once __DIR__ . '/../model/DAO/CellDAO.php';
@@ -36,8 +37,8 @@ class VendingMachine
      */
     public function createMachine($rowNumber, $columnNumber, $cellSize)
     {
-        $database = new MachineDAO();
-        $this->machineId = $database->insert(array($rowNumber, $columnNumber, $cellSize));
+        $machineDao = new MachineDAO();
+        $this->machineId = $machineDao->insert(array($rowNumber, $columnNumber, $cellSize));
         $this->columnNumber = $columnNumber;
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
@@ -51,8 +52,8 @@ class VendingMachine
      */
     public function loadMachine($machineId)
     {
-        $machineData = new MachineDAO();
-        $machineData = $machineData->select([$machineId]);
+        $machineDao = new MachineDAO();
+        $machineData = $machineDao->select([$machineId]);
         if (($machineData) != null) {
             $this->machineId = $machineData['vendingMachineId'];
             $this->rowNumber = $machineData['vendingMachineRows'];

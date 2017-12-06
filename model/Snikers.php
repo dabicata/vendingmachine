@@ -1,6 +1,6 @@
 <?php
 
-namespace vending;
+namespace vending\model;
 
 include_once __DIR__ . '/Product.php';
 
@@ -31,7 +31,7 @@ class Snikers extends Product
         $productName = (new \ReflectionClass($this))->getShortName();
 
         $this->price = $price;
-        parent::__construct($productName, SELF::SIZE, $expireDate);
+        parent::__construct($productName, self::SIZE, $expireDate);
     }
 
     /**
@@ -62,7 +62,7 @@ class Snikers extends Product
      */
     public function getTypeId(): int
     {
-        return SELF::TYPEID;
+        return self::TYPEID;
     }
 
 }

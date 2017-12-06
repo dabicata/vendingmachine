@@ -1,48 +1,50 @@
 <?php
 
-namespace vending;
 
 include_once __DIR__ . '/../controller/Machine.php';
-include_once __DIR__ . '/../controller/CreateProduct.php';
+include_once __DIR__ . '/../controller/Product.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
+include_once '../view/header.php';
 
-include '../view/header.php';
-if (!isset($_GET["action"])) {
-    $_GET["action"] = 'default';
+if (!isset($_GET['action'])) {
+    $action = 'default';
+} else {
+    $action = $_GET['action'];
 }
-switch ($_GET["action"]) {
-
-    case "loadMachine":
-        $object = new CreateProduct();
-        $object->createProducts();
+switch ($action) {
+    case 'loadMachine':
+        $object = new \vending\controller\Product();
+        $machine = new \vending\controller\Machine();
+        $result = $object->createProducts();
+        $machine->loadProducts($result['productArray']);
         break;
-    case "createMachine":
-        $object = new Machine();
+    case 'createMachine':
+        $object = new \vending\controller\Machine();
         $object->createMachine();
         break;
-    case "editMachine":
-        $object = new Machine();
+    case 'editMachine':
+        $object = new \vending\controller\Machine();
         $object->editMachine();
         break;
-    case "loadMachineView":
-        $object = new Machine();
+    case 'loadMachineView':
+        $object = new \vending\controller\Machine();
         $result = $object->loadMachine();
         include '../view/loadMachine.php';
         break;
-    case "createMachineView":
+    case 'createMachineView':
         include '../view/createMachine.php';
         break;
-    case "editMachineView":
-        $object = new Machine();
+    case 'editMachineView':
+        $object = new \vending\controller\Machine();
         $machineData = $object->editMachineView();
         include '../view/editMachine.php';
         break;
-    case "displayMachineView":
-        $object = new Machine();
+    case 'displayMachineView':
+        $object = new \vending\controller\Machine();
         $machineData = $object->displayMachine();
         include '../view/machine.php';
         break;
-    case "default":
+    case 'default':
         include '../view/index.php';
         break;
     default:

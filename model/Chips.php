@@ -1,6 +1,6 @@
 <?php
 
-namespace vending;
+namespace vending\model;
 
 include_once __DIR__ . '/Product.php';
 
@@ -31,7 +31,7 @@ class Chips extends Product
         $productName = (new \ReflectionClass($this))->getShortName();
 
         $this->price = $price;
-        parent::__construct($productName, SELF::SIZE, $expireDate);
+        parent::__construct($productName, self::SIZE, $expireDate);
     }
 
     /**
@@ -46,10 +46,9 @@ class Chips extends Product
 
 
     /**
-     * Sets price of product.
-     *
+     * Sets a price.
      * @param $price
-     * @return mixed
+     * @return mixed|void
      */
     public function setPrice($price)
     {
@@ -63,7 +62,7 @@ class Chips extends Product
      */
     public function getTypeId(): int
     {
-        return SELF::TYPEID;
+        return self::TYPEID;
     }
 
 }

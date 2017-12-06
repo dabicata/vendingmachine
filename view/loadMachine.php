@@ -1,31 +1,29 @@
 <?php
 
-$counterProductName = 0;
-$counterProductType = 0;
-$counterExpireDate = 0;
-$counterPrice = 0;
+$counter = 0;
+
 ?>
 <form action="index.php?action=loadMachine" method="post">
     <input type="hidden" name="action" value="createProduct">
-    <?php foreach ($result[1] as $types): ?>
-        <select name="<?php echo "productName" . $counterProductName++; ?>">
+    <?php foreach ($result['productType'] as $types): ?>
+        <select name="<?php echo "productName" . $counter; ?>">
             <br>
-            <?php foreach ($result[1] as $types2): ?>
+            <?php foreach ($result['productType'] as $types2): ?>
                 <option value="<?php echo $types2['productTypeName']; ?>"><?php echo $types2['productTypeName']; ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="number" min="0" name="<?php echo "productCounter" . $counterProductType++; ?>"
+        <input type="number" min="0" name="<?php echo "productCounter" . $counter; ?>"
                placeholder="Quantity">
-        <input type="date" name="<?php echo "productExpireDate" . $counterExpireDate++; ?>">
-        <input type="number" min="0" name="<?php echo "productPrice" . $counterPrice++; ?>"
+        <input type="date" date-date="" data-date-format="DD MM YY"
+               name="<?php echo "productExpireDate" . $counter; ?>">
+        <input type="number" min="0" name="<?php echo "productPrice" . $counter++; ?>"
                placeholder="Price">
         <br>
     <?php endforeach; ?>
     <select name="machineId">
-        <?php foreach ($result[0] as $machine) {
-            echo '<option value="' . $machine['vendingMachineId'] . '">' . $machine['vendingMachineId'] . '</option>';
-        }
-        ?>
+        <?php foreach ($result['machineData'] as $machine): ?>
+            <option value="<?php echo $machine['vendingMachineId']; ?>"> <?php echo $machine['vendingMachineId'] ?></option>
+        <?php endforeach; ?>
         <br>
     </select>
     <input type="submit" value="Add Products">

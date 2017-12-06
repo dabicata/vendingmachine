@@ -1,6 +1,8 @@
 <?php
 
-namespace vending\model;
+namespace vending\model\DAO;
+
+use vending\model\DbConnector;
 
 include_once __DIR__ . '/CRUDInterface.php';
 include_once __DIR__ . '/../DbConnector.php';
