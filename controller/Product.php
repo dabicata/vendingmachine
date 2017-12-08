@@ -15,42 +15,46 @@ class Product
 
     public function createProducts()
     {
-
-
         $productArray = [];
         $checks = [];
         for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
-            $today = new \DateTime();
-            if ($_POST["productExpireDate$x"] != '') {
-                $htmlDate = $_POST["productExpireDate$x"];
-                $date = \DateTime::createFromFormat("Y-m-d", "$htmlDate");
-                if ($date->getTimestamp() >= $today->getTimestamp()) {
+            if (($_POST["productExpireDate$x"] != '') || ($_POST["productCounter$x"] != '') || ($_POST["productPrice$x"] != '')) {
+                $today = new \DateTime();
+                if (($_POST["productCounter$x"] > 0) && ($_POST["productCounter$x"] != '')) {
                     $checks[] = true;
-                    $validValues[$x]['validDate'] = $date;
+                    $validCounter = $_POST["productCounter$x"];
+                    $validValues[$x]['validCounter'] = $validCounter;
                 } else {
                     $checks[] = false;
-                    $validValues[$x]['validDate'] = $date;
+                    $invalidValues[$x]['invalidQuantity'] = true;
                 }
-            } else {
-                $checks[] = false;
-            }
-            if (($_POST["productCounter$x"] > 0) && ($_POST["productCounter$x"] != '')) {
-                $checks[] = true;
-                $validCounter = $_POST["productCounter$x"];
-                $validValues[$x]['validCounter'] = $validCounter;
-            } else {
-                $checks[] = false;
-                $validValues[$x]['validCounter'] = null;
-            }
-            if (($_POST["productPrice$x"] > 0) && ($_POST["productPrice$x"] != '')) {
-                $checks[] = true;
-                $validPrice = $_POST["productPrice$x"];
-                $validValues[$x]['validPrice'] = $validPrice;
-            } else {
-                $checks[] = false;
+                if ($_POST["productExpireDate$x"] != '') {
+                    $htmlDate = $_POST["productExpireDate$x"];
+                    $date = \DateTime::createFromFormat("Y-m-d", "$htmlDate");
+                    if ($date->getTimestamp() >= $today->getTimestamp()) {
+                        $checks[] = true;
+                        $validValues[$x]['validDate'] = $date;
+                    } else {
+                        $checks[] = false;
+                        $invalidValues[$x]['invalidDate'] = true;
+                    }
+                } else {
+                    $checks[] = false;
+                    $invalidValues[$x]['invalidDate'] = true;
+                }
+                if (($_POST["productPrice$x"] > 0) && ($_POST["productPrice$x"] != '')) {
+                    $checks[] = true;
+                    $validPrice = $_POST["productPrice$x"];
+                    $validValues[$x]['validPrice'] = $validPrice;
+                } else {
+                    $checks[] = false;
+                    $invalidValues[$x]['validPrice'] = true;
+
+                }
             }
         }
-        if (!in_array(false, $checks)) {
+
+        if (!in_array(false, $checks) && ($checks != null)) {
             for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
                 for ($y = 0; $y < $_POST["productCounter$x"]; $y++) {
                     switch ($_POST["productName$x"]) {
@@ -67,13 +71,17 @@ class Product
                     $productArray[] = $productOBJ;
                 }
             }
+        } else {
+            $_SESSION['validValues'] = $validValues;
+            header('location: index.php?action=loadMachineView');
         }
+        $result = ["productArray" => $productArray];
 
-        $result = ["validValues" => $validValues, "productArray" => $productArray];
-        var_dump($checks);
+
         return $result;
     }
 }
+
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 $counter = 0;
-
+var_dump($_SESSION);
 ?>
 <form action="index.php?action=loadMachine" method="post">
     <input type="hidden" name="action" value="createProduct">
@@ -13,9 +13,8 @@ $counter = 0;
             <?php endforeach; ?>
         </select>
         <input type="number" min="0" name="<?php echo "productCounter" . $counter; ?>"
-               placeholder="Quantity">
-        <input type="date" date-date="" data-date-format="DD MM YY"
-               name="<?php echo "productExpireDate" . $counter; ?>">
+               value="" placeholder="Quantity">
+        <input type="date" name="<?php echo "productExpireDate" . $counter; ?>">
         <input type="number" min="0" name="<?php echo "productPrice" . $counter++; ?>"
                placeholder="Price">
         <br>

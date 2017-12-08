@@ -73,11 +73,13 @@ class Machine
 
     public function loadProducts($productArray)
     {
-        $machine = new VendingMachine();
-        $machine->loadMachine($_POST['machineId']);
-        $machine->loadProducts($productArray);
-        header('location: index.php?action=displayMachineView');
-
+        var_dump($productArray != null);
+        if ($productArray != null) {
+            $machine = new VendingMachine();
+            $machine->loadMachine($_POST['machineId']);
+            $machine->loadProducts($productArray);
+            header('location: index.php?action=displayMachineView');
+        }
     }
 }
 

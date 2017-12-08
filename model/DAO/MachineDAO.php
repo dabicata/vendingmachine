@@ -20,7 +20,7 @@ class MachineDAO implements CRUDInterface
      **/
     public function selectAll()
     {
-        $sql = 'SELECT * FROM `vending_machines`';
+        $sql = 'SELECT * FROM `vending_machines` ORDER BY vending_machine_id DESC ';
         $db = new DbConnector();
         $data = $db->selectAllQuery($sql);
         $db->closeConnection();
