@@ -2,6 +2,7 @@
 
 $counter = 0;
 var_dump($_SESSION);
+var_dump(isset($_SESSION['validValues'][$counter]['validCounter']));
 ?>
 <form action="index.php?action=loadMachine" method="post">
     <input type="hidden" name="action" value="createProduct">
@@ -13,12 +14,28 @@ var_dump($_SESSION);
             <?php endforeach; ?>
         </select>
         <input type="number" min="0" name="<?php echo "productCounter" . $counter; ?>"
-               value="" placeholder="Quantity">
-        <input type="date" name="<?php echo "productExpireDate" . $counter; ?>">
-        <input type="number" min="0" name="<?php echo "productPrice" . $counter++; ?>"
+               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidQuantity'] ?? false) {
+                   echo 'incorrect';
+               } ?>"
+               value="<?php if ($_SESSION['validValues'][$counter]['validCounter'] ?? false) {
+                   echo $_SESSION['validValues'][$counter]['validCounter'];
+               } ?>" placeholder="Quantity">
+        <input type="date" class="<?php if ($_SESSION['invalidValues'][$counter]['invalidDate'] ?? false) {
+            echo 'incorrect';
+        } ?>"
+               value="<?php if ($_SESSION['validValues'][$counter]['validDate'] ?? false) {
+                   echo $_SESSION['validValues'][$counter]['validDate'];
+               } ?>" name=" <?php echo "productExpireDate" . $counter; ?>">
+
+        <input type="number" min="0" name="<?php echo "productPrice" . $counter; ?>"
+               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidPrice'] ?? false) {
+                   echo 'incorrect';
+               } ?>" value="<?php if ($_SESSION['validValues'][$counter]['validPrice'] ?? false) {
+            echo $_SESSION['validValues'][$counter]['validPrice'];
+        } ?>"
                placeholder="Price">
         <br>
-    <?php endforeach; ?>
+        <?php $counter++; endforeach; ?>
     <select name="machineId">
         <?php foreach ($result['machineData'] as $machine): ?>
             <option value="<?php echo $machine['vendingMachineId']; ?>"> <?php echo $machine['vendingMachineId'] ?></option>

@@ -20,29 +20,104 @@ class Machine
 {
     public function editMachine()
     {
-
-        $machineRows = $_POST['machineRows'];
-        $machineColumns = $_POST['machineColumns'];
-        $machineSize = $_POST['machineSize'];
-        $machineId = $_POST['vendingMachineId'];
-        $machine = new MachineDAO();
-        $machine->update(array($machineRows, $machineColumns, $machineSize, $machineId));
-        header('location: index.php?action=displayMachineView');
-    }
-
-    public function createMachine()
-    {
-
+        $checks = [];
         if (isset($_POST)) {
-            if (($_POST['machineRows'] > 0) && ($_POST['machineColumns'] > 0) && ($_POST['machineSize'] > 0)) {
-                $machine = new VendingMachine();
-                $machine->createMachine($_POST['machineRows'], $_POST['machineColumns'], $_POST['machineSize']);
-                header('location: index.php?action=loadMachineView');
+            if (($_POST['machineRows'] != '') || ($_POST['machineColumns'] != '') || ($_POST['machineSize'] != '')) {
+
+                if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '')) {
+                    $checks[] = true;
+                    $validRows = $_POST['machineRows'];
+                    $validValues['validRowsEdit'] = $validRows;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidRowsEdit'] = true;
+                }
+
+                if (($_POST['machineColumns'] > 0) && ($_POST['machineColumns'] != '')) {
+                    $checks[] = true;
+                    $validColumns = $_POST['machineColumns'];
+                    $validValues['validColumnsEdit'] = $validColumns;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidColumnsEdit'] = true;
+                }
+                if (($_POST['machineSize'] > 0) && ($_POST['machineSize'] != '')) {
+                    $checks[] = true;
+                    $validSize = $_POST['machineSize'];
+                    $validValues['validSizeEdit'] = $validSize;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidSizeEdit'] = true;
+                }
             }
+        }
+        if (!in_array(false, $checks) && ($checks != null)) {
+            $machineRows = $_POST['machineRows'];
+            $machineColumns = $_POST['machineColumns'];
+            $machineSize = $_POST['machineSize'];
+            $machineId = $_POST['vendingMachineId'];
+            $machine = new MachineDAO();
+            $machine->update(array($machineRows, $machineColumns, $machineSize, $machineId));
+            header('location: index.php?action=displayMachineView');
+        } else {
+            $_SESSION['validValues'] = $validValues;
+            $_SESSION['invalidValues'] = $invalidValues;
+            $url = $_POST['vendingMachineId'];
+            header("location: index.php?action=editMachineView&machineId=$url");
         }
     }
 
-    public function editMachineView()
+
+    public
+    function createMachine()
+    {
+        $checks = [];
+        if (isset($_POST)) {
+            if (($_POST['machineRows'] != '') || ($_POST['machineColumns'] != '') || ($_POST['machineSize'] != '')) {
+
+                if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '')) {
+                    $checks[] = true;
+                    $validRows = $_POST['machineRows'];
+                    $validValues['validRows'] = $validRows;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidRows'] = true;
+                }
+
+                if (($_POST['machineColumns'] > 0) && ($_POST['machineColumns'] != '')) {
+                    $checks[] = true;
+                    $validColumns = $_POST['machineColumns'];
+                    $validValues['validColumns'] = $validColumns;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidColumns'] = true;
+                }
+                if (($_POST['machineSize'] > 0) && ($_POST['machineSize'] != '')) {
+                    $checks[] = true;
+                    $validSize = $_POST['machineSize'];
+                    $validValues['validSize'] = $validSize;
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidSize'] = true;
+                }
+            }
+        }
+        if (!in_array(false, $checks) && ($checks != null)) {
+            $machine = new VendingMachine();
+            $machine->createMachine($_POST['machineRows'], $_POST['machineColumns'], $_POST['machineSize']);
+            header('location: index.php?action=loadMachineView');
+            $_SESSION['validValues'] = null;
+            $_SESSION['invalidValues'] = null;
+        } else {
+            $_SESSION['validValues'] = $validValues;
+            $_SESSION['invalidValues'] = $invalidValues;
+            header('location: index.php?action=createMachineView');
+        }
+    }
+
+
+    public
+    function editMachineView()
     {
 
         $machine = new MachineDAO();
@@ -52,7 +127,8 @@ class Machine
         return $machineData;
     }
 
-    public function displayMachine()
+    public
+    function displayMachine()
     {
         $machine = new MachineDAO();
         $machineData = $machine->selectAll();
@@ -60,7 +136,8 @@ class Machine
         return $machineData;
     }
 
-    public function loadMachine()
+    public
+    function loadMachine()
     {
         $machine = new MachineDAO();
         $machineData = $machine->selectAll();
@@ -71,7 +148,8 @@ class Machine
         return $result;
     }
 
-    public function loadProducts($productArray)
+    public
+    function loadProducts($productArray)
     {
         var_dump($productArray != null);
         if ($productArray != null) {

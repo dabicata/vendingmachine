@@ -33,7 +33,8 @@ class Product
                     $date = \DateTime::createFromFormat("Y-m-d", "$htmlDate");
                     if ($date->getTimestamp() >= $today->getTimestamp()) {
                         $checks[] = true;
-                        $validValues[$x]['validDate'] = $date;
+                        $validValues[$x]['validDate'] = $htmlDate;
+
                     } else {
                         $checks[] = false;
                         $invalidValues[$x]['invalidDate'] = true;
@@ -48,12 +49,10 @@ class Product
                     $validValues[$x]['validPrice'] = $validPrice;
                 } else {
                     $checks[] = false;
-                    $invalidValues[$x]['validPrice'] = true;
-
+                    $invalidValues[$x]['invalidPrice'] = true;
                 }
             }
         }
-
         if (!in_array(false, $checks) && ($checks != null)) {
             for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
                 for ($y = 0; $y < $_POST["productCounter$x"]; $y++) {
@@ -70,9 +69,12 @@ class Product
                     }
                     $productArray[] = $productOBJ;
                 }
+                $_SESSION['validValues'] = null;
+                $_SESSION['invalidValues'] = null;
             }
         } else {
             $_SESSION['validValues'] = $validValues;
+            $_SESSION['invalidValues'] = $invalidValues;
             header('location: index.php?action=loadMachineView');
         }
         $result = ["productArray" => $productArray];
