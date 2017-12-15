@@ -2,7 +2,7 @@
 
 $counter = 0;
 var_dump($_SESSION);
-var_dump(isset($_SESSION['validValues'][$counter]['validCounter']));
+var_dump(isset($_SESSION['validValues'][$counter]['invalidPrice']));
 ?>
 <form action="index.php?action=loadMachine" method="post">
     <input type="hidden" name="action" value="createProduct">
@@ -13,29 +13,43 @@ var_dump(isset($_SESSION['validValues'][$counter]['validCounter']));
                 <option value="<?php echo $types2['productTypeName']; ?>"><?php echo $types2['productTypeName']; ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="number" min="0" name="<?php echo "productCounter" . $counter; ?>"
-               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidQuantity'] ?? false) {
+        <input type="number" min="0" name="<?php echo "productQuantity" . $counter; ?>"
+               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidQuantityRed'] ?? false) {
                    echo 'incorrect';
                } ?>"
-               value="<?php if ($_SESSION['validValues'][$counter]['validCounter'] ?? false) {
-                   echo $_SESSION['validValues'][$counter]['validCounter'];
+               value="<?php
+               if (isset($_SESSION['validValues'][$counter]['validQuantity']) || isset($_SESSION['invalidValues'][$counter]['invalidQuantity'])) {
+                   if (isset($_SESSION['validValues'][$counter]['validQuantity'])) {
+                       echo $_SESSION['validValues'][$counter]['validQuantity'];
+                   } else {
+                       echo $_SESSION['invalidValues'][$counter]['invalidQuantity'];
+                   }
                } ?>" placeholder="Quantity">
-        <input type="date" class="<?php if ($_SESSION['invalidValues'][$counter]['invalidDate'] ?? false) {
+        <input type="date" class="<?php if ($_SESSION['invalidValues'][$counter]['invalidDateRed'] ?? false) {
             echo 'incorrect';
-        } ?>"
-               value="<?php if ($_SESSION['validValues'][$counter]['validDate'] ?? false) {
-                   echo $_SESSION['validValues'][$counter]['validDate'];
-               } ?>" name=" <?php echo "productExpireDate" . $counter; ?>">
+        } ?>" value="<?php
+        if (isset($_SESSION['validValues'][$counter]['validDate']) || isset($_SESSION['invalidValues'][$counter]['invalidDate'])) {
+            if (isset($_SESSION['validValues'][$counter]['validDate'])) {
+                echo $_SESSION['validValues'][$counter]['validDate'];
+            } else {
+                echo $_SESSION['invalidValues'][$counter]['invalidDate'];
+            }
+        } ?>" name=" <?php echo "productExpireDate" . $counter; ?>">
 
         <input type="number" min="0" name="<?php echo "productPrice" . $counter; ?>"
-               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidPrice'] ?? false) {
+               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidPriceRed'] ?? false) {
                    echo 'incorrect';
-               } ?>" value="<?php if ($_SESSION['validValues'][$counter]['validPrice'] ?? false) {
-            echo $_SESSION['validValues'][$counter]['validPrice'];
-        } ?>"
-               placeholder="Price">
+               } ?>" value="<?php
+        if (isset($_SESSION['validValues'][$counter]['validPrice']) || isset($_SESSION['invalidValues'][$counter]['invalidPrice'])) {
+            if (isset($_SESSION['validValues'][$counter]['validPrice'])) {
+                echo $_SESSION['validValues'][$counter]['validPrice'];
+            } else {
+                echo $_SESSION['invalidValues'][$counter]['invalidPrice'];
+            }
+        } ?>" placeholder="Price">
         <br>
-        <?php $counter++; endforeach; ?>
+        <?php $counter++;
+    endforeach; ?>
     <select name="machineId">
         <?php foreach ($result['machineData'] as $machine): ?>
             <option value="<?php echo $machine['vendingMachineId']; ?>"> <?php echo $machine['vendingMachineId'] ?></option>

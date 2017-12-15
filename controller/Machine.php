@@ -26,28 +26,28 @@ class Machine
 
                 if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '')) {
                     $checks[] = true;
-                    $validRows = $_POST['machineRows'];
-                    $validValues['validRowsEdit'] = $validRows;
+                    $validValues['validRowsEdit'] = $_POST['machineRows'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidRowsEdit'] = true;
+                    $invalidValues['invalidRowsEditRed'] = true;
+                    $invalidValues['invalidRowsEdit'] = $_POST['machineRows'];
                 }
 
                 if (($_POST['machineColumns'] > 0) && ($_POST['machineColumns'] != '')) {
                     $checks[] = true;
-                    $validColumns = $_POST['machineColumns'];
-                    $validValues['validColumnsEdit'] = $validColumns;
+                    $validValues['validColumnsEdit'] = $_POST['machineColumns'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidColumnsEdit'] = true;
+                    $invalidValues['invalidColumnsEditRed'] = true;
+                    $invalidValues['invalidColumnsEdit'] = $_POST['machineColumns'];
                 }
                 if (($_POST['machineSize'] > 0) && ($_POST['machineSize'] != '')) {
                     $checks[] = true;
-                    $validSize = $_POST['machineSize'];
-                    $validValues['validSizeEdit'] = $validSize;
+                    $validValues['validSizeEdit'] = $_POST['machineSize'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidSizeEdit'] = true;
+                    $invalidValues['invalidSizeEditRed'] = true;
+                    $invalidValues['invalidSizeEdit'] = $_POST['machineSize'];
                 }
             }
         }
@@ -75,30 +75,30 @@ class Machine
         if (isset($_POST)) {
             if (($_POST['machineRows'] != '') || ($_POST['machineColumns'] != '') || ($_POST['machineSize'] != '')) {
 
-                if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '')) {
+                if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '') && ctype_digit($_POST['machineRows'])) {
                     $checks[] = true;
-                    $validRows = $_POST['machineRows'];
-                    $validValues['validRows'] = $validRows;
+                    $validValues['validRows'] = $_POST['machineRows'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidRows'] = true;
+                    $invalidValues['invalidRowsRed'] = true;
+                    $invalidValues['invalidRows'] = $_POST['machineRows'];
                 }
 
-                if (($_POST['machineColumns'] > 0) && ($_POST['machineColumns'] != '')) {
+                if (($_POST['machineColumns'] > 0) && ($_POST['machineColumns'] != '') && ctype_digit($_POST['machineColumns'])) {
                     $checks[] = true;
-                    $validColumns = $_POST['machineColumns'];
-                    $validValues['validColumns'] = $validColumns;
+                    $validValues['validColumns'] = $_POST['machineColumns'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidColumns'] = true;
+                    $invalidValues['invalidColumnsRed'] = true;
+                    $invalidValues['invalidColumns'] = $_POST['machineColumns'];
                 }
-                if (($_POST['machineSize'] > 0) && ($_POST['machineSize'] != '')) {
+                if (($_POST['machineSize'] > 0) && ($_POST['machineSize'] != '') && ctype_digit($_POST['machineSize'])) {
                     $checks[] = true;
-                    $validSize = $_POST['machineSize'];
-                    $validValues['validSize'] = $validSize;
+                    $validValues['validSize'] = $_POST['machineSize'];
                 } else {
                     $checks[] = false;
-                    $invalidValues['invalidSize'] = true;
+                    $invalidValues['invalidSizeRed'] = true;
+                    $invalidValues['invalidSize'] = $_POST['machineSize'];
                 }
             }
         }

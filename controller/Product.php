@@ -18,15 +18,15 @@ class Product
         $productArray = [];
         $checks = [];
         for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
-            if (($_POST["productExpireDate$x"] != '') || ($_POST["productCounter$x"] != '') || ($_POST["productPrice$x"] != '')) {
+            if (($_POST["productExpireDate$x"] != '') || ($_POST["productQuantity$x"] != '') || ($_POST["productPrice$x"] != '')) {
                 $today = new \DateTime();
-                if (($_POST["productCounter$x"] > 0) && ($_POST["productCounter$x"] != '')) {
+                if (($_POST["productQuantity$x"] > 0) && ($_POST["productQuantity$x"] != '') && (ctype_digit($_POST["productQuantity$x"]))) {
                     $checks[] = true;
-                    $validCounter = $_POST["productCounter$x"];
-                    $validValues[$x]['validCounter'] = $validCounter;
+                    $validValues[$x]['validQuantity'] = $_POST["productQuantity$x"];
                 } else {
                     $checks[] = false;
-                    $invalidValues[$x]['invalidQuantity'] = true;
+                    $invalidValues[$x]['invalidQuantityRed'] = true;
+                    $invalidValues[$x]['invalidQuantity'] = $_POST["productQuantity$x"];
                 }
                 if ($_POST["productExpireDate$x"] != '') {
                     $htmlDate = $_POST["productExpireDate$x"];
@@ -37,25 +37,26 @@ class Product
 
                     } else {
                         $checks[] = false;
-                        $invalidValues[$x]['invalidDate'] = true;
+                        $invalidValues[$x]['invalidDateRed'] = true;
+                        $invalidValues[$x]['invalidDate'] = $htmlDate;
                     }
                 } else {
                     $checks[] = false;
-                    $invalidValues[$x]['invalidDate'] = true;
+                    $invalidValues[$x]['invalidDateRed'] = true;
                 }
                 if (($_POST["productPrice$x"] > 0) && ($_POST["productPrice$x"] != '')) {
                     $checks[] = true;
-                    $validPrice = $_POST["productPrice$x"];
-                    $validValues[$x]['validPrice'] = $validPrice;
+                    $validValues[$x]['validPrice'] = $_POST["productPrice$x"];
                 } else {
                     $checks[] = false;
-                    $invalidValues[$x]['invalidPrice'] = true;
+                    $invalidValues[$x]['invalidPriceRed'] = true;
+                    $invalidValues[$x]['invalidPrice'] = $_POST["productPrice$x"];
                 }
             }
         }
         if (!in_array(false, $checks) && ($checks != null)) {
             for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
-                for ($y = 0; $y < $_POST["productCounter$x"]; $y++) {
+                for ($y = 0; $y < $_POST["productQuantity$x"]; $y++) {
                     switch ($_POST["productName$x"]) {
                         case "Cola":
                             $productOBJ = new Cola($_POST["productPrice$x"], $date);
