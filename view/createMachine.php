@@ -1,39 +1,79 @@
-<form action="index.php?action=createMachine" method="post">
+<form action="index.php?action=createMachineView" method="post">
     <input type="hidden" name="action" value="createMachine">
     Machine Rows:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidRowsRed'] ?? false) {
+    <input type="number" class="<?php if ($array['invalidValues']['invalidRowsRed'] ?? false) {
         echo 'incorrect';
     } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validRows']) || isset($_SESSION['invalidValues']['invalidRows'])) {
-               if (isset($_SESSION['validValues']['validRows'])) {
-                   echo $_SESSION['validValues']['validRows'];
+           value="<?php if (isset($array['validValues']['validRows']) || isset($array['invalidValues']['invalidRows'])) {
+               if (isset($array['validValues']['validRows'])) {
+                   echo $array['validValues']['validRows'];
                } else {
-                   echo $_SESSION['invalidValues']['invalidRows'];
+                   echo $array['invalidValues']['invalidRows'];
                }
            } ?>" step="1" min="0" pattern="[0-9]" name="machineRows">
     <br> Machine Columns:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidColumnsRed'] ?? false) {
+    <input type="number" class="<?php if ($array['invalidValues']['invalidColumnsRed'] ?? false) {
         echo 'incorrect';
     } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validColumns']) || isset($_SESSION['invalidValues']['invalidColumns'])) {
-               if (isset($_SESSION['validValues']['validColumns'])) {
-                   echo $_SESSION['validValues']['validColumns'];
+           value="<?php if (isset($array['validValues']['validColumns']) || isset($array['invalidValues']['invalidColumns'])) {
+               if (isset($array['validValues']['validColumns'])) {
+                   echo $array['validValues']['validColumns'];
                } else {
-                   echo $_SESSION['invalidValues']['invalidColumns'];
+                   echo $array['invalidValues']['invalidColumns'];
                }
            } ?>" step="1" min="0" pattern="[0-9]" name="machineColumns">
     <br>
     Machine Size:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidSizeRed'] ?? false) {
+    <input type="number" class="<?php if ($array['invalidValues']['invalidSizeRed'] ?? false) {
         echo 'incorrect';
     } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validSize']) || isset($_SESSION['invalidValues']['invalidSize'])) {
-               if (isset($_SESSION['validValues']['validSize'])) {
-                   echo $_SESSION['validValues']['validSize'];
+           value="<?php if (isset($array['validValues']['validSize']) || isset($array['invalidValues']['invalidSize'])) {
+               if (isset($array['validValues']['validSize'])) {
+                   echo $array['validValues']['validSize'];
                } else {
-                   echo $_SESSION['invalidValues']['invalidSize'];
+                   echo $array['invalidValues']['invalidSize'];
                }
            } ?>" step="1" min="0" pattern="[0-9]" name="machineSize">
     <br>
+    Machine Name:<br>
+    <input type="text" class="<?php if ($array['invalidValues']['invalidNameRed'] ?? false) {
+        echo 'incorrect';
+    } ?>"
+           value="<?php if (isset($array['validValues']['validName']) || isset($array['invalidValues']['invalidName'])) {
+               if (isset($array['validValues']['validName'])) {
+                   echo $array['validValues']['validName'];
+               } else {
+                   echo $array['invalidValues']['invalidName'];
+               }
+           } ?>" name="machineName">
+    <br>
+    Machine Description:<br>
+    <textarea name="machineDesc" class="<?php if ($array['invalidValues']['invalidDescRed'] ?? false) {
+        echo 'incorrect';
+    } ?>"><?php if (isset($array['validValues']['validDesc']) || isset($array['invalidValues']['invalidDesc'])) {
+            if (isset($array['validValues']['validDesc'])) {
+                echo $array['validValues']['validDesc'];
+            } else {
+                echo $array['invalidValues']['invalidDesc'];
+            }
+        } ?></textarea>
+    <br>
+    Status: <br>
+    <div class="<?php if ($array['invalidValues']['invalidStatusRed'] ?? false) {
+        echo 'incorrect';
+    } ?>">
+        <?php
+        foreach ($array['status'] as $value): ?>
+            <input type="radio" value="<?php echo $value['statusId'] ?>" <?php
+            if (isset($array['validValues']['validStatus'])) {
+                if ($value['statusId'] == $array['validValues']['validStatus']) {
+                    echo 'checked="checked"';
+                }
+            }
+            ?> name="status"> <?php echo $value['status'] ?>
+            <br>
+        <?php endforeach; ?>
+    </div>
     <input type="submit" value="Create Machine">
 </form>
+<?php var_dump($array); ?>

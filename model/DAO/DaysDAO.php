@@ -7,16 +7,15 @@ use vending\model\DbConnector;
 include_once __DIR__ . '/CRUDInterface.php';
 include_once __DIR__ . '/../DbConnector.php';
 
-class activeDaysDAO implements CRUDInterface
+class DaysDAO implements CRUDInterface
 {
-
 
     /**
      * Selects all.
      */
     public function selectAll()
     {
-        $sql = 'SELECT * FROM `active_days` ';
+        $sql = 'SELECT * FROM `days` ';
         $db = new DbConnector();
         $data = $db->selectAllQuery($sql);
         $db->closeConnection();
@@ -27,14 +26,14 @@ class activeDaysDAO implements CRUDInterface
     /**
      * Select by ID.
      *
-     * @param $machineId
+     * @param $dayId
      * @return mixed
      */
-    public function select($machineId)
+    public function select($dayId)
     {
-        $sql = 'SELECT * FROM `active_days` WHERE vending_machine_id = ?';
+        $sql = 'SELECT * FROM `active_days` WHERE `day_id` = ?';
         $db = new DbConnector();
-        $data = $db->selectByIdQuery($sql, $machineId);
+        $data = $db->selectByIdQuery($sql, $dayId);
         $db->closeConnection();
 
         return $data;
@@ -48,8 +47,7 @@ class activeDaysDAO implements CRUDInterface
      */
     public function insert(iterable $insertParam)
     {
-        $sql = 'INSERT INTO `active_days` (`vending_machine_id`, `day_id`)' .
-            'VALUES (?, ?)';
+        $sql = 'INSERT INTO `days` (`days`) VALUES (?)';
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
@@ -61,12 +59,11 @@ class activeDaysDAO implements CRUDInterface
      * Update the database.
      *
      * @param iterable $updateParam
-     * @return mixed
+     * @return mixed|void
      */
     public function update(iterable $updateParam)
-
     {
-        $sql = 'UPDATE `active_days` SET `vending_machine_id` = ?, `active_days` = ? WHERE `vending_machine_id` = ?';
+        $sql = 'UPDATE `days` SET `days` = ? WHERE `day_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
         $db->closeConnection();
@@ -75,14 +72,14 @@ class activeDaysDAO implements CRUDInterface
     /**
      * Delete from database.
      *
-     * @param $machineId
-     * @return mixed
+     * @param $dayId
+     * @return mixed|void
      */
-    public function delete($machineId)
+    public function delete($dayId)
     {
-        $sql = 'DELETE FROM `active_days` WHERE `vending_machine_id` = ?';
+        $sql = 'DELETE FROM `days` WHERE `day_id` = ?';
         $db = new DbConnector();
-        $db->executeQuery($sql, $machineId);
+        $db->executeQuery($sql, $dayId);
         $db->closeConnection();
     }
 }

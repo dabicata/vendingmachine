@@ -11,36 +11,31 @@ if (!isset($_GET['action'])) {
 } else {
     $action = $_GET['action'];
 }
+$object = new \vending\controller\Machine();
+
 switch ($action) {
+
     case 'loadMachineView':
-        $object = new \vending\controller\Machine();
         $result = $object->loadMachine();
         $include = '../view/loadMachine.php';
         break;
     case 'loadMachine':
         $object = new \vending\controller\Product();
-        $machine = new \vending\controller\Machine();
         $values = $object->createProducts();
         $machine->loadProducts($values['productArray']);
         break;
-    case 'createMachine':
-        $object = new \vending\controller\Machine();
-        $object->createMachine();
-        break;
     case 'editMachine':
-        $object = new \vending\controller\Machine();
         $object->editMachine();
         break;
     case 'createMachineView':
+        $array = $object->createMachine();
         $include = '../view/createMachine.php';
         break;
     case 'editMachineView':
-        $object = new \vending\controller\Machine();
         $machineData = $object->editMachineView();
         $include = '../view/editMachine.php';
         break;
     case 'displayMachineView':
-        $object = new \vending\controller\Machine();
         $machineData = $object->displayMachine();
         $include = '../view/machine.php';
         break;

@@ -71,6 +71,8 @@ class CellDAO implements CRUDInterface
      */
     public function insert(iterable $insertParam)
     {
+        var_dump($insertParam);
+        die;
         $sql = 'INSERT INTO `cells` ( `vending_machine_id`, `cell_row`, `cell_column`, `cell_date_created`) VALUES (?, ?, ?, now())';
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);

@@ -46,6 +46,23 @@ class VendingMachine
     }
 
     /**
+     * Create new cell and cellMatrix it to machine.
+     */
+    public function defineMachine()
+    {
+        $cellDAO = new CellDAO();
+        $this->cellMatrix = [];
+        for ($row = 0; $row < $this->rowNumber; $row++) {
+            for ($column = 0; $column < $this->columnNumber; $column++) {
+                var_dump($this->machineId);
+                die;
+                $cellId = $cellDAO->insert([$this->machineId, $row, $column]);
+                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
+            }
+        }
+    }
+
+    /**
      * Loads machine data from the Mysql Database.
      *
      * @param $machineId
@@ -89,21 +106,6 @@ class VendingMachine
                         }
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * Create new cell and cellMatrix it to machine.
-     */
-    public function defineMachine()
-    {
-        $cellDAO = new CellDAO();
-        $this->cellMatrix = [];
-        for ($row = 0; $row < $this->rowNumber; $row++) {
-            for ($column = 0; $column < $this->columnNumber; $column++) {
-                $cellId = $cellDAO->insert([$this->machineId, $row, $column]);
-                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
             }
         }
     }

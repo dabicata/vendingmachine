@@ -4,12 +4,16 @@
 namespace vending\controller;
 
 
+use vending\model\DAO\activeDaysDAO;
 use vending\model\DAO\MachineDAO;
 use vending\model\DAO\ProductTypeDAO;
+use vending\model\DAO\StatusDAO;
 use vending\model\VendingMachine;
 
 include_once __DIR__ . '/../model/DAO/MachineDAO.php';
 include_once __DIR__ . '/../model/DAO/ProductTypeDAO.php';
+include_once __DIR__ . '/../model/DAO/StatusDAO.php';
+include_once __DIR__ . '/../model/DAO/ActiveDaysDAO.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
 include_once __DIR__ . '/../model/Chips.php';
 include_once __DIR__ . '/../model/Cola.php';
@@ -60,19 +64,22 @@ class Machine
             $machine->update(array($machineRows, $machineColumns, $machineSize, $machineId));
             header('location: index.php?action=displayMachineView');
         } else {
-            $_SESSION['validValues'] = $validValues;
-            $_SESSION['invalidValues'] = $invalidValues;
+            $array['validValues'] = $validValues;
+            $array['invalidValues'] = $invalidValues;
             $url = $_POST['vendingMachineId'];
             header("location: index.php?action=editMachineView&machineId=$url");
         }
     }
 
 
-    public
-    function createMachine()
+    public function createMachine()
     {
+        $activeDay = $this->machineActiveDaysView();
+        $array['status'] = $this->machineStatusView();
+//        $array['status'] = $status;
+        $array['activeDay'] = $activeDay;
         $checks = [];
-        if (isset($_POST)) {
+        if (!empty($_POST)) {
             if (($_POST['machineRows'] != '') || ($_POST['machineColumns'] != '') || ($_POST['machineSize'] != '')) {
 
                 if (($_POST['machineRows'] > 0) && ($_POST['machineRows'] != '') && ctype_digit($_POST['machineRows'])) {
@@ -100,24 +107,60 @@ class Machine
                     $invalidValues['invalidSizeRed'] = true;
                     $invalidValues['invalidSize'] = $_POST['machineSize'];
                 }
+                if (trim($_POST['machineDesc']) != '') {
+                    $checks[] = true;
+                    $validValues['validDesc'] = trim(htmlentities($_POST['machineDesc']));
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidDescRed'] = true;
+                    $invalidValues['invalidDesc'] = trim(htmlentities($_POST['machineDesc']));
+                }
+                if (trim($_POST['machineName']) != '') {
+                    $checks[] = true;
+                    $validValues['validName'] = trim(htmlentities($_POST['machineName']));
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidNameRed'] = true;
+                    $invalidValues['invalidName'] = trim(htmlentities($_POST['machineName']));
+                }
+                if (isset($_POST['status'])) {
+                    if (($_POST['status'] > 0) && ($_POST['status'] != '') && ctype_digit($_POST['status'])) {
+                        $statusDb = new StatusDAO();
+                        $data = $statusDb->select([2]);
+                        if (!empty($data)) {
+                            $checks[] = true;
+                            $validValues['validStatus'] = $_POST['status'];
+                        } else {
+                            $checks[] = false;
+                            $invalidValues['invalidStatusRed'] = true;
+                            $validValues['invalidStatus'] = $_POST['status'];
+                        }
+                    }
+                } else {
+                    $checks[] = false;
+                    $invalidValues['invalidStatusRed'] = true;
+                    $validValues['invalidStatus'] = '';
+                }
             }
         }
         if (!in_array(false, $checks) && ($checks != null)) {
             $machine = new VendingMachine();
             $machine->createMachine($_POST['machineRows'], $_POST['machineColumns'], $_POST['machineSize']);
             header('location: index.php?action=loadMachineView');
-            $_SESSION['validValues'] = null;
-            $_SESSION['invalidValues'] = null;
+            $array['validValues'] = null;
+            $array['invalidValues'] = null;
         } else {
-            $_SESSION['validValues'] = $validValues;
-            $_SESSION['invalidValues'] = $invalidValues;
-            header('location: index.php?action=createMachineView');
+            if (isset($validValues) && isset($invalidValues)) {
+                $array['validValues'] = $validValues;
+                $array['invalidValues'] = $invalidValues;
+            }
+            return $array;
+//            header('location: index.php?action=createMachineView');
         }
     }
 
 
-    public
-    function editMachineView()
+    public function editMachineView()
     {
 
         $machine = new MachineDAO();
@@ -127,8 +170,7 @@ class Machine
         return $machineData;
     }
 
-    public
-    function displayMachine()
+    public function displayMachine()
     {
         $machine = new MachineDAO();
         $machineData = $machine->selectAll();
@@ -136,8 +178,7 @@ class Machine
         return $machineData;
     }
 
-    public
-    function loadMachine()
+    public function loadMachine()
     {
         $machine = new MachineDAO();
         $machineData = $machine->selectAll();
@@ -148,9 +189,9 @@ class Machine
         return $result;
     }
 
-    public
-    function loadProducts($productArray)
+    public function loadProducts($productArray)
     {
+
         var_dump($productArray != null);
         if ($productArray != null) {
             $machine = new VendingMachine();
@@ -158,6 +199,22 @@ class Machine
             $machine->loadProducts($productArray);
             header('location: index.php?action=displayMachineView');
         }
+    }
+
+    public function machineStatusView()
+    {
+        $status = new StatusDAO();
+        $status = $status->selectAll();
+
+        return $status;
+    }
+
+    public function machineActiveDaysView()
+    {
+        $daysDb = new activeDaysDAO();
+        $daysData = $daysDb->selectAll();
+
+        return $daysData;
     }
 }
 

@@ -54,11 +54,13 @@ class MachineDAO implements CRUDInterface
     public function insert(iterable $insertParam)
     {
         $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_status_id`, `vending_machine_date_created`)' .
-            'VALUES (?, ?, ?, ?, now())';
+            'VALUES (?, ?, ?, 1, now())';
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
 
+        var_dump($data);
+        die;
         return $data;
     }
 

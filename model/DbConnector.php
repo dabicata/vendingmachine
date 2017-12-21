@@ -57,6 +57,7 @@ class DbConnector
             echo 'Connection failed: ' . $e->getMessage();
         }
 
+        var_dump($parameters);
         return $this->dataBase->lastInsertId();
     }
 
