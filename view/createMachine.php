@@ -74,6 +74,26 @@
             <br>
         <?php endforeach; ?>
     </div>
+    <br>
+    Active Days:<br>
+    <div class="<?php if ($array['invalidValues']['invalidDaysRed'] ?? false) {
+        echo 'incorrect';
+    } ?>">
+        <?php
+        //        var_dump($array);
+        foreach ($array['days'] as $value): ?>
+            <input type="checkbox" value="<?php echo $value['dayId'] ?>" <?php
+            if (isset($array['validValues']['validDays'])) {
+                foreach ($array['validValues']['validDays'] as $validDay) {
+                    if ($value['dayId'] == $validDay) {
+                        echo 'checked="checked"';
+                    }
+                }
+            }
+            ?> name="days[]"> <?php echo $value['days'] ?>
+            <br>
+        <?php endforeach; ?>
+    </div>
     <input type="submit" value="Create Machine">
 </form>
-<?php var_dump($array); ?>
+<?php var_dump($array['validValues']['validDays']); ?>

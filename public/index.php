@@ -1,6 +1,5 @@
 <?php
 
-
 include_once __DIR__ . '/../controller/Machine.php';
 include_once __DIR__ . '/../controller/Product.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
@@ -16,13 +15,9 @@ $object = new \vending\controller\Machine();
 switch ($action) {
 
     case 'loadMachineView':
+        $array = $object->loadProducts();
         $result = $object->loadMachine();
         $include = '../view/loadMachine.php';
-        break;
-    case 'loadMachine':
-        $object = new \vending\controller\Product();
-        $values = $object->createProducts();
-        $machine->loadProducts($values['productArray']);
         break;
     case 'editMachine':
         $object->editMachine();

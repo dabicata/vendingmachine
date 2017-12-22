@@ -15,6 +15,8 @@ class Product
 
     public function createProducts()
     {
+//        var_dump($_POST);
+        $array = [];
         $productArray = [];
         $checks = [];
         for ($x = 0; $x < (count($_POST) - 2) / 4; $x++) {
@@ -70,15 +72,19 @@ class Product
                     }
                     $productArray[] = $productOBJ;
                 }
-                $_SESSION['validValues'] = null;
-                $_SESSION['invalidValues'] = null;
+                $array['validValues'] = null;
+                $array['invalidValues'] = null;
             }
         } else {
-            $_SESSION['validValues'] = $validValues;
-            $_SESSION['invalidValues'] = $invalidValues;
-            header('location: index.php?action=loadMachineView');
+            if (isset($validValues) && isset($invalidValues)) {
+                $array['validValues'] = $validValues;
+                $array['invalidValues'] = $invalidValues;
+//            header('location: index.php?action=loadMachineView');
+            }
         }
-        $result = ["productArray" => $productArray];
+        $result = ['productArray' => $productArray, 'values' => $array];
+
+        var_dump($result['values']);
 
 
         return $result;

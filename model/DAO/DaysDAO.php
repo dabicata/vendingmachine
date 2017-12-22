@@ -31,7 +31,7 @@ class DaysDAO implements CRUDInterface
      */
     public function select($dayId)
     {
-        $sql = 'SELECT * FROM `active_days` WHERE `day_id` = ?';
+        $sql = 'SELECT * FROM `days` WHERE `day_id` = ?';
         $db = new DbConnector();
         $data = $db->selectByIdQuery($sql, $dayId);
         $db->closeConnection();

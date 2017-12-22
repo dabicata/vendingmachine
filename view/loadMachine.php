@@ -1,10 +1,9 @@
 <?php
 
 $counter = 0;
-var_dump($_SESSION);
-var_dump(isset($_SESSION['validValues'][$counter]['invalidPrice']));
+var_dump($array);
 ?>
-<form action="index.php?action=loadMachine" method="post">
+<form action="index.php?action=loadMachineView" method="post">
     <input type="hidden" name="action" value="createProduct">
     <?php foreach ($result['productType'] as $types): ?>
         <select name="<?php echo "productName" . $counter; ?>">
@@ -14,37 +13,37 @@ var_dump(isset($_SESSION['validValues'][$counter]['invalidPrice']));
             <?php endforeach; ?>
         </select>
         <input type="number" min="0" name="<?php echo "productQuantity" . $counter; ?>"
-               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidQuantityRed'] ?? false) {
+               class="<?php if ($array['invalidValues'][$counter]['invalidQuantityRed'] ?? false) {
                    echo 'incorrect';
                } ?>"
                value="<?php
-               if (isset($_SESSION['validValues'][$counter]['validQuantity']) || isset($_SESSION['invalidValues'][$counter]['invalidQuantity'])) {
-                   if (isset($_SESSION['validValues'][$counter]['validQuantity'])) {
-                       echo $_SESSION['validValues'][$counter]['validQuantity'];
+               if (isset($array['validValues'][$counter]['validQuantity']) || isset($array['invalidValues'][$counter]['invalidQuantity'])) {
+                   if (isset($array['validValues'][$counter]['validQuantity'])) {
+                       echo $array['validValues'][$counter]['validQuantity'];
                    } else {
-                       echo $_SESSION['invalidValues'][$counter]['invalidQuantity'];
+                       echo $array['invalidValues'][$counter]['invalidQuantity'];
                    }
                } ?>" placeholder="Quantity">
-        <input type="date" class="<?php if ($_SESSION['invalidValues'][$counter]['invalidDateRed'] ?? false) {
+        <input type="date" class="<?php if ($array['invalidValues'][$counter]['invalidDateRed'] ?? false) {
             echo 'incorrect';
         } ?>" value="<?php
-        if (isset($_SESSION['validValues'][$counter]['validDate']) || isset($_SESSION['invalidValues'][$counter]['invalidDate'])) {
-            if (isset($_SESSION['validValues'][$counter]['validDate'])) {
-                echo $_SESSION['validValues'][$counter]['validDate'];
+        if (isset($array['validValues'][$counter]['validDate']) || isset($array['invalidValues'][$counter]['invalidDate'])) {
+            if (isset($array['validValues'][$counter]['validDate'])) {
+                echo $array['validValues'][$counter]['validDate'];
             } else {
-                echo $_SESSION['invalidValues'][$counter]['invalidDate'];
+                echo $array['invalidValues'][$counter]['invalidDate'];
             }
         } ?>" name=" <?php echo "productExpireDate" . $counter; ?>">
 
         <input type="number" min="0" name="<?php echo "productPrice" . $counter; ?>"
-               class="<?php if ($_SESSION['invalidValues'][$counter]['invalidPriceRed'] ?? false) {
+               class="<?php if ($array['invalidValues'][$counter]['invalidPriceRed'] ?? false) {
                    echo 'incorrect';
                } ?>" value="<?php
-        if (isset($_SESSION['validValues'][$counter]['validPrice']) || isset($_SESSION['invalidValues'][$counter]['invalidPrice'])) {
-            if (isset($_SESSION['validValues'][$counter]['validPrice'])) {
-                echo $_SESSION['validValues'][$counter]['validPrice'];
+        if (isset($array['validValues'][$counter]['validPrice']) || isset($array['invalidValues'][$counter]['invalidPrice'])) {
+            if (isset($array['validValues'][$counter]['validPrice'])) {
+                echo $array['validValues'][$counter]['validPrice'];
             } else {
-                echo $_SESSION['invalidValues'][$counter]['invalidPrice'];
+                echo $array['invalidValues'][$counter]['invalidPrice'];
             }
         } ?>" placeholder="Price">
         <br>
