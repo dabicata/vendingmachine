@@ -1,6 +1,5 @@
 <?php
 
-
 function showInput($array, $value)
 {
     if (isset($array['validValues']["valid" . "$value"]) || isset($array['invalidValues']["invalid" . "$value"])) {
@@ -29,5 +28,20 @@ function showEditInput($array, $value)
         }
     } else {
         return $array['machineData']["vendingMachine" . "$value"];
+    }
+}
+
+function showLoadInputRed($array,$counter,$value){
+    if ($array['invalidValues'][$counter]["invalid"."$value"."Red"] ?? false) {
+        return 'incorrect';
+    }
+}
+function showLoadInput($array,$counter,$value){
+    if (isset($array['validValues'][$counter]["valid"."$value"]) || isset($array['invalidValues'][$counter]["ivalid"."$value"])) {
+        if (isset($array['validValues'][$counter]["valid"."$value"])) {
+            return $array['validValues'][$counter]["valid"."$value"];
+        } else {
+            return $array['invalidValues'][$counter]["invalid"."$value"];
+        }
     }
 }

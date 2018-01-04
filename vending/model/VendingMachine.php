@@ -336,4 +336,116 @@ class VendingMachine
             }
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRowNumber()
+    {
+        return $this->rowNumber;
+    }
+
+    /**
+     * @param mixed $rowNumber
+     */
+    public function setRowNumber($rowNumber): void
+    {
+        $this->rowNumber = $rowNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColumnNumber()
+    {
+        return $this->columnNumber;
+    }
+
+    /**
+     * @param mixed $columnNumber
+     */
+    public function setColumnNumber($columnNumber): void
+    {
+        $this->columnNumber = $columnNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCellMatrix()
+    {
+        return $this->cellMatrix;
+    }
+
+    /**
+     * @param mixed $cellMatrix
+     */
+    public function setCellMatrix($cellMatrix): void
+    {
+        $this->cellMatrix = $cellMatrix;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineName()
+    {
+        return $this->machineName;
+    }
+
+    /**
+     * @param mixed $machineName
+     */
+    public function setMachineName($machineName): void
+    {
+        $this->machineName = $machineName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineDesc()
+    {
+        return $this->machineDesc;
+    }
+
+    /**
+     * @param mixed $machineDesc
+     */
+    public function setMachineDesc($machineDesc): void
+    {
+        $this->machineDesc = $machineDesc;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineStatus()
+    {
+        return $this->machineStatus;
+    }
+
+    /**
+     * @param mixed $machineStatus
+     */
+    public function setMachineStatus($machineStatus): void
+    {
+        $this->machineStatus = $machineStatus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineActiveDays()
+    {
+        return $this->machineActiveDays;
+    }
+
+    /**
+     * @param mixed $machineActiveDays
+     */
+    public function setMachineActiveDays($machineActiveDays): void
+    {
+        $this->machineActiveDays = $machineActiveDays;
+    }
 }
