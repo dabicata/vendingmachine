@@ -73,7 +73,7 @@ class MachineDAO implements CRUDInterface
     public function update(iterable $updateParam)
     {
         $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, ' .
-            '`vending_machine_size` = ?,`vending_machine_status_id` = ?, `vending_machine_date_updated` = now()' .
+            '`vending_machine_size` = ?,`vending_machine_status_id` = ?,`vending_machine_name` = ?, `vending_machine_date_updated` = now()' .
             ' WHERE `vending_machines`.`vending_machine_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);

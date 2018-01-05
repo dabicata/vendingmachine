@@ -939,7 +939,7 @@ CREATE TABLE `vending_machines` (
   `vending_machine_id`           INT(11)  NOT NULL,
   `vending_machine_rows`         INT(11)  NOT NULL,
   `vending_machine_columns`      INT(11)  NOT NULL,
-  `machine_size`                 INT(11)  NOT NULL,
+  `vending_machine_size`         INT(11)  NOT NULL,
   `vending_machine_date_created` DATETIME NOT NULL,
   `vending_machine_date_updated` DATETIME NOT NULL,
   `vending_machine_status_id`    INT(11)  NOT NULL
@@ -952,7 +952,7 @@ CREATE TABLE `vending_machines` (
 -- Dumping data for table `vending_machines`
 --
 
-INSERT INTO `vending_machines` (`vending_machine_id`, `vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_date_created`, `vending_machine_date_updated`, `vending_machine_status_id`)
+INSERT INTO `vending_machines` (`vending_machine_id`, `vending_machine_rows`, `vending_machine_columns`, `vending_machine_size`, `vending_machine_date_created`, `vending_machine_date_updated`, `vending_machine_status_id`)
 VALUES
   (768, 6, 5, 5, '2017-11-28 11:56:54', '2017-12-06 15:54:22', 0),
   (769, 5, 55, 5, '2017-11-29 16:21:03', '0000-00-00 00:00:00', 0),

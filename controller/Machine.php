@@ -32,6 +32,7 @@ class Machine
      */
     public static function editMachine()
     {
+        var_dump($_POST);
         $machine = new MachineDAO();
         $activeDaysDB = new ActiveDaysDAO();
         if (isset($_GET['machineId'])) {
@@ -138,12 +139,13 @@ class Machine
             }
         }
         if (!in_array(false, $checks) && ($checks != null)) {
-            $machine->update(array($_POST['machineRows'], $_POST['machineColumns'], $_POST['machineSize'], $_POST['machineStatus'], $_POST['vendingMachineId']));
+            $machine->update(array($_POST['machineRows'], $_POST['machineColumns'], $_POST['machineSize'],
+                $_POST['machineStatus'], $_POST['machineName'], $_POST['vendingMachineId']));
             $activeDaysDB->delete([$_POST['vendingMachineId']]);
             foreach ($_POST['days'] as $dayId) {
                 $activeDaysDB->insert([$_POST['vendingMachineId'], $dayId]);
             }
-            header('location: index.php?action=displayMachineView   ');
+//            header('location: index.php?action=displayMachineView   ');
         } else {
             if (isset($validValues) && isset($invalidValues)) {
                 $array['validValues'] = $validValues;

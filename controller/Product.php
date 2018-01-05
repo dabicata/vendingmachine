@@ -82,12 +82,10 @@ class Product
             if (isset($validValues) && isset($invalidValues)) {
                 $array['validValues'] = $validValues;
                 $array['invalidValues'] = $invalidValues;
-//            header('location: index.php?action=loadMachineView');
             }
         }
         $result = ['productArray' => $productArray, 'values' => $array];
 
-        var_dump($result['values']);
 
 
         return $result;

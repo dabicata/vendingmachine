@@ -57,4 +57,3 @@ include_once __DIR__ . '/../utility/utility.php';
         </div>
         <input type="submit" value="Create Machine">
     </form>
-<?php //var_dump($array['validValues']['validDays']); ?>
