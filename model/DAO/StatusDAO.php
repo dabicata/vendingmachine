@@ -22,7 +22,7 @@ class StatusDAO implements CRUDInterface
      */
     public function selectAll()
     {
-        $sql = 'SELECT * FROM `status` ';
+        $sql = 'SELECT * FROM `status`';
         $db = new DbConnector();
         $data = $db->selectAllQuery($sql);
         $db->closeConnection();

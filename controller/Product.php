@@ -13,9 +13,12 @@ include_once __DIR__ . '/../model/Snikers.php';
 class Product
 {
 
-    public function createProducts()
+    /**
+     * Validates if input form for products is valid and if it's valid create products.
+     * @return array
+     */
+    public static function createProducts()
     {
-//        var_dump($_POST);
         $array = [];
         $productArray = [];
         $checks = [];

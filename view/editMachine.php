@@ -1,42 +1,60 @@
-<form action="index.php?action=editMachine" method="post">
+<?php
+include_once __DIR__ . '/../utility/utility.php';
+?>
+<form action="index.php?action=editMachineView" method="post">
     <input type="hidden" name="action" value="editMachine">
     Machine Rows:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidRowsEditRed'] ?? false) {
-        echo 'incorrect';
-    } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validRowsEdit']) || isset($_SESSION['invalidValues']['invalidRowsEdit'])) {
-               if (isset($_SESSION['validValues']['validRowsEdit'])) {
-                   echo $_SESSION['validValues']['validRowsEdit'];
-               } else {
-                   echo $_SESSION['invalidValues']['invalidRowsEdit'];
-               }
-           } ?>" step="1" min="0" pattern="[0-9]" name="machineRows">
+    <input type="number" class="<?php echo showInputRed($array, 'Rows'); ?>"
+           value="<?php echo showEditInput($array, 'Rows'); ?>" step="1" min="0" pattern="[0-9]" name="machineRows">
     <br>
     Machine Columns:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidColumnsEditRed'] ?? false) {
-        echo 'incorrect';
-    } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validColumnsEdit']) || isset($_SESSION['invalidValues']['invalidColumnEdit'])) {
-               if (isset($_SESSION['validValues']['validColumnsEdit'])) {
-                   echo $_SESSION['validValues']['validColumnsEdit'];
-               } else {
-                   echo $_SESSION['validValues']['invalidColumnsEdit'];
-               }
-           } ?>" step="1" min="0" pattern="[0-9]" name="machineColumns">
+    <input type="number" class="<?php echo showInputRed($array, 'Columns'); ?>"
+           value="<?php echo showEditInput($array, 'Columns'); ?>" step="1" min="0" pattern="[0-9]"
+           name="machineColumns">
     <br>
     Machine Size:<br>
-    <input type="number" class="<?php if ($_SESSION['invalidValues']['invalidSizeEditRed'] ?? false) {
-        echo 'incorrect';
-    } ?>"
-           value="<?php if (isset($_SESSION['validValues']['validSizeEdit']) || isset($_SESSION['invalidValues']['invalidSizeEdit'])) {
-               if (isset($_SESSION['validValues']['validSizeEdit'])) {
-                   echo $_SESSION['validValues']['validSizeEdit'];
-               } else {
-                   echo $_SESSION['invalidValues']['invalidSizeEdit'];
-               }
-           } ?>" step="1" min="0" pattern="[0-9]" name="machineSize">
+    <input type="text" class="<?php echo showInputRed($array, 'Size'); ?>"
+           value="<?php echo showEditInput($array, 'Size'); ?>" name="machineSize">
+    <br> Machine Name:<br>
+    <input type="text" class="<?php echo showInputRed($array, 'Name'); ?>"
+           value="<?php echo showEditInput($array, 'Name'); ?>" name="machineName">
+    <br> Machine Description:<br>
+    <textarea name="machineDesc"
+              class="<?php echo showInputRed($array, 'Desc'); ?>"><?php echo showEditInput($array, 'Desc'); ?></textarea>
     <br>
-    <input type="hidden" value="<?php echo $machineData['vendingMachineId']; ?>" name="vendingMachineId">
+    Status: <br>
+    <div class="<?php echo showInputRed($array, 'Status'); ?>">
+        <?php
+        foreach ($array['status'] as $value): ?>
+            <input type="radio" value="<?php echo $value['statusId'] ?>" <?php
+            if (isset($array['validValues']['validStatus']) ?? false) {
+                if ($value['statusId'] == $array['validValues']['validStatus']) {
+                    echo 'checked="checked"';
+                }
+            } else {
+                if ($value['statusId'] == $array['machineData']['vendingMachineStatusId']) {
+                    echo 'checked="checked"';
+                }
+            } ?> name="machineStatus"> <?php echo $value['status'] ?>
+            <br>
+        <?php endforeach; ?>
+    </div>
+    <br>
+    Active Days:<br>
+    <div class="<?php echo showInputRed($array, 'Days'); ?>">
+        <?php foreach ($array['days'] as $value): ?>
+            <input type="checkbox" value="<?php echo $value['dayId']; ?>" <?php
+            foreach ($array['checkedDays'] as $checkedDay) {
+                if ($checkedDay['day_id'] == $value['dayId']) {
+                    echo 'checked="checked"';
+                }
+            }
+            ?> name="days[]"> <?php echo $value['days'] ?>
+            <br>
+        <?php endforeach; ?>
+    </div>
+    <input type="hidden" value="<?php if (isset($array['machineData']['vendingMachineId'])) {
+        echo $array['machineData']['vendingMachineId'];
+    } ?>" name="vendingMachineId">
     <input type="submit" value="Save">
 </form>
-<?php var_dump($_SESSION);

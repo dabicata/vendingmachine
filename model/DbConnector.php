@@ -57,7 +57,7 @@ class DbConnector
             echo 'Connection failed: ' . $e->getMessage();
         }
 
-        var_dump($parameters);
+
         return $this->dataBase->lastInsertId();
     }
 
@@ -134,6 +134,41 @@ class DbConnector
         return $camelCaseQuery;
     }
 
+    /**
+     * Takes sql and parameters for sql and performs select query by id.
+     *
+     * @param $sql
+     * @param $parameters
+     * @return mixed
+     */
+    public function selectAllByIdQuery($sql, $parameters)
+    {
+
+        $query = $this->dataBase->prepare($sql);
+        $counter = 1;
+        foreach ($parameters as $param) {
+            $query->bindValue($counter, $param);
+            $counter++;
+        }
+        try {
+            $query->execute();
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
+
+        $camelKeys = [];
+        $camelCaseQuery = [];
+        $result = $query->fetchAll();
+        if ($result) {
+            foreach ($result as $key => $value) {
+                $camelKey = lcfirst(implode('', array_map('ucfirst', explode('_', $key))));
+                $camelKeys[] = $camelKey;
+            }
+            $camelCaseQuery = array_combine($camelKeys, $result);
+        }
+
+        return $camelCaseQuery;
+    }
 
     /** Select everything from Database.
      * @param $sql

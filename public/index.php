@@ -4,42 +4,42 @@ include_once __DIR__ . '/../controller/Machine.php';
 include_once __DIR__ . '/../controller/Product.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
 
-session_start();
 if (!isset($_GET['action'])) {
     $action = 'default';
 } else {
     $action = $_GET['action'];
 }
-$object = new \vending\controller\Machine();
 
 switch ($action) {
-
+    //creates products and loads them in machine.
     case 'loadMachineView':
-        $array = $object->loadProducts();
-        $result = $object->loadMachine();
+        $array = \vending\controller\Machine::loadProducts();
+        $result = \vending\controller\Machine::loadMachine();
         $include = '../view/loadMachine.php';
         break;
-    case 'editMachine':
-        $object->editMachine();
-        break;
+    //Create machine.
     case 'createMachineView':
-        $array = $object->createMachine();
+        $array = \vending\controller\Machine::createMachine();
         $include = '../view/createMachine.php';
         break;
+    //Edit machine.
     case 'editMachineView':
-        $machineData = $object->editMachineView();
+        $array = \vending\controller\Machine::editMachine();
         $include = '../view/editMachine.php';
         break;
+    //Display machine.
     case 'displayMachineView':
-        $machineData = $object->displayMachine();
+        $machineData = \vending\controller\Machine::displayMachine();
         $include = '../view/machine.php';
         break;
+    //If url is invalid redirects you to the index page.
     case 'default':
         $include = '../view/index.php';
         break;
+    //If url is invalid redirects you to the index page.
     default:
         $include = '../view/index.php';
 }
 include '../view/header.php';
-include $include;
+include "$include";
 include '../view/footer.php';

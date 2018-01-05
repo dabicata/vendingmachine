@@ -7,7 +7,7 @@ use vending\model\DbConnector;
 include_once __DIR__ . '/CRUDInterface.php';
 include_once __DIR__ . '/../DbConnector.php';
 
-class activeDaysDAO implements CRUDInterface
+class ActiveDaysDAO implements CRUDInterface
 {
 
 
@@ -19,6 +19,22 @@ class activeDaysDAO implements CRUDInterface
         $sql = 'SELECT * FROM `active_days` ';
         $db = new DbConnector();
         $data = $db->selectAllQuery($sql);
+        $db->closeConnection();
+
+        return $data;
+    }
+
+    /**
+     * Select all by ID.
+     *
+     * @param $machineId
+     * @return mixed
+     */
+    public function selectAllById($machineId)
+    {
+        $sql = 'SELECT * FROM `active_days` WHERE machine_id = ? ';
+        $db = new DbConnector();
+        $data = $db->selectAllByIdQuery($sql, $machineId);
         $db->closeConnection();
 
         return $data;

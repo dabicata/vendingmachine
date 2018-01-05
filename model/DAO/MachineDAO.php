@@ -46,33 +46,34 @@ class MachineDAO implements CRUDInterface
     }
 
     /**
-     * Insert into machines: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_created.
+     * Insert into machines: vending_machine_rows, vending_machine_columns, vending_machine_size, vending_machine_date_created,
+     * vending_machine_name, vending_machine_desc, vending_machine_status_id.
      *
      * @param $insertParam
      * @return string
      */
     public function insert(iterable $insertParam)
     {
-        $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `machine_size`, `vending_machine_status_id`, `vending_machine_date_created`)' .
-            'VALUES (?, ?, ?, 1, now())';
+        $sql = 'INSERT INTO `vending_machines` (`vending_machine_rows`, `vending_machine_columns`, `vending_machine_size`, ' .
+            '`vending_machine_name`,`vending_machine_desc`, `vending_machine_status_id`, ' .
+            '`vending_machine_date_created`) VALUES (?, ?, ?, ?, ?, ?, now())';
         $db = new DbConnector();
         $data = $db->executeQuery($sql, $insertParam);
         $db->closeConnection();
 
-        var_dump($data);
-        die;
         return $data;
     }
 
     /**
-     * Update machine selected by ID: vending_machine_rows, vending_machine_columns, machine_size, vending_machine_date_updated.
+     * Update machine selected by ID: vending_machine_rows, vending_machine_columns, vending_machine_size, vending_machine_date_updated.
      *
      * @param $updateParam
      * @return mixed|void
      */
     public function update(iterable $updateParam)
     {
-        $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, `machine_size` = ?,`vending_machine_status_id` = ?, `vending_machine_date_updated` = now()' .
+        $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, ' .
+            '`vending_machine_size` = ?,`vending_machine_status_id` = ?, `vending_machine_date_updated` = now()' .
             ' WHERE `vending_machines`.`vending_machine_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);

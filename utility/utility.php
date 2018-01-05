@@ -27,21 +27,26 @@ function showEditInput($array, $value)
             return $array['invalidValues']["invalid" . "$value"];
         }
     } else {
-        return $array['machineData']["vendingMachine" . "$value"];
+        if (isset($array['machineData']["vendingMachine" . "$value"])) {
+            return $array['machineData']["vendingMachine" . "$value"];
+        }
     }
 }
 
-function showLoadInputRed($array,$counter,$value){
-    if ($array['invalidValues'][$counter]["invalid"."$value"."Red"] ?? false) {
+function showLoadInputRed($array, $counter, $value)
+{
+    if ($array['invalidValues'][$counter]["invalid" . "$value" . "Red"] ?? false) {
         return 'incorrect';
     }
 }
-function showLoadInput($array,$counter,$value){
-    if (isset($array['validValues'][$counter]["valid"."$value"]) || isset($array['invalidValues'][$counter]["ivalid"."$value"])) {
-        if (isset($array['validValues'][$counter]["valid"."$value"])) {
-            return $array['validValues'][$counter]["valid"."$value"];
+
+function showLoadInput($array, $counter, $value)
+{
+    if (isset($array['validValues'][$counter]["valid" . "$value"]) || isset($array['invalidValues'][$counter]["ivalid" . "$value"])) {
+        if (isset($array['validValues'][$counter]["valid" . "$value"])) {
+            return $array['validValues'][$counter]["valid" . "$value"];
         } else {
-            return $array['invalidValues'][$counter]["invalid"."$value"];
+            return $array['invalidValues'][$counter]["invalid" . "$value"];
         }
     }
 }

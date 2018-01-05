@@ -3,11 +3,13 @@
 namespace vending\model;
 
 
+use vending\model\DAO\ActiveDaysDAO;
 use vending\model\DAO\CellDAO;
 use vending\model\DAO\MachineDAO;
 use vending\model\DAO\ProductsDAO;
 
 include_once __DIR__ . '/../model/DAO/MachineDAO.php';
+include_once __DIR__ . '/../model/DAO/ActiveDaysDAO.php';
 include_once __DIR__ . '/../model/DAO/CellDAO.php';
 include_once __DIR__ . '/../model/DAO/ProductsDAO.php';
 include_once __DIR__ . '/Cell.php';
@@ -26,6 +28,10 @@ class VendingMachine
     private $cellSize; //Cell size.
     private $cellMatrix; //Cell Matrix cells to machine.
     private $machineId; //Id of machine.
+    private $machineName; //Name of machine.
+    private $machineDesc; //Description of machine.
+    private $machineStatus; //Status of machine.
+    private $machineActiveDays; //Active days of machine.
 
 
     /**
@@ -34,14 +40,26 @@ class VendingMachine
      * @param $rowNumber - rows of machine
      * @param $columnNumber - columns of machine
      * @param $cellSize - default cell size of machine
+     * @param $machineName - name of machine.
+     * @param $machineDesc - description of machine.
+     * @param $machineStatus - status of machine.
+     * @param $machineActiveDays - active days of machine.
      */
-    public function createMachine($rowNumber, $columnNumber, $cellSize)
+    public function createMachine($rowNumber, $columnNumber, $cellSize, $machineName, $machineDesc, $machineStatus, $machineActiveDays)
     {
         $machineDao = new MachineDAO();
-        $this->machineId = $machineDao->insert(array($rowNumber, $columnNumber, $cellSize));
+        $activeDaysDB = new ActiveDaysDAO();
+        $this->machineId = $machineDao->insert(array($rowNumber, $columnNumber, $cellSize, $machineName, $machineDesc, $machineStatus));
         $this->columnNumber = $columnNumber;
         $this->rowNumber = $rowNumber;
         $this->cellSize = $cellSize;
+        $this->machineName = $machineName;
+        $this->machineDesc = $machineDesc;
+        $this->machineStatus = $machineStatus;
+        $this->machineActiveDays = $machineActiveDays;
+        foreach ($machineActiveDays as $dayId) {
+            $activeDaysDB->insert([$this->machineId, $dayId]);
+        }
         $this->defineMachine();
     }
 
@@ -50,14 +68,13 @@ class VendingMachine
      */
     public function defineMachine()
     {
+        $vendingMachine = new VendingMachine();
         $cellDAO = new CellDAO();
-        $this->cellMatrix = [];
+        $cellMatrix = [];
         for ($row = 0; $row < $this->rowNumber; $row++) {
             for ($column = 0; $column < $this->columnNumber; $column++) {
-                var_dump($this->machineId);
-                die;
                 $cellId = $cellDAO->insert([$this->machineId, $row, $column]);
-                $this->cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
+                $cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
             }
         }
     }
@@ -75,7 +92,7 @@ class VendingMachine
             $this->machineId = $machineData['vendingMachineId'];
             $this->rowNumber = $machineData['vendingMachineRows'];
             $this->columnNumber = $machineData['vendingMachineColumns'];
-            $this->cellSize = $machineData['machineSize'];
+            $this->cellSize = $machineData['vendingMachineSize'];
             $cellDAO = new CellDAO();
             $productData = new ProductsDAO();
             $cellDB = $cellDAO->selectCellByMachineId([$machineId]);
@@ -192,7 +209,6 @@ class VendingMachine
         return $this->columnNumber;
     }
 
-
     /**
      * Sets cell size.
      *
@@ -214,94 +230,145 @@ class VendingMachine
     }
 
     /**
-     * Merge 2 cells into one from left to right.
-     * Example: cell with coordinates 1,1 merged with 2,2
+     * Returns machine id.
      *
-     * @param $firstCellRow - row of the first cell you want to combine
-     * @param $firstCellColumn - column of first the cell you want to combine
-     * @param $secondCellRow - row of the second cell you want to combine
-     * @param $secondCellColumn - column of second the cell you want to combine
-     * @throws \Exception
+     * @return mixed
      */
-    public function combineCells($firstCellRow, $firstCellColumn, $secondCellRow, $secondCellColumn)
+    public function getMachineId()
     {
-        if (($firstCellRow == $secondCellRow) && ($secondCellColumn == $firstCellColumn + 1)) {
-            if (($this->cellMatrix[$firstCellRow][$firstCellColumn]) && ($this->cellMatrix[$secondCellRow][$secondCellColumn])) {
-                $this->cellMatrix[$firstCellRow][$firstCellColumn]->setSize($this->cellMatrix[$firstCellRow][$firstCellColumn]->getSize() * 2);
-                $this->cellMatrix[$secondCellRow][$secondCellColumn]->setSize(0);
-            } else {
-                throw new \Exception("Cell doesn't exist");
-            }
-        } else {
-            throw new \Exception("You can combine only cells on same row from left to right");
-        }
+        return $this->machineId;
+    }
+
+    /**
+     * Sets machine id.
+     *
+     * @param mixed $machineId
+     */
+    public function setMachineId($machineId): void
+    {
+        $this->machineId = $machineId;
     }
 
 
     /**
-     *Lets you buy a product.
-     *
+     * @return mixed
+     */
+    public function getRowNumber()
+    {
+        return $this->rowNumber;
+    }
+
+    /**
+     * @param mixed $rowNumber
+     */
+    public function setRowNumber($rowNumber): void
+    {
+        $this->rowNumber = $rowNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColumnNumber()
+    {
+        return $this->columnNumber;
+    }
+
+    /**
+     * @param mixed $columnNumber
+     */
+    public function setColumnNumber($columnNumber): void
+    {
+        $this->columnNumber = $columnNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCellMatrix()
+    {
+        return $this->cellMatrix;
+    }
+
+    /**
+     * @param mixed $cellMatrix
+     */
+    public function setCellMatrix($cellMatrix): void
+    {
+        $this->cellMatrix = $cellMatrix;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineName()
+    {
+        return $this->machineName;
+    }
+
+    /**
+     * @param mixed $machineName
+     */
+    public function setMachineName($machineName): void
+    {
+        $this->machineName = $machineName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineDesc()
+    {
+        return $this->machineDesc;
+    }
+
+    /**
+     * @param mixed $machineDesc
+     */
+    public function setMachineDesc($machineDesc): void
+    {
+        $this->machineDesc = $machineDesc;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineStatus()
+    {
+        return $this->machineStatus;
+    }
+
+    /**
+     * @param mixed $machineStatus
+     */
+    public function setMachineStatus($machineStatus): void
+    {
+        $this->machineStatus = $machineStatus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMachineActiveDays()
+    {
+        return $this->machineActiveDays;
+    }
+
+    /**
+     * @param mixed $machineActiveDays
+     */
+    public function setMachineActiveDays($machineActiveDays): void
+    {
+        $this->machineActiveDays = $machineActiveDays;
+    }
+
+    /**
      * @param $row
      * @param $column
-     * @param $price
-     * @return string
-     * @throws \Exception
+     * @return mixed
      */
-    public function buyProduct($row, $column, $price)
+    public function getCell($row, $column)
     {
-        $productDAO = new ProductsDAO();
-        if ((count($this->cellMatrix[$row][$column]->getProducts()) > 0)) {
-            if ($price >= ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice())) {
-                $this->cellMatrix[$row][$column]->removeProduct(0);
-                $productDAO->delete([$this->cellMatrix[$row][$column]->getProductFromArray()->getProductId()]);
-                return ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
-            } else {
-                return ($price - ($this->cellMatrix[$row][$column]->getProductFromArray()->getPrice()));
-
-            }
-        } else {
-            throw new \Exception(" Product not found.");
-        }
-    }
-
-    /**
-     * Displays all products from machine.
-     */
-    public function listItems()
-    {
-        if ($this->cellMatrix !== null) {
-            foreach ($this->cellMatrix as $matrix) {
-                foreach ($matrix as $cell) {
-                    if (null !== $cell->getProductFromArray()) {
-                        echo $cell->getProductFromArray()->getProductName() . ' ' . ($cell->getQuantity()) . "\n";
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     *Checks if there are expired products and remove them.
-     */
-    public function removeExpiredProducts()
-    {
-        $productDAO = new ProductsDAO();
-        $productDAO->deleteExpired();
-        foreach ($this->cellMatrix as $matrix) {
-            $counter = 0;
-            foreach ($matrix as $cell) {
-                if ($cell->getProducts() !== null) {
-                    foreach ($cell->getProducts() as $products) {
-                        if ((strtotime($products->getExpireDate())) < strtotime(new \DateTime())) {
-                            $cell->removeProduct($counter);
-                        } else {
-                            $counter++;
-                        }
-                    }
-                }
-            }
-        }
+        return $this->cellMatrix[$row][$column];
     }
 }
-
-
