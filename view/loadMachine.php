@@ -4,7 +4,7 @@ include_once __DIR__ . '/../utility/utility.php';
 
 $counter = 0;
 ?>
-<form action="index.php?action=loadMachineView" method="post">
+<form action='index.php?action=loadMachineView' method="post">
     <input type="hidden" name="action" value="createProduct">
     <?php foreach ($result['productType'] as $types): ?>
         <select name="<?php echo "productName" . $counter; ?>">

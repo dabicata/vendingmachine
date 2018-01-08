@@ -3,11 +3,6 @@
 namespace vending\model;
 
 
-use vending\model\DAO\ActiveDaysDAO;
-use vending\model\DAO\CellDAO;
-use vending\model\DAO\MachineDAO;
-use vending\model\DAO\ProductsDAO;
-
 include_once __DIR__ . '/../model/DAO/MachineDAO.php';
 include_once __DIR__ . '/../model/DAO/ActiveDaysDAO.php';
 include_once __DIR__ . '/../model/DAO/CellDAO.php';
@@ -33,181 +28,6 @@ class VendingMachine
     private $machineStatus; //Status of machine.
     private $machineActiveDays; //Active days of machine.
 
-
-    /**
-     * Sets rows columns and cell size of machine.
-     *
-     * @param $rowNumber - rows of machine
-     * @param $columnNumber - columns of machine
-     * @param $cellSize - default cell size of machine
-     * @param $machineName - name of machine.
-     * @param $machineDesc - description of machine.
-     * @param $machineStatus - status of machine.
-     * @param $machineActiveDays - active days of machine.
-     */
-    public function createMachine($rowNumber, $columnNumber, $cellSize, $machineName, $machineDesc, $machineStatus, $machineActiveDays)
-    {
-        $machineDao = new MachineDAO();
-        $activeDaysDB = new ActiveDaysDAO();
-        $this->machineId = $machineDao->insert(array($rowNumber, $columnNumber, $cellSize, $machineName, $machineDesc, $machineStatus));
-        $this->columnNumber = $columnNumber;
-        $this->rowNumber = $rowNumber;
-        $this->cellSize = $cellSize;
-        $this->machineName = $machineName;
-        $this->machineDesc = $machineDesc;
-        $this->machineStatus = $machineStatus;
-        $this->machineActiveDays = $machineActiveDays;
-        foreach ($machineActiveDays as $dayId) {
-            $activeDaysDB->insert([$this->machineId, $dayId]);
-        }
-        $this->defineMachine();
-    }
-
-    /**
-     * Create new cell and cellMatrix it to machine.
-     */
-    public function defineMachine()
-    {
-        $vendingMachine = new VendingMachine();
-        $cellDAO = new CellDAO();
-        $cellMatrix = [];
-        for ($row = 0; $row < $this->rowNumber; $row++) {
-            for ($column = 0; $column < $this->columnNumber; $column++) {
-                $cellId = $cellDAO->insert([$this->machineId, $row, $column]);
-                $cellMatrix[$row][$column] = new Cell($this->cellSize, $cellId);
-            }
-        }
-    }
-
-    /**
-     * Loads machine data from the Mysql Database.
-     *
-     * @param $machineId
-     */
-    public function loadMachine($machineId)
-    {
-        $machineDao = new MachineDAO();
-        $machineData = $machineDao->select([$machineId]);
-        if (($machineData) != null) {
-            $this->machineId = $machineData['vendingMachineId'];
-            $this->rowNumber = $machineData['vendingMachineRows'];
-            $this->columnNumber = $machineData['vendingMachineColumns'];
-            $this->cellSize = $machineData['vendingMachineSize'];
-            $cellDAO = new CellDAO();
-            $productData = new ProductsDAO();
-            $cellDB = $cellDAO->selectCellByMachineId([$machineId]);
-            if (($cellDB) != null) {
-                $this->cellMatrix = [];
-                $counter = 0;
-                for ($row = 0; $row < $this->rowNumber; $row++) {
-                    for ($column = 0; $column < $this->columnNumber; $column++) {
-                        $this->cellMatrix[$cellDB[$counter]['cellRow']][$cellDB[$counter]['cellColumn']] = new Cell($this->cellSize, $cellDB[$counter]['cellId']);
-                        $counter++;
-                        $productDB = $productData->selectProductByCellId([$this->cellMatrix[$row][$column]->getCellId()]);
-                        if ($productDB != null) {
-                            foreach ($productDB as $product) {
-                                switch ($product['productTypeId']) {
-                                    case Cola::TYPEID:
-                                        $productOBJ = new Cola($product['productPrice'], $product['productExpireDate']);
-                                        break;
-                                    case Chips::TYPEID:
-                                        $productOBJ = new Chips($product['productPrice'], $product['productExpireDate']);
-                                        break;
-                                    case Snikers::TYPEID:
-                                        $productOBJ = new Snikers($product['productPrice'], $product['productExpireDate']);
-                                        break;
-                                }
-                                $productOBJ->setProductId($product['productId']);
-                                $this->cellMatrix[$row][$column]->setProduct($productOBJ);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Loads product objects into cells.
-     *
-     * @param array|iterable $productArray array of objects of products
-     * @return array
-     */
-    public function loadProducts(iterable $productArray)
-    {
-
-        $productDAO = new ProductsDAO();
-        foreach ($productArray as $key => $product) {
-            foreach ($this->cellMatrix as $matrix) {
-                foreach ($matrix as $cell) {
-                    if ($product->getSize() <= $cell->getSize()) {
-                        if ((is_null($cell->getProducts())) ||
-                            ($cell->getProductFromArray() != null &&
-                                (($cell->getProductFromArray()->getProductName()) == ($product->getProductName())
-                                    && (($cell->getSize() / $product->getSize()) > $cell->getQuantity())))
-                        ) {
-                            $cell->setProduct($product);
-                            $productId = $productDAO->insert([
-                                $product->getTypeId(),
-                                $product->getPrice(),
-                                $product->getExpireDate()->format('Y/m/d h:m:s'),
-                                $product->getSize(),
-                                $cell->getCellId()
-                            ]);
-                            $product->setProductId($productId);
-                            unset($productArray[$key]);
-                            break 2;
-                        }
-                    }
-                }
-            }
-        }
-        if ($productArray == !null) {
-            return $productArray;
-        }
-    }
-
-    /**
-     *Delete Machine and everything in it.
-     */
-    public function deleteMachine()
-    {
-        $productDAO = new ProductsDAO();
-        $cellDAO = new CellDAO();
-        $machineDAO = new MachineDAO();
-        if ($this->cellMatrix !== null) {
-            foreach ($this->cellMatrix as $cells) {
-                foreach ($cells as $cell) {
-                    $cellIdArray[] = $cell->getCellId();
-                }
-            }
-            $productDAO->deleteByCellId($cellIdArray);
-        }
-        $cellDAO->deleteByMachineId([$this->machineId]);
-        if ($this->machineId !== null) {
-            $machineDAO->delete([$this->machineId]);
-        }
-    }
-
-    /**
-     * Returns row number of machine.
-     *
-     * @return mixed
-     */
-    public function getRow()
-    {
-        return $this->rowNumber;
-    }
-
-    /**
-     * Return column number of machine.
-     *
-     * @return mixed
-     */
-    public function getColumn()
-    {
-        return $this->columnNumber;
-    }
 
     /**
      * Sets cell size.
@@ -251,6 +71,7 @@ class VendingMachine
 
 
     /**
+     * Returns number of rows.
      * @return mixed
      */
     public function getRowNumber()
@@ -259,6 +80,8 @@ class VendingMachine
     }
 
     /**
+     * Sets number of rows.
+     *
      * @param mixed $rowNumber
      */
     public function setRowNumber($rowNumber): void
@@ -267,6 +90,7 @@ class VendingMachine
     }
 
     /**
+     * Returns number of columns.
      * @return mixed
      */
     public function getColumnNumber()
@@ -275,6 +99,7 @@ class VendingMachine
     }
 
     /**
+     * Sets number of columns.
      * @param mixed $columnNumber
      */
     public function setColumnNumber($columnNumber): void
@@ -283,6 +108,7 @@ class VendingMachine
     }
 
     /**
+     * Returns cell matrix.
      * @return mixed
      */
     public function getCellMatrix()
@@ -291,14 +117,17 @@ class VendingMachine
     }
 
     /**
+     * Sets cell matrix.
      * @param mixed $cellMatrix
      */
-    public function setCellMatrix($cellMatrix): void
+    public function setCellMatrix($cellMatrix)
     {
         $this->cellMatrix = $cellMatrix;
     }
 
     /**
+     * Returns machine name.
+     *
      * @return mixed
      */
     public function getMachineName()
@@ -307,6 +136,8 @@ class VendingMachine
     }
 
     /**
+     * Sets machine name.
+     *
      * @param mixed $machineName
      */
     public function setMachineName($machineName): void
@@ -315,6 +146,8 @@ class VendingMachine
     }
 
     /**
+     * Returns machine description.
+     *
      * @return mixed
      */
     public function getMachineDesc()
@@ -323,6 +156,8 @@ class VendingMachine
     }
 
     /**
+     * Sets machine description.
+     *
      * @param mixed $machineDesc
      */
     public function setMachineDesc($machineDesc): void
@@ -331,6 +166,8 @@ class VendingMachine
     }
 
     /**
+     * Returns machine status.
+     *
      * @return mixed
      */
     public function getMachineStatus()
@@ -339,6 +176,8 @@ class VendingMachine
     }
 
     /**
+     * Sets machine status.
+     *
      * @param mixed $machineStatus
      */
     public function setMachineStatus($machineStatus): void
@@ -347,6 +186,7 @@ class VendingMachine
     }
 
     /**
+     * Returns machine active days.
      * @return mixed
      */
     public function getMachineActiveDays()
@@ -355,6 +195,8 @@ class VendingMachine
     }
 
     /**
+     * Sets machine active days.
+     *
      * @param mixed $machineActiveDays
      */
     public function setMachineActiveDays($machineActiveDays): void
@@ -363,6 +205,8 @@ class VendingMachine
     }
 
     /**
+     * Returns specific cell from the cell matrix.
+     *
      * @param $row
      * @param $column
      * @return mixed
@@ -370,5 +214,18 @@ class VendingMachine
     public function getCell($row, $column)
     {
         return $this->cellMatrix[$row][$column];
+    }
+
+    /**
+     * Sets specific row and column from the cell matrix.
+     *
+     * @param $row
+     * @param $column
+     * @param $value
+     */
+    public function setCell($row, $column, $value): void
+    {
+
+        $this->cellMatrix[$row][$column] = $value;
     }
 }

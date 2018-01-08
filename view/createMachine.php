@@ -2,7 +2,7 @@
 include_once __DIR__ . '/../utility/utility.php';
 
 ?>
-    <form action="index.php?action=createMachineView" method="post">
+<form action='index.php?action=createMachineView' method="post">
         <input type="hidden" name="action" value="createMachine">
         Machine Rows:<br>
         <input type="number" class="<?php echo showInputRed($array, 'Rows'); ?>"

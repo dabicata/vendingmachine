@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__ . '/../utility/utility.php';
 ?>
-<form action="index.php?action=editMachineView" method="post">
+<form action='index.php?action=editMachineView' method="post">
     <input type="hidden" name="action" value="editMachine">
     Machine Rows:<br>
     <input type="number" class="<?php echo showInputRed($array, 'Rows'); ?>"

@@ -28,6 +28,7 @@
                     }
                 } ?> </td>
             <td><a href="index.php?action=editMachineView&machineId= <?php echo $value['vendingMachineId']; ?>">Edit</a>
+            <td><a href="index.php?action=showContent&machineId= <?php echo $value['vendingMachineId']; ?>">Show</a>
             </td>
         </tr>
     <?php endforeach; ?>

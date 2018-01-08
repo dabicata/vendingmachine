@@ -1,8 +1,10 @@
 <?php
 
-include_once __DIR__ . '/../controller/Machine.php';
+use \vending\controller\VendingMachineController;
+
 include_once __DIR__ . '/../controller/Product.php';
 include_once __DIR__ . '/../model/VendingMachine.php';
+include_once __DIR__ . '/../controller/VendingMachineController.php';
 
 if (!isset($_GET['action'])) {
     $action = 'default';
@@ -11,26 +13,31 @@ if (!isset($_GET['action'])) {
 }
 
 switch ($action) {
-    //creates products and loads them in machine.
+    //Creates products and loads them in machine.
     case 'loadMachineView':
-        $array = \vending\controller\Machine::loadProducts();
-        $result = \vending\controller\Machine::loadMachine();
+        $array = VendingMachineController::loadProductsView();
+        $result = VendingMachineController::loadMachineView();
         $include = '../view/loadMachine.php';
         break;
     //Create machine.
     case 'createMachineView':
-        $array = \vending\controller\Machine::createMachine();
+        $array = VendingMachineController::createMachineView();
         $include = '../view/createMachine.php';
         break;
     //Edit machine.
     case 'editMachineView':
-        $array = \vending\controller\Machine::editMachine();
+        $array = VendingMachineController::editMachine();
         $include = '../view/editMachine.php';
         break;
     //Display machine.
     case 'displayMachineView':
-        $machineData = \vending\controller\Machine::displayMachine();
+        $machineData = VendingMachineController::displayMachine();
         $include = '../view/machine.php';
+        break;
+    //Display content of machine.
+    case 'showContent':
+        $machineData = VendingMachineController::machineContentView();
+        $include = '../view/machineContent.php';
         break;
     //If url is invalid redirects you to the index page.
     case 'default':

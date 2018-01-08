@@ -73,7 +73,7 @@ class MachineDAO implements CRUDInterface
     public function update(iterable $updateParam)
     {
         $sql = 'UPDATE `vending_machines` SET `vending_machine_rows` = ?, `vending_machine_columns` = ?, ' .
-            '`vending_machine_size` = ?,`vending_machine_status_id` = ?,`vending_machine_name` = ?, `vending_machine_date_updated` = now()' .
+            '`vending_machine_size` = ?,`vending_machine_status_id` = ?,`vending_machine_name` = ?, `vending_machine_desc` = ?, `vending_machine_date_updated` = now()' .
             ' WHERE `vending_machines`.`vending_machine_id` = ?';
         $db = new DbConnector();
         $db->executeQuery($sql, $updateParam);
@@ -92,5 +92,18 @@ class MachineDAO implements CRUDInterface
         $db = new DbConnector();
         $db->executeQuery($sql, $machineId);
         $db->closeConnection();
+    }
+
+    public function machineContent($machineId)
+    {
+        $sql = 'SELECT cell_row,cell_column,product_type_name, count(c.cell_id) AS product_counter FROM 
+`vending_machines` AS vm LEFT JOIN cells AS c ON vm.vending_machine_id = c.vending_machine_id LEFT JOIN products AS p ON
+ c.cell_id = p.cell_id LEFT JOIN product_types AS pt ON p.product_type_id = pt.product_type_id WHERE
+  vm.vending_machine_id = ? AND p.product_type_id IS NOT NULL GROUP BY c.cell_id';
+        $db = new DbConnector();
+        $data = $db->selectAllByIdQuery($sql, $machineId);
+        $db->closeConnection();
+
+        return $data;
     }
 }

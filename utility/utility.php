@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Checks if value from array is set and returns it.
+ *
+ * @param $array
+ * @param $value
+ * @return mixed
+ */
 function showInput($array, $value)
 {
     if (isset($array['validValues']["valid" . "$value"]) || isset($array['invalidValues']["invalid" . "$value"])) {
@@ -11,6 +18,12 @@ function showInput($array, $value)
     }
 }
 
+/**
+ * Checks if value is true and if its true returns "incorrect".
+ * @param $array
+ * @param $value
+ * @return string
+ */
 function showInputRed($array, $value)
 {
     if ($array['invalidValues']["invalid" . "$value" . "Red"] ?? false) {
@@ -18,6 +31,13 @@ function showInputRed($array, $value)
     }
 }
 
+/**
+ * Checks if value from array is set and returns it.
+ *
+ * @param $array
+ * @param $value
+ * @return mixed
+ */
 function showEditInput($array, $value)
 {
     if (isset($array['validValues']["valid" . "$value"]) || isset($array['invalidValues']["invalid" . "$value"])) {
@@ -33,6 +53,13 @@ function showEditInput($array, $value)
     }
 }
 
+/**
+ * Checks if value is true and if its true returns "incorrect".
+ * @param $array
+ * @param $counter
+ * @param $value
+ * @return string
+ */
 function showLoadInputRed($array, $counter, $value)
 {
     if ($array['invalidValues'][$counter]["invalid" . "$value" . "Red"] ?? false) {
@@ -40,6 +67,14 @@ function showLoadInputRed($array, $counter, $value)
     }
 }
 
+/**
+ * Checks if value from array is set and returns it.
+ *
+ * @param $array
+ * @param $counter
+ * @param $value
+ * @return mixed
+ */
 function showLoadInput($array, $counter, $value)
 {
     if (isset($array['validValues'][$counter]["valid" . "$value"]) || isset($array['invalidValues'][$counter]["ivalid" . "$value"])) {
